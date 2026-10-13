@@ -622,11 +622,11 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       title: "Syndics et copropriétés : un partenaire technique à Bruxelles",
       highlight: "Bruxelles",
       intro:
-        "Chaufferie collective, colonnes d'eau, parlophonie, éclairage des communs : un seul interlocuteur pour l'entretien et le dépannage de vos immeubles, avec des devis clairs à présenter en assemblée.",
+        "Chaufferie collective, colonnes d'eau, parlophonie, éclairage des communs : un seul numéro pour l'entretien et le dépannage de vos immeubles, avec des devis clairs à présenter en assemblée.",
       intent: "installation",
     },
     facts: [
-      { icon: "handshake", stat: "Un interlocuteur", label: "Chauffage, électricité, plomberie" },
+      { icon: "handshake", stat: "Un seul numéro", label: "Chauffage, électricité, plomberie" },
       { icon: "clock", stat: "Sous 24h", label: "Dépannage des parties communes" },
       { icon: "file", stat: "Devis gratuits", label: "Clairs et détaillés pour l'AG" },
       { icon: "calendarCheck", stat: "7j/7", label: "Urgences comprises" },
@@ -646,7 +646,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         {
           icon: "userTie",
           title: "Un seul contact",
-          text: "Un interlocuteur unique pour les principaux corps de métier techniques : moins d'appels, moins de coordination pour le syndic.",
+          text: "Un seul numéro pour les principaux corps de métier techniques : moins d'appels, moins de coordination pour le syndic.",
         },
         {
           icon: "clipboard",
@@ -720,7 +720,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
     cta: {
       intent: "installation",
       title: "Vous gérez un immeuble ? Parlons de vos installations.",
-      body: "Chaufferie, colonnes, parlophonie, éclairage des communs : présentez-nous votre immeuble, nous vous remettons un devis clair et un interlocuteur unique pour la suite. Et pour les urgences, nous sommes là 7j/7.",
+      body: "Chaufferie, colonnes, parlophonie, éclairage des communs : présentez-nous votre immeuble, nous vous remettons un devis clair, et c'est le même numéro pour la suite. Et pour les urgences, nous sommes là 7j/7.",
     },
     draft: false,
   },

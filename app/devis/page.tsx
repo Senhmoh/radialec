@@ -20,7 +20,7 @@ import { Eyebrow } from "../sections/v2/ui";
 export const metadata = pageMetadata({
   title: "Devis gratuit chauffage, électricité, plomberie à Bruxelles",
   description:
-    "Demandez votre devis gratuit en 2 minutes : chaudière, pompe à chaleur, électricité, plomberie, climatisation à Bruxelles. Réponse sous 24h, sans engagement.",
+    "Demandez votre devis gratuit en 2 minutes : chaudière, pompe à chaleur, électricité, plomberie, climatisation à Bruxelles. Rappel sous 2 h, devis sous 24h, sans engagement.",
   path: "/devis",
 });
 
@@ -90,7 +90,7 @@ const faqs: FaqItem[] = [
     id: 2,
     question: "Sous quel délai vais-je recevoir mon devis ?",
     answer:
-      "Un technicien vous recontacte sous 24h. Pour la plupart des demandes, vous recevez ensuite votre devis détaillé sous 24h ; un projet plus important peut demander une visite sur place au préalable.",
+      "Un technicien vous rappelle sous 2 heures (entre 10h et 21h). Pour la plupart des demandes, vous recevez ensuite votre devis détaillé sous 24h ; un projet plus important peut demander une visite sur place au préalable.",
   },
   {
     id: 3,
@@ -148,13 +148,13 @@ export default function DevisPage() {
                   ]}
                 />
                 <div className="mt-8 lg:mt-10">
-                  <Eyebrow>Devis gratuit · Réponse sous 24h</Eyebrow>
+                  <Eyebrow>Devis gratuit · Rappel sous 2 h</Eyebrow>
                   <h1 className="v2-title mt-5 text-[2.1rem] sm:text-[2.7rem] lg:text-[2.7rem] xl:text-[3.1rem]">
                     {fr("Demandez votre devis gratuit à Bruxelles")}
                   </h1>
                   <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-night/70 lg:text-lg">
                     {fr(
-                      "Chauffage, électricité, plomberie, climatisation : décrivez votre besoin en 2 minutes, un technicien vous recontacte sous 24h avec un devis clair et sans engagement."
+                      "Décrivez votre besoin en deux minutes : un technicien vous rappelle sous 2 heures, puis vous envoie un devis clair et sans engagement."
                     )}
                   </p>
                   <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-night/70">

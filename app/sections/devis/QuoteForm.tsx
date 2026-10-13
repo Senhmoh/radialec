@@ -58,7 +58,7 @@ const intentToType: Record<ServiceIntent, RequestType> = {
 const steps = [
   { label: "Votre projet", title: "Quel est votre projet ?", intro: "Choisissez le domaine, puis la prestation qui s'en rapproche le plus." },
   { label: "Les détails", title: "Parlez-nous de votre besoin", intro: "Plus c'est précis, plus le devis sera juste. Deux minutes suffisent." },
-  { label: "Vos coordonnées", title: "Où et comment vous joindre ?", intro: "Un technicien vous recontacte sous 24h avec votre devis." },
+  { label: "Vos coordonnées", title: "Où et comment vous joindre ?", intro: "Un technicien vous rappelle sous 2 h (entre 10h et 21h), puis vous envoie votre devis." },
 ];
 
 type Status = "idle" | "sending" | "success" | "error";

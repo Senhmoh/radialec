@@ -78,7 +78,7 @@ const faqs: FaqItem[] = [
     id: 7,
     question: "Pourquoi certains services sont-ils « sur devis » ?",
     answer:
-      "Une installation ou une rénovation dépend de votre logement : puissance, emplacement, état de l'existant. Nous préférons un devis précis à un prix d'appel trompeur. Il est gratuit, sans engagement, et vous le recevez sous 24h : [demander un devis](/contact#devis).",
+      "Une installation ou une rénovation dépend de votre logement : puissance, emplacement, état de l'existant. Nous préférons un devis précis à un prix d'appel trompeur. Il est gratuit, sans engagement, et vous le recevez sous 24h : [demander un devis](/devis).",
   },
   {
     id: 8,
@@ -96,7 +96,7 @@ const faqs: FaqItem[] = [
 export default function TarifsPage() {
   const groups = getTarifGroups();
   const cta = resolveCta("installation", {
-    body: "Installation, remplacement ou rénovation : décrivez-nous votre projet, nous revenons vers vous avec un devis détaillé sous 24h. Gratuit, sans engagement, et le prix annoncé est le prix payé.",
+    body: "Décrivez-nous votre projet : vous recevez un devis détaillé sous 24h, gratuit et sans engagement. Son montant est celui de la facture.",
   });
 
   const offerCatalog = {

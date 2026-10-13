@@ -37,7 +37,7 @@ export const chauffageServices: Service[] = [
     },
     // Ajouts non validés : facts
     facts: [
-      { icon: "clipboard", stat: "Devis sous 24h", label: "Clair et sans surprise" },
+      { icon: "clipboard", stat: "Devis sous 24h", label: "Clair et détaillé" },
       { icon: "shield", stat: "Garantie 2 + 2 ans", label: "Pose Radialec + pièces fabricant" },
       { icon: "clock", stat: "1 à 2 jours", label: "Pour une installation standard" },
       { icon: "award", stat: "Conforme PEB & RGIE", label: "Normes en vigueur respectées" },
@@ -45,12 +45,12 @@ export const chauffageServices: Service[] = [
     blocks: [
       {
         type: "steps",
-        title: "Notre process d'installation",
+        title: "Comment se passe votre installation",
         steps: [
           {
             title: "Devis sous 24h",
             description:
-              "Nous évaluons votre besoin et vous transmettons un devis clair, sans surprise.",
+              "Nous évaluons votre besoin et vous envoyons un devis détaillé.",
             image: {
               src: boilerMaintenance,
               alt: "Technicien Radialec notant les caractéristiques d'une chaudière avant de faire le devis",
@@ -153,7 +153,7 @@ export const chauffageServices: Service[] = [
       "chauffage/entretien-chaudiere",
     ],
     cta: {
-      body: "Chaudière vieillissante, tableau électrique à mettre aux normes, envie de passer à la pompe à chaleur : un projet ne s'improvise pas. Nos techniciens agréés interviennent à Bruxelles et dans toute la région, avec un seul interlocuteur du premier rendez-vous jusqu'à la mise en service. Décrivez votre projet, on s'occupe du reste.",
+      body: "Votre chaudière se fait vieille, ou vous pensez à la pompe à chaleur ? Parlons-en : un technicien agréé passe voir votre installation, vous conseille, et vous recevez un devis détaillé sous 24h, gratuit et sans engagement.",
     },
     zonesIntro:
       "Nous remplaçons et installons des chaudières dans les 19 communes bruxelloises et en périphérie, en Brabant flamand et en Brabant wallon.",
@@ -179,7 +179,7 @@ export const chauffageServices: Service[] = [
     hero: {
       eyebrow: "Obligation légale · Tous les 1 à 2 ans",
       intro:
-        "Gaz ou mazout, chaudière ou chauffe-eau : nos techniciens agréés réalisent votre entretien obligatoire, effectuent les tests de sécurité et vous remettent votre attestation le jour même. Sans mauvaise surprise sur le prix.",
+        "Nos techniciens agréés font l'entretien obligatoire de votre chaudière, gaz ou mazout, contrôlent les sécurités et vous remettent l'attestation le jour même. Le prix est affiché sur cette page : il ne change pas une fois sur place.",
       image: {
         asset: "P06",
         alt: "Technicien nettoyant l'échangeur d'une chaudière ouverte",
@@ -194,7 +194,7 @@ export const chauffageServices: Service[] = [
     blocks: [
       {
         type: "features",
-        title: "Un entretien obligatoire, pas une option",
+        title: "Pourquoi l'entretien est obligatoire",
         intro:
           "En Région bruxelloise, l'entretien de votre chaudière n'est pas un conseil, c'est une obligation légale : tous les deux ans pour une chaudière au gaz, chaque année pour une chaudière au mazout. Un contrôle réalisé par un technicien agréé, qui se termine par la remise d'une attestation d'entretien officielle.",
         items: [
@@ -235,7 +235,7 @@ export const chauffageServices: Service[] = [
       },
       {
         type: "steps",
-        title: "Notre process d'entretien",
+        title: "Comment se passe l'entretien",
         steps: [
           {
             title: "Prise de rendez-vous",
@@ -282,7 +282,7 @@ export const chauffageServices: Service[] = [
       },
       {
         type: "pricing",
-        eyebrow: "Des tarifs clairs, sans surprise",
+        eyebrow: "Nos prix",
         title: "Tarifs entretien de chaudière à Bruxelles",
         items: [{ key: "entretienChaudiereGaz" }, { key: "entretienChaudiereMazout" }, { key: "contratEntretien" }],
       },
@@ -346,7 +346,7 @@ export const chauffageServices: Service[] = [
       "chauffage/depannage-chaudiere",
     ],
     cta: {
-      body: "Chaudière gaz ou mazout, avec ou sans chauffe-eau intégré : nos techniciens agréés s'occupent de votre entretien de A à Z et vous remettent votre attestation le jour même. Un seul rendez-vous, l'esprit tranquille pour les deux prochaines années.",
+      body: "Choisissez un créneau en ligne ou appelez-nous. Le technicien fait l'entretien complet et vous remet l'attestation le jour même : vous êtes tranquille jusqu'au prochain.",
     },
     draft: false,
   },
@@ -768,7 +768,7 @@ export const chauffageServices: Service[] = [
     cta: {
       title: "Votre boiler fatigue ? Prenons rendez-vous (avant) la panne.",
       highlight: "(avant)",
-      body: "Boiler électrique, ballon couplé à la chaudière ou chaudière mixte : nos techniciens détartrent, contrôlent et remettent votre production d'eau chaude en ordre. Un rendez-vous rapide, un prix connu à l'avance.",
+      body: "Boiler électrique, ballon raccordé à la chaudière ou chaudière mixte ? Prenez rendez-vous : le technicien détartre, contrôle et vous dit dans quel état est votre appareil. Prix connu à l'avance.",
     },
     draft: false,
   },
@@ -788,9 +788,9 @@ export const chauffageServices: Service[] = [
     icon: "sync",
     intent: "entretien",
     hero: {
-      eyebrow: "Chauffage · Performance",
+      eyebrow: "Chauffage · Radiateurs",
       intro:
-        "Radiateurs tièdes, froids en bas, bruits dans les tuyaux ? Des boues se sont accumulées dans votre circuit. Nous le désembouons en profondeur pour retrouver une chaleur homogène, réduire votre consommation et protéger votre chaudière.",
+        "Radiateurs tièdes, froids en bas, bruits dans les tuyaux ? Des boues se sont accumulées dans votre circuit. Nous nettoyons tout le circuit : les radiateurs chauffent à nouveau de haut en bas, et la chaudière force moins.",
       image: {
         asset: "P16",
         alt: "Eau boueuse retirée d'un circuit de chauffage, à côté de la machine de désembouage",
@@ -994,7 +994,7 @@ export const chauffageServices: Service[] = [
     hero: {
       eyebrow: "Chauffage central · Radiateurs",
       intro:
-        "Radiateurs vétustes, pièce mal chauffée, salle de bain à rénover : nous dimensionnons, installons et raccordons vos nouveaux radiateurs à votre chauffage central, avec vannes thermostatiques et équilibrage du circuit.",
+        "Un radiateur trop vieux, une pièce qui reste froide, une salle de bain à refaire ? Nous choisissons la bonne puissance, posons et raccordons vos radiateurs à votre chauffage central, avec vannes thermostatiques et équilibrage du circuit.",
       image: {
         asset: "P14",
         alt: "Radiateur neuf posé sous une fenêtre",
@@ -1002,7 +1002,7 @@ export const chauffageServices: Service[] = [
     },
     facts: [
       { icon: "euro", stat: "Devis gratuit", label: "Sous 24h" },
-      { icon: "ruler", stat: "Sur mesure", label: "Puissance adaptée à chaque pièce" },
+      { icon: "ruler", stat: "Pièce par pièce", label: "Puissance calculée pour chaque pièce" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Sur nos interventions" },
       { icon: "award", stat: "Chauffagiste agréé", label: "Pose conforme aux normes" },
     ],
@@ -1081,7 +1081,7 @@ export const chauffageServices: Service[] = [
           {
             title: "Devis sous 24h",
             description:
-              "Un devis clair et détaillé : radiateurs, accessoires, main-d'œuvre. Sans surprise.",
+              "Un devis détaillé : radiateurs, accessoires et main-d'œuvre, ligne par ligne.",
           },
           {
             title: "Pose et raccordement",
@@ -1164,7 +1164,7 @@ export const chauffageServices: Service[] = [
       "chauffage/entretien-chaudiere",
     ],
     cta: {
-      body: "Radiateur à remplacer, pièce à chauffer, salle de bain à rénover : décrivez-nous votre projet. Nous vous conseillons le bon modèle et vous remettons un devis clair sous 24h, pose et raccordement compris.",
+      body: "Décrivez-nous votre projet : on vous conseille le bon modèle et vous recevez un devis sous 24h, pose et raccordement compris.",
     },
     draft: false,
   },
@@ -1181,13 +1181,13 @@ export const chauffageServices: Service[] = [
     metaDescription:
       "Installation de pompe à chaleur air-eau à Bruxelles : étude, dimensionnement, pose et entretien. Devis gratuit sous 24h.",
     summary:
-      "Remplacer votre chaudière par une PAC air-eau : étude du logement, dimensionnement, pose et suivi par un seul interlocuteur.",
+      "Remplacer votre chaudière par une PAC air-eau : étude du logement, calcul de la puissance, pose et suivi.",
     icon: "leaf",
     intent: "installation",
     hero: {
       eyebrow: "Chauffage bas carbone",
       intro:
-        "Votre chaudière arrive en fin de vie, ou vous voulez sortir du mazout ? Nous étudions votre logement, dimensionnons la pompe à chaleur adaptée et assurons une pose conforme, du premier rendez-vous à la mise en service.",
+        "Votre chaudière arrive en fin de vie, ou vous voulez sortir du mazout ? On étudie votre logement, on calcule la puissance qu'il faut et on pose la pompe à chaleur, réglages compris.",
       image: {
         asset: "P12",
         alt: "Unité extérieure d'une pompe à chaleur air-eau installée dans un jardin",
@@ -1196,7 +1196,7 @@ export const chauffageServices: Service[] = [
     facts: [
       { icon: "award", stat: "Dimensionnement", label: "Puissance calculée pour votre logement" },
       { icon: "euro", stat: "Devis gratuit", label: "Sous 24h" },
-      { icon: "handshake", stat: "Un seul interlocuteur", label: "De l'étude à la mise en service" },
+      { icon: "handshake", stat: "Réglages compris", label: "Courbe de chauffe et prise en main" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Sur nos interventions" },
     ],
     blocks: [
@@ -1312,7 +1312,7 @@ export const chauffageServices: Service[] = [
           },
           { key: "entretienPac" },
         ],
-        note: "Prix TVAC. Installation sur devis gratuit et détaillé : le prix annoncé est le prix payé.",
+        note: "Prix TVAC. L'installation se fait sur devis gratuit et détaillé, et le montant du devis est celui de la facture.",
       },
     ],
     faqTitle: "Questions fréquentes sur la pompe à chaleur",
@@ -1373,7 +1373,7 @@ export const chauffageServices: Service[] = [
       "climatisation/entretien-climatisation",
     ],
     cta: {
-      body: "Sortir du mazout, remplacer une chaudière en fin de vie, réduire votre facture : un projet de pompe à chaleur ne s'improvise pas. Nous étudions votre logement et vous remettons un devis clair sous 24h, avec un seul interlocuteur jusqu'à la mise en service.",
+      body: "Une pompe à chaleur, ça se prépare : on passe voir votre logement, vos radiateurs et votre isolation, et vous recevez un devis détaillé sous 24h. Si la PAC n'est pas le bon choix chez vous, on vous le dit.",
     },
     draft: false,
   },
@@ -1549,7 +1549,7 @@ export const chauffageServices: Service[] = [
         id: 7,
         question: "Dois-je préparer quelque chose avant votre passage ?",
         answer:
-          "Ne faites pas de feu dans les heures qui précèdent pour que le conduit soit froid, et dégagez l'accès à l'appareil. Nous nous occupons du reste.",
+          "Ne faites pas de feu dans les heures qui précèdent pour que le conduit soit froid, et dégagez l'accès à l'appareil.",
       },
     ],
     related: [
@@ -1561,7 +1561,7 @@ export const chauffageServices: Service[] = [
     cta: {
       title: "Votre ramonage est (bientôt) dû ? Prenons rendez-vous.",
       highlight: "(bientôt)",
-      body: "Cheminée, insert, poêle ou chaudière au mazout : prenez rendez-vous avant la saison de chauffe. Un ramonage au prix affiché, et vous profitez de vos flambées en toute sérénité.",
+      body: "Cheminée, insert, poêle ou chaudière au mazout ? Prenez rendez-vous avant la saison de chauffe : ramonage au prix affiché, attestation comprise.",
     },
     draft: false,
   },
@@ -1578,7 +1578,7 @@ export const chauffageServices: Service[] = [
     pageTitle: "Chauffagiste pour votre chaudière Vaillant à Bruxelles",
     metaTitle: "Chauffagiste Vaillant à Bruxelles : entretien et dépannage",
     metaDescription: `Entretien (${prices.entretienChaudiereGaz.amount} € TVAC), dépannage 7j/7 et remplacement de votre chaudière Vaillant à Bruxelles. Prix annoncé à l'avance, codes d'erreur expliqués.`,
-    summary: "Entretien, dépannage et remplacement de votre chaudière Vaillant, avec un seul interlocuteur.",
+    summary: "Entretien, dépannage et remplacement de votre chaudière Vaillant, au prix affiché.",
     icon: "fire",
     intent: "entretien",
     price: { key: "entretienChaudiereGaz" },
@@ -1597,7 +1597,7 @@ export const chauffageServices: Service[] = [
       {
         type: "features",
         eyebrow: "Votre Vaillant entre de bonnes mains",
-        title: "Entretien, dépannage, remplacement : un seul interlocuteur",
+        title: "Tout ce qu'il faut pour votre Vaillant",
         items: [
           {
             icon: "clipboard",

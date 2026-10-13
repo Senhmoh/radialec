@@ -561,7 +561,7 @@ export const plomberieServices: Service[] = [
     ],
     cta: {
       title: "Débit en berne, boiler entartré ? Prenons rendez-vous.",
-      body: "Robinetterie, pommeaux, boiler, canalisations : nos techniciens traquent le calcaire là où il vous coûte le plus cher. Un rendez-vous rapide, un prix annoncé à l'avance et une eau qui coule à nouveau normalement.",
+      body: "Robinets, pommeaux, boiler, canalisations : on enlève le calcaire là où il vous coûte le plus. Prenez rendez-vous, le prix est annoncé à l'avance.",
     },
     draft: false,
   },

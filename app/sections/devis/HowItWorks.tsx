@@ -6,7 +6,7 @@ import { SectionTitle } from "../v2/ui";
 
 const steps = [
   { tag: "2 min", title: "Vous décrivez votre besoin", text: "Le formulaire ci-dessus, avec des photos si vous en avez. Aucun compte à créer." },
-  { tag: "Sous 24h", title: "Un technicien vous recontacte", text: "Il relit votre demande et vous contacte pour préciser ce qui doit l'être." },
+  { tag: "Sous 2 h", title: "Un technicien vous rappelle", text: "Il relit votre demande et vous contacte pour préciser ce qui doit l'être." },
   { tag: "Gratuit", title: "Vous recevez un devis détaillé", text: "Matériel, main-d'œuvre, TVA : vous savez exactement ce que vous payez." },
   { tag: "Sans engagement", title: "Vous décidez", text: "S'il vous convient, nous planifions l'intervention. Sinon, vous ne nous devez rien." },
 ];

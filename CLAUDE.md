@@ -76,7 +76,7 @@ Constraints: zero budget (free fonts/libs/tools only), the logo (flame + bolt + 
 ### Owner decisions (`prompts/refonte/04-reponses-claude-code-2026-10-06.md`, applied 2026-10-08)
 
 - **Delay promises stay**: « sous 24h », « intervention en 24 heures », « (presque) déjà en route » and the running-technician final CTA (with its « intervention en 24 heures » annotation) are kept. The owner reversed D5/Q28 on 2026-10-08: never remove them.
-- Calls are taken **7j/7, 10h–21h** (`company.hours.detail`); callback promise « sous 2 h, entre 10h et 21h » (`company.promises.callback`); e-mail `info@radialec.be`.
+- Calls are taken **7j/7, 10h–21h** (`company.hours.detail`), and **24h/24 for emergencies** (`company.promises.emergency`, confirmed 2026-10-13: « on décroche 24h/24 »; the intervention itself stays « sous 24h », never promise a night intervention). Callback promise « sous 2 h, entre 10h et 21h » (`company.promises.callback`), also used for quote requests (devis FAQ, form, confirmation e-mail); e-mail `info@radialec.be`.
 - Google rating: show « 5/5 sur Google » + link, **never an exact review count**. Since 2026-10-11 the only count shown is the floor « plus de 30 avis » (`company.google.reviewsFloor`), which stays true as reviews grow (owner to confirm).
 - Address = **registered office only** (Lange Eikstraat 46, 1970 Wezembeek-Oppem, no premises): footer « Siège social » and legal pages only; never a visit address, no map on /contact. LocalBusiness JSON-LD: postal code + locality (no street) + `openingHoursSpecification` 10:00–21:00.
 - **VAT: no percentage anywhere on the site** (owner, 08/10/2026). Prices are shown TVAC; never write « TVA 6 % / 21 % ». Entretien gaz back to 149 € on 2026-10-08 (no promo; `pricingPolicy.promoValidity` null — set it again only for a real, dated offer, never a strikethrough price). /tarifs « Conditions » only shows decided rows (`getPolicyRows()` drops `null`). Manager's answers (08/10): surcharges week-end +20 €, jours fériés +50 €, urgence (intervention within 2 hours) +50 €; travel included up to 50 km; payment cash or banking app (Wero, Payconiq); chauffe-eau gaz 129 €, boiler électrique 160 €, ramonage 149 € with attestation, débouchage 200 € (colonne/égout extra), PAC 180 €, airco 240 € + 90 € per indoor unit, détartrage 300 €, mise en conformité 990 € (repérage, schémas, organisme agréé, if nothing to modify), contrat d'entretien particulier 130 € for 2 years; everything else « sur devis ». Dépannage 149 € TVAC (déplacement, diagnostic, 1st hour) and extra hour 60 € TVAC confirmed on 08/10. **Every amount in page copy is a `${prices.…}` template** — never type a price in prose.
@@ -88,6 +88,16 @@ Constraints: zero budget (free fonts/libs/tools only), the logo (flame + bolt + 
 - French only (no NL/EN). No per-commune pages unless they carry real local content (Uccle first).
 - Q21: a service without a confirmed price shows « sur devis » / quote request — never an estimated price.
 - Q31 (boiler service content: steps for gas and oil, ~1 hour, attestation de conformité in PDF), Q32 (scope of prices) and Q35 (repairs guaranteed 2 years with the same exclusivity condition, FAQ on the 4 dépannage pages) were answered by the manager on 08/10. Q33 (gas-safety wording on dépannage chaudière) validated by the manager on 08/10: don't reword it without him.
+
+### Copy style (owner request 2026-10-13: the site must not sound AI-written)
+
+All French copy was rewritten on 2026-10-13 to remove generated-sounding tics. Keep it that way:
+- **Banned stock phrases**: « interlocuteur unique / un seul interlocuteur », « du premier rendez-vous à la mise en service », « on s'occupe du reste », « sans (mauvaise) surprise », « ne s'improvise pas », « de A à Z », « en toute sérénité / l'esprit tranquille », « notre process », « dans les règles de l'art », « X, pas juste Y », « Votre devis, sans mauvaise surprise », « délai garanti ».
+- **No three-item list + colon** to open every sentence; vary openings (a question in the customer's words works well: « Plus d'eau chaude ? »).
+- **Facts over adjectives**: prices (`${prices…}`), « sous 24h », « on décroche 24h/24 », « attestation le jour même », 19 communes, reviews. One promise per sentence, short sentences, « on » is fine.
+- « Un seul numéro pour toute la maison » is the plain way to say the multi-trade advantage — at most 2-3 places, not on every page.
+- « Le prix annoncé est le prix payé » only where it answers a question (tarifs FAQ, home trust tile); elsewhere « le montant du devis est celui de la facture » / « vous connaissez le prix avant qu'on commence ».
+- « (presque) déjà en route » stays (owner decision). Gas-safety text (`app/data/safety.ts`) is never reworded.
 
 ### Draft content
 

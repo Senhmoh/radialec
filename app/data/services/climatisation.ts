@@ -34,20 +34,20 @@ export const climatisationServices: Service[] = [
     facts: [
       { icon: "clipboard", stat: "Devis gratuit sous 24h", label: "Sans engagement" },
       { icon: "snowflake", stat: "Réversible", label: "Froid l'été, chaud l'hiver" },
-      { icon: "ruler", stat: "Sur mesure", label: "Puissance calculée pièce par pièce" },
+      { icon: "ruler", stat: "Pièce par pièce", label: "Puissance calculée pour chaque pièce" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Sur nos interventions" },
     ],
     blocks: [
       {
         type: "features",
         eyebrow: "Airco réversible",
-        title: "Un seul appareil, deux saisons de confort",
+        title: "Du frais l'été, du chaud à la mi-saison",
         intro:
           "Une climatisation réversible est une **pompe à chaleur air-air** : elle rafraîchit l'été et chauffe l'hiver, pièce par pièce.",
         items: [
           {
             icon: "tempLow",
-            title: "Fraîcheur maîtrisée",
+            title: "Pendant les canicules",
             text: "Une température agréable pendant les canicules, dans le séjour, les chambres ou un bureau sous les toits.",
           },
           {
@@ -57,7 +57,7 @@ export const climatisationServices: Service[] = [
           },
           {
             icon: "volume",
-            title: "Discrète au quotidien",
+            title: "Peu de bruit à l'intérieur",
             text: "Les unités intérieures récentes sont silencieuses ; l'emplacement de l'unité extérieure est choisi pour limiter toute gêne.",
           },
         ],
@@ -101,7 +101,7 @@ export const climatisationServices: Service[] = [
       {
         type: "steps",
         title: "Votre installation, étape par étape",
-        intro: "Un seul interlocuteur, du premier rendez-vous à la mise en service.",
+        intro: "De la visite au premier allumage, voici comment ça se passe.",
         steps: [
           {
             title: "Visite et dimensionnement",
@@ -111,7 +111,7 @@ export const climatisationServices: Service[] = [
           {
             title: "Devis détaillé sous 24h",
             description:
-              "Un devis clair, poste par poste, gratuit et sans engagement. Le prix annoncé est le prix payé.",
+              "Un devis poste par poste, gratuit et sans engagement. Son montant est celui de la facture.",
           },
           {
             title: "Pose soignée",
@@ -132,13 +132,13 @@ export const climatisationServices: Service[] = [
           "Puissance calculée selon chaque pièce, ni trop ni trop peu",
           "Emplacement de l'unité extérieure étudié : bruit, voisinage, accès pour l'entretien",
           "Évacuation des condensats propre et discrète",
-          "Liaisons frigorifiques réalisées dans les règles de l'art",
+          "Liaisons frigorifiques soignées et testées",
           "Circuit électrique adapté et protégé, conforme au [RGIE](/electricite/mise-en-conformite-electrique)",
           "Goulottes et percements réduits au minimum",
           "Mise en service avec test en mode froid et en mode chaud",
           "Conseils d'utilisation et d'[entretien](/climatisation/entretien-climatisation)",
         ],
-        note: "Le tout couvert par notre garantie de 2 ans sur l'intervention.",
+        note: "Notre pose est garantie 2 ans.",
         image: {
           asset: "P40",
           alt: "Unité intérieure de climatisation murale dans un salon",
@@ -160,7 +160,7 @@ export const climatisationServices: Service[] = [
         id: 1,
         question: "Combien coûte l'installation d'une climatisation à Bruxelles ?",
         answer:
-          "Le prix dépend du nombre de pièces, de la puissance nécessaire et de la configuration (mono-split, multi-split, longueur des liaisons). Nous vous remettons un devis détaillé et gratuit sous 24h : le prix annoncé est le prix payé.",
+          "Le prix dépend du nombre de pièces, de la puissance nécessaire et de la configuration (mono-split, multi-split, longueur des liaisons). Nous vous remettons un devis détaillé et gratuit sous 24h, et son montant est celui de la facture.",
       },
       {
         id: 2,
@@ -206,7 +206,7 @@ export const climatisationServices: Service[] = [
       "electricite/installation-electricite",
     ],
     cta: {
-      body: "Une chambre qui étouffe l'été, un bureau sous les toits, envie d'un chauffage d'appoint efficace : décrivez-nous votre projet de climatisation. Conseil, dimensionnement et devis détaillé sous 24h, sans engagement, avec un seul interlocuteur jusqu'à la mise en service.",
+      body: "Une chambre qui étouffe l'été, un bureau sous les toits ? Décrivez-nous votre projet : on calcule la puissance qu'il faut et vous recevez un devis détaillé sous 24h, sans engagement.",
     },
     zonesIntro:
       "Nous installons votre climatisation dans les 19 communes de la Région bruxelloise et en périphérie, en Brabant flamand et en Brabant wallon.",
@@ -231,7 +231,7 @@ export const climatisationServices: Service[] = [
     hero: {
       eyebrow: "Entretien annuel recommandé",
       intro:
-        "Filtres encrassés, échangeur colonisé par les bactéries, performances en baisse : une airco ou une pompe à chaleur non entretenue consomme plus et souffle un air moins sain. Nos techniciens nettoient, désinfectent et contrôlent votre installation.",
+        "Une airco ou une pompe à chaleur qu'on n'entretient pas consomme plus, chauffe ou refroidit moins bien, et souffle un air moins sain. Nos techniciens nettoient les filtres et l'échangeur, désinfectent et contrôlent l'installation.",
       image: {
         asset: "P41",
         alt: "Technicien retirant le filtre d'une climatisation murale",
@@ -241,7 +241,7 @@ export const climatisationServices: Service[] = [
       { icon: "euro", stat: `${prices.entretienPac.amount}€ TVAC`, label: "Entretien pompe à chaleur" },
       { icon: "calendar", stat: "1 fois par an", label: "Rythme généralement recommandé" },
       { icon: "leaf", stat: "Air plus sain", label: "Filtres et échangeur désinfectés" },
-      { icon: "chart", stat: "Consommation maîtrisée", label: "Performances préservées" },
+      { icon: "chart", stat: "Moins de consommation", label: "Un appareil propre force moins" },
     ],
     blocks: [
       {
@@ -380,7 +380,7 @@ export const climatisationServices: Service[] = [
       "chauffage/entretien-chaudiere",
     ],
     cta: {
-      body: "Airco murale, multi-split ou pompe à chaleur : nos techniciens nettoient, désinfectent et contrôlent votre installation, puis vous expliquent ce qui a été fait. Un rendez-vous rapide, un prix connu d'avance et un air plus sain toute l'année.",
+      body: "Airco murale, multi-split ou pompe à chaleur ? Prenez rendez-vous : le technicien nettoie, désinfecte et contrôle l'installation, puis vous explique ce qu'il a fait. Prix connu à l'avance.",
     },
     draft: false,
   },

@@ -238,7 +238,7 @@ export const electriciteServices: Service[] = [
     facts: [
       { icon: "clipboard", stat: "Devis gratuit", label: "Sous 24h, sans engagement" },
       { icon: "schema", stat: "Conforme au RGIE", label: "Prête pour le contrôle" },
-      { icon: "users", stat: "Un seul interlocuteur", label: "De l'étude à la mise en service" },
+      { icon: "users", stat: "Schémas compris", label: "Prêts pour le contrôle RGIE" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Sur nos travaux" },
     ],
     blocks: [
@@ -302,7 +302,7 @@ export const electriciteServices: Service[] = [
         title: "RGIE et contrôle de conformité : ce qu'il faut savoir",
         paragraphs: [
           "En Belgique, toute installation électrique domestique doit respecter le **RGIE** (Règlement général sur les installations électriques). Avant sa mise en service, une nouvelle installation doit en principe être contrôlée par un **organisme agréé**, indépendant de l'électricien qui l'a réalisée.",
-          "Pour cette visite, l'organisme demande le **schéma unifilaire** et les **plans de position** de l'installation. Nous les préparons avec votre installation, pour que le contrôle se passe sans mauvaise surprise. En savoir plus sur la [mise en conformité électrique](/electricite/mise-en-conformite-electrique).",
+          "Pour cette visite, l'organisme demande le **schéma unifilaire** et les **plans de position** de l'installation. Nous les préparons avec votre installation, pour que le contrôle se passe bien. En savoir plus sur la [mise en conformité électrique](/electricite/mise-en-conformite-electrique).",
           "Les règles détaillées sont publiées par le [SPF Économie](https://economie.fgov.be).",
         ],
       },
@@ -374,7 +374,7 @@ export const electriciteServices: Service[] = [
         id: 5,
         question: "Intervenez-vous aussi sur le chauffage et la plomberie ?",
         answer:
-          "Oui, c'est l'avantage Radialec : un seul interlocuteur pour l'électricité, le [chauffage](/chauffage), la [plomberie](/plomberie) et la [climatisation](/climatisation). Pratique en rénovation.",
+          "Oui : nous faisons aussi le [chauffage](/chauffage), la [plomberie](/plomberie) et la [climatisation](/climatisation). En rénovation, c'est pratique : un seul numéro pour coordonner les travaux.",
       },
       {
         id: 6,
@@ -389,7 +389,7 @@ export const electriciteServices: Service[] = [
       "electricite/installation-videophonie",
     ],
     cta: {
-      body: "Construction, rénovation ou extension : un projet électrique ne s'improvise pas. Nos électriciens qualifiés interviennent à Bruxelles et dans toute la région, avec un seul interlocuteur du premier rendez-vous jusqu'à la mise en service. Décrivez votre projet, on s'occupe du reste.",
+      body: "Construction, rénovation ou extension ? Décrivez-nous votre projet : un électricien passe voir, et vous recevez un devis détaillé sous 24h. On prépare aussi les schémas pour le contrôle.",
     },
     draft: false,
   },
@@ -574,8 +574,9 @@ export const electriciteServices: Service[] = [
       "electricite/installation-electricite",
     ],
     cta: {
-      title: "Un contrôle à passer ? Votre devis, sans mauvaise surprise.",
-      body: "Vente de votre bien, rapport négatif ou installation vieillissante : nos électriciens qualifiés analysent la situation, réalisent les corrections et préparent vos documents. Un seul interlocuteur jusqu'au nouveau passage de l'organisme agréé.",
+      title: "Un contrôle à passer ? Le devis est gratuit.",
+      highlight: "gratuit",
+      body: "Vous vendez, ou votre rapport de contrôle est négatif ? Envoyez-nous le rapport : on chiffre les corrections, on les fait et on prépare les documents pour la nouvelle visite de l'organisme agréé.",
     },
     draft: false,
   },
@@ -597,7 +598,7 @@ export const electriciteServices: Service[] = [
     hero: {
       eyebrow: "Voiture électrique · Devis gratuit",
       intro:
-        "Rechargez votre voiture chez vous, en toute sécurité. Nous vérifions votre raccordement, dimensionnons la puissance utile et installons votre borne sur un circuit dédié, avec les protections exigées pour la recharge.",
+        "Rechargez votre voiture chez vous, sans surcharger votre installation. Nous vérifions votre raccordement, choisissons la puissance utile et installons la borne sur un circuit dédié, avec les protections exigées pour la recharge.",
       image: {
         asset: "P23",
         alt: "Borne de recharge murale installée dans un garage, voiture en charge",
@@ -680,7 +681,7 @@ export const electriciteServices: Service[] = [
           {
             title: "Étude de faisabilité",
             description:
-              "Nous vérifions votre raccordement, la puissance disponible et l'emplacement idéal de la borne.",
+              "Nous vérifions votre raccordement, la puissance disponible et le meilleur emplacement pour la borne.",
           },
           {
             title: "Devis détaillé sous 24h",
@@ -756,8 +757,8 @@ export const electriciteServices: Service[] = [
       "professionnels/syndics-coproprietes",
     ],
     cta: {
-      title: "Une voiture électrique ? Votre borne, sans mauvaise surprise.",
-      body: "Raccordement à vérifier, puissance à choisir, circuit à créer : une borne de recharge se prépare. Nos électriciens qualifiés étudient votre installation et vous remettent un devis clair sous 24h, à Bruxelles et dans toute la région.",
+      title: "Une voiture électrique ? Parlons de votre borne.",
+      body: "Avant de poser une borne, on vérifie votre raccordement et la puissance disponible. Vous recevez ensuite un devis détaillé sous 24h, à Bruxelles et alentour.",
     },
     draft: false,
   },
@@ -954,8 +955,9 @@ export const electriciteServices: Service[] = [
       "electricite/installation-electricite",
     ],
     cta: {
-      title: "Un parlophone à remplacer ? Votre devis, sans mauvaise surprise.",
-      body: "Maison ou immeuble, installation neuve ou remplacement : nos électriciens qualifiés vous conseillent le bon système et l'installent proprement, à Bruxelles et dans toute la région. Décrivez-nous votre porte d'entrée, on s'occupe du reste.",
+      title: "Un parlophone à remplacer ? Le devis est gratuit.",
+      highlight: "gratuit",
+      body: "Maison ou immeuble, neuf ou remplacement ? Décrivez-nous votre entrée : on vous conseille le bon système, et un électricien l'installe proprement.",
     },
     draft: false,
   },
@@ -971,7 +973,7 @@ export const electriciteServices: Service[] = [
     metaDescription:
       "Voyez qui sonne avant d'ouvrir : installation de vidéophone à Bruxelles, maison ou immeuble, en neuf ou en remplacement d'un parlophone. Devis gratuit 24h.",
     summary:
-      "Voyez qui sonne avant d'ouvrir : écran intérieur, platine caméra et ouverture de porte, en maison comme en immeuble.",
+      "Écran intérieur, platine caméra et ouverture de porte, en maison comme en immeuble.",
     icon: "video",
     intent: "installation",
     hero: {
@@ -1002,7 +1004,7 @@ export const electriciteServices: Service[] = [
           },
           {
             icon: "door",
-            title: "Plus de confort",
+            title: "Ouvrir sans descendre",
             text: "Répondez et ouvrez la porte depuis l'écran, sans descendre, même depuis l'étage.",
           },
           {
@@ -1135,8 +1137,9 @@ export const electriciteServices: Service[] = [
       "electricite/depannage-electrique",
     ],
     cta: {
-      title: "Voir avant d'ouvrir ? Votre devis, sans mauvaise surprise.",
-      body: "Maison ou immeuble, installation neuve ou remplacement d'un parlophone : nos électriciens qualifiés vous conseillent le bon système et l'installent proprement, à Bruxelles et dans toute la région. Décrivez-nous votre entrée, on s'occupe du reste.",
+      title: "Envie de voir qui sonne ? Le devis est gratuit.",
+      highlight: "gratuit",
+      body: "Maison ou immeuble, en neuf ou à la place d'un ancien parlophone : on vous conseille le bon système, et un électricien l'installe proprement.",
     },
     draft: false,
   },
@@ -1158,7 +1161,7 @@ export const electriciteServices: Service[] = [
     hero: {
       eyebrow: "Contrôle RGIE · Vente",
       intro:
-        "Pas de schéma, pas de contrôle réussi. Nous relevons votre installation électrique circuit par circuit et établissons le schéma unifilaire et les plans de position exigés par l'organisme agréé lors du contrôle RGIE.",
+        "Lors du contrôle RGIE, l'organisme agréé demande un schéma unifilaire et des plans de position à jour. Nous relevons votre installation circuit par circuit et les établissons pour vous.",
       image: {
         asset: "P25",
         alt: "Schéma unifilaire posé à côté d'un tableau électrique",
@@ -1312,8 +1315,9 @@ export const electriciteServices: Service[] = [
       "electricite/depannage-electrique",
     ],
     cta: {
-      title: "Un contrôle électrique à préparer ? Votre devis, sans mauvaise surprise.",
-      body: "Vente, rapport négatif ou travaux récents : nos électriciens qualifiés relèvent votre installation et établissent des documents clairs, prêts pour l'organisme agréé. Un seul interlocuteur, à Bruxelles et dans toute la région.",
+      title: "Un contrôle électrique à préparer ? Le devis est gratuit.",
+      highlight: "gratuit",
+      body: "Vente, rapport négatif ou travaux récents ? Un électricien relève votre installation et vous remet des schémas clairs, prêts pour l'organisme agréé.",
     },
     draft: false,
   },
@@ -1416,7 +1420,7 @@ export const electriciteServices: Service[] = [
             badge: "Maison ancienne",
             text: "Tout est refait : tableau, câblage, prises, éclairage, terre. La solution durable pour une installation d'origine ou avant de gros travaux.",
             points: [
-              "Installation neuve de A à Z",
+              "Installation entièrement refaite",
               "Pensée pour vos usages actuels",
               "Documents prêts pour le contrôle",
             ],
@@ -1514,7 +1518,7 @@ export const electriciteServices: Service[] = [
         id: 6,
         question: "Pouvez-vous coordonner la rénovation avec le chauffage ou la plomberie ?",
         answer:
-          "Oui, c'est tout l'intérêt de Radialec : un seul interlocuteur pour l'électricité, le [chauffage](/chauffage) et la [plomberie](/plomberie). Idéal en rénovation.",
+          "Oui : nous faisons aussi le [chauffage](/chauffage) et la [plomberie](/plomberie). En rénovation, c'est pratique : un seul numéro pour coordonner les travaux.",
       },
     ],
     related: [
@@ -1524,8 +1528,9 @@ export const electriciteServices: Service[] = [
       "chauffage/remplacement-chaudiere",
     ],
     cta: {
-      title: "Une installation d'un autre âge ? Votre devis, sans mauvaise surprise.",
-      body: "Tableau à fusibles, câbles fatigués, prises sans terre : ne laissez pas une installation vieillissante mettre votre sécurité en jeu. Nos électriciens qualifiés rénovent votre installation à Bruxelles et dans toute la région, avec un devis clair sous 24h.",
+      title: "Une installation d'un autre âge ? Le devis est gratuit.",
+      highlight: "gratuit",
+      body: "Tableau à fusibles, prises sans terre ? Un électricien passe voir votre installation, vous dit ce qui doit être refait en priorité, et vous recevez un devis détaillé sous 24h.",
     },
     draft: false,
   },

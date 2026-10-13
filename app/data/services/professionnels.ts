@@ -14,22 +14,22 @@ export const professionnelsServices: Service[] = [
     pageTitle: "Chauffage, électricité et plomberie pour syndics et copropriétés à Bruxelles",
     metaTitle: "Technicien pour syndics et copropriétés à Bruxelles",
     metaDescription:
-      "Syndics et copropriétés à Bruxelles : chaufferie collective, électricité des communs, parlophonie, colonnes. Un interlocuteur unique, devis sous 24h.",
+      "Syndics et copropriétés à Bruxelles : chaufferie collective, électricité des communs, parlophonie, colonnes. Un seul numéro, devis sous 24h.",
     summary:
-      "Chaufferie collective, électricité des communs, parlophonie, colonnes : un interlocuteur unique pour vos immeubles.",
+      "Chauffage collectif, électricité des communs, parlophonie, colonnes d'eau : un seul numéro pour tout le technique de vos immeubles.",
     icon: "building",
     intent: "installation",
     hero: {
       eyebrow: "Syndics · Gestionnaires · ACP",
       intro:
-        "Chaufferie collective, éclairage des communs, parlophonie, colonnes d'eau : gérer un immeuble, c'est jongler avec les corps de métier. Radialec vous offre un interlocuteur unique, disponible 7j/7, et des devis clairs à présenter à vos copropriétaires.",
+        "Gérer un immeuble, c'est jongler avec les corps de métier. Chaufferie, éclairage des communs, parlophonie, colonnes d'eau : avec Radialec, vous appelez un seul numéro, 7j/7, et vous recevez des devis faciles à présenter à vos copropriétaires.",
       image: {
         asset: "P50",
         alt: "Façade d'un immeuble à appartements à Bruxelles",
       },
     },
     facts: [
-      { icon: "users", stat: "Interlocuteur unique", label: "Chauffage, électricité, plomberie" },
+      { icon: "users", stat: "Un seul numéro", label: "Chauffage, électricité, plomberie" },
       { icon: "clock", stat: "Sous 24h", label: "Intervention rapide, 7j/7" },
       { icon: "fileSign", stat: "Devis gratuit sous 24h", label: "Détaillé, prêt pour l'AG" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Sur nos interventions" },
@@ -118,7 +118,7 @@ export const professionnelsServices: Service[] = [
           {
             icon: "euro",
             title: "Des prix annoncés",
-            text: "Le prix annoncé est le prix payé : aucune mauvaise surprise à justifier en fin d'exercice.",
+            text: "Le montant du devis est celui de la facture : rien à justifier en fin d'exercice.",
           },
           {
             icon: "comments",
@@ -193,7 +193,7 @@ export const professionnelsServices: Service[] = [
     ],
     cta: {
       title: "Un immeuble à gérer ? Un seul numéro pour tout le technique.",
-      body: "Chaufferie, électricité des communs, parlophonie, colonnes d'eau : présentez-nous votre immeuble et vos besoins. Devis détaillé sous 24h, interventions 7j/7 et un interlocuteur unique pour vous et vos copropriétaires.",
+      body: "Présentez-nous votre immeuble et vos besoins : vous recevez un devis détaillé sous 24h, et nous intervenons 7j/7 dans les parties communes.",
     },
     zonesIntro:
       "Nous intervenons pour les immeubles et copropriétés des 19 communes bruxelloises et de la périphérie, en Brabant flamand et en Brabant wallon.",

@@ -52,7 +52,7 @@ export function QuoteSummary({ quote, categoryLabel, serviceLabel, amount, photo
         )}
 
         <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 border-t border-night/[0.07] pt-5 text-sm text-night/75">
-          {["Devis gratuit", "Sans engagement", "Réponse sous 24h", "Pas de frais ajoutés"].map((item) => (
+          {["Devis gratuit", "Sans engagement", "Rappel sous 2 h", "Pas de frais ajoutés"].map((item) => (
             <li key={item} className="flex items-center gap-2">
               <FaCheck className="h-3 w-3 flex-shrink-0 text-flame" aria-hidden="true" />
               {item}
