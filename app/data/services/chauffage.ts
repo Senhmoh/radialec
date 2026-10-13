@@ -1,5 +1,6 @@
 import { boilerBrandNames } from "../brands";
-import { prices } from "../pricing";
+import { company } from "../company";
+import { prices, pricingPolicy } from "../pricing";
 import { gasLeakAlert } from "../safety";
 import type { Service } from "./types";
 
@@ -368,7 +369,7 @@ export const chauffageServices: Service[] = [
     hero: {
       eyebrow: "Dépannage 7j/7 · Sous 24h",
       intro:
-        `Plus de chauffage, plus d'eau chaude, chaudière en sécurité ? Nos techniciens agréés diagnostiquent et réparent les chaudières ${boilerBrandNames}, 7j/7, avec une intervention sous 24h. Le prix vous est annoncé avant toute réparation.`,
+        `Plus de chauffage, plus d'eau chaude, chaudière en sécurité ? Appelez-nous, on décroche ${company.promises.emergency}. Nos techniciens agréés réparent les chaudières ${boilerBrandNames} et passent chez vous sous 24h, 7j/7. Vous connaissez le prix avant toute réparation.`,
       image: {
         asset: "P09",
         alt: "Technicien diagnostiquant une chaudière en panne à l'aide d'un multimètre",
@@ -376,8 +377,8 @@ export const chauffageServices: Service[] = [
     },
     facts: [
       { icon: "euro", stat: `${prices.depannage.amount}€ TVAC`, label: "Déplacement + diagnostic + 1ère heure" },
-      { icon: "clock", stat: "Sous 24h", label: "Intervention rapide" },
-      { icon: "calendar", stat: "7j/7", label: "Week-end compris" },
+      { icon: "clock", stat: "Sous 24h", label: "Intervention, 7j/7" },
+      { icon: "phone", stat: company.promises.emergency, label: "On décroche pour les urgences" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Pièces et interventions" },
     ],
     blocks: [
@@ -387,7 +388,7 @@ export const chauffageServices: Service[] = [
         eyebrow: "Diagnostic",
         title: "Les pannes de chaudière que nous réparons",
         intro:
-          "Quel que soit le symptôme, nous commençons par un diagnostic complet, puis nous vous annonçons le prix avant toute réparation.",
+          "On commence toujours par trouver la cause. Vous connaissez ensuite le prix de la réparation, avant qu'on la fasse.",
         items: [
           {
             icon: "fire",
@@ -447,27 +448,27 @@ export const chauffageServices: Service[] = [
       },
       {
         type: "steps",
-        title: "Comment se déroule un dépannage",
+        title: "Comment se passe un dépannage de chaudière",
         steps: [
           {
-            title: "Appel et premier avis",
+            title: "Vous appelez",
             description:
-              "Vous nous décrivez la panne (symptômes, code erreur, marque). Nous fixons un créneau d'intervention sous 24h, 7j/7.",
+              `Décrivez-nous la panne : ce qui ne marche plus, le code affiché, la marque de la chaudière. On décroche ${company.promises.emergency} et on fixe un passage sous 24h, 7j/7.`,
           },
           {
-            title: "Diagnostic sur place",
+            title: "Le technicien trouve la panne",
             description:
-              `Votre technicien identifie la cause exacte de la panne. Déplacement, diagnostic et première heure : ${prices.depannage.amount}€ TVAC.`,
+              `Il cherche la cause exacte : circulateur, vanne, allumage, carte électronique… Déplacement, diagnostic et première heure : ${prices.depannage.amount}€ TVAC.`,
           },
           {
-            title: "Prix annoncé, puis réparation",
+            title: "Vous validez le prix",
             description:
-              "Si une pièce doit être remplacée, vous connaissez le prix avant que nous commencions. Vous décidez.",
+              "Si une pièce doit être changée, vous en connaissez le prix avant qu'on commence. C'est vous qui décidez.",
           },
           {
-            title: "Remise en service",
+            title: "La chaudière repart",
             description:
-              "Contrôle du fonctionnement, de la pression et des sécurités, puis conseils pour éviter que la panne ne se reproduise.",
+              "Contrôle de la pression et des sécurités, puis quelques conseils pour que la panne ne revienne pas.",
           },
         ],
       },
@@ -475,7 +476,7 @@ export const chauffageServices: Service[] = [
         type: "pricing",
         title: "Tarif dépannage de chaudière à Bruxelles",
         intro:
-          "Un forfait clair pour démarrer, sans frais cachés : vous savez ce que vous payez avant même l'arrivée du technicien.",
+          "Le déplacement, le diagnostic et la première heure ont un prix fixe : vous le connaissez avant même que le technicien sonne à la porte.",
         items: [
           { key: "depannage", label: "Dépannage chaudière", popular: true },
           {
@@ -483,7 +484,7 @@ export const chauffageServices: Service[] = [
             note: "Si la réparation n'en vaut plus la peine — devis gratuit",
           },
         ],
-        note: "Prix TVAC. Pièces éventuelles : prix communiqué et validé avec vous avant la réparation. Le prix annoncé est le prix payé.",
+        note: "Prix TVAC. Si une pièce doit être changée, on vous en donne le prix et on attend votre accord avant de réparer.",
       },
       {
         type: "brands",
@@ -503,7 +504,7 @@ export const chauffageServices: Service[] = [
         id: 2,
         question: "En combien de temps pouvez-vous intervenir ?",
         answer:
-          "Nous intervenons sous 24h, 7 jours sur 7, week-end compris, à Bruxelles et dans sa périphérie.",
+          `On décroche ${company.promises.emergency}, et un technicien passe sous 24h, 7 jours sur 7, à Bruxelles et en périphérie. Besoin de lui dans les 2 heures ? Dites-le-nous : c'est possible avec le supplément urgence (${pricingPolicy.urgentSurcharge}, [voir les tarifs](/tarifs)).`,
       },
       {
         id: 3,
@@ -557,7 +558,7 @@ export const chauffageServices: Service[] = [
     cta: {
       title: "Chaudière en panne ? Votre technicien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "Plus de chauffage, plus d'eau chaude, chaudière en sécurité : décrivez-nous la panne. Nous intervenons 7j/7 à Bruxelles et dans toute la région, sous 24h, et vous annonçons le prix avant toute réparation.",
+      body: `Décrivez-nous la panne au téléphone, on décroche ${company.promises.emergency}. Un technicien passe sous 24h, 7j/7, à Bruxelles et alentour, et vous annonce le prix avant de réparer.`,
     },
     zonesIntro:
       "Dépannage de chaudière sous 24h dans les 19 communes bruxelloises et en périphérie, en Brabant flamand et en Brabant wallon.",

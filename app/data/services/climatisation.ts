@@ -1,3 +1,4 @@
+import { company } from "../company";
 import { aircoPerIndoorUnit, prices } from "../pricing";
 import type { Service } from "./types";
 
@@ -402,7 +403,7 @@ export const climatisationServices: Service[] = [
     hero: {
       eyebrow: "Dépannage 7j/7 · Sous 24h",
       intro:
-        "Plus de froid en pleine canicule, plus de chauffage avec votre pompe à chaleur, de l'eau qui coule sous l'unité murale : nos techniciens diagnostiquent la panne et réparent votre installation, au prix annoncé avant toute intervention.",
+        `Plus de froid en pleine canicule, une pompe à chaleur qui ne chauffe plus, de l'eau qui coule sous l'unité ? Nos techniciens trouvent la panne et réparent votre installation, au prix annoncé avant toute intervention. Pour une urgence, on décroche ${company.promises.emergency}.`,
       image: {
         asset: "P42",
         alt: "Manomètres frigorifiques branchés sur l'unité extérieure d'une climatisation",
@@ -410,8 +411,8 @@ export const climatisationServices: Service[] = [
     },
     facts: [
       { icon: "euro", stat: `${prices.depannage.amount}€ TVAC`, label: "Déplacement + diagnostic + 1ère heure" },
-      { icon: "clock", stat: "Sous 24h", label: "Intervention rapide" },
-      { icon: "calendarCheck", stat: "7j/7", label: "Week-end compris" },
+      { icon: "clock", stat: "Sous 24h", label: "Intervention, 7j/7" },
+      { icon: "phone", stat: company.promises.emergency, label: "On décroche pour les urgences" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Sur nos interventions" },
     ],
     blocks: [
@@ -419,7 +420,7 @@ export const climatisationServices: Service[] = [
         type: "features",
         layout: "list",
         title: "Les pannes que nous réparons",
-        intro: "Airco murale, multi-split ou pompe à chaleur : décrivez-nous le symptôme, nous remontons à la cause.",
+        intro: "Décrivez-nous ce que fait (ou ne fait plus) l'appareil : airco murale, multi-split ou pompe à chaleur, on remonte à la cause.",
         items: [
           {
             icon: "tempHigh",
@@ -479,21 +480,21 @@ export const climatisationServices: Service[] = [
         title: "Comment se passe un dépannage ?",
         steps: [
           {
-            title: "Appel et premier diagnostic",
+            title: "Vous nous décrivez les symptômes",
             description:
-              "Vous nous décrivez les symptômes et l'éventuel code erreur. Nous planifions l'intervention sous 24h, 7j/7.",
+              "Ce que fait l'appareil, l'éventuel code affiché, la marque : on fixe un passage sous 24h, 7j/7.",
           },
           {
-            title: "Diagnostic sur place",
+            title: "Contrôle complet sur place",
             description:
-              "Contrôle électrique, circuit frigorifique, écoulement des condensats, unité extérieure.",
+              "Partie électrique, circuit frigorifique, écoulement des condensats et unité extérieure : le technicien vérifie tout.",
           },
           {
-            title: "Prix annoncé avant réparation",
-            description: "Vous savez ce qui doit être fait et combien cela coûte avant que nous intervenions.",
+            title: "Vous validez le prix",
+            description: "Vous savez ce qui doit être fait et combien ça coûte avant qu'on commence.",
           },
           {
-            title: "Réparation et test",
+            title: "Test en froid et en chaud",
             description: "Remise en service, test en froid et en chaud, conseils pour éviter que la panne se reproduise.",
           },
         ],
@@ -526,7 +527,7 @@ export const climatisationServices: Service[] = [
         id: 2,
         question: "Intervenez-vous le week-end ?",
         answer:
-          "Oui, nous intervenons 7j/7, avec une intervention sous 24h à Bruxelles et en périphérie.",
+          `Oui. On décroche ${company.promises.emergency}, et un technicien passe sous 24h, week-end compris, à Bruxelles et en périphérie.`,
       },
       {
         id: 3,
@@ -575,7 +576,7 @@ export const climatisationServices: Service[] = [
     cta: {
       title: "Airco en panne ? Votre technicien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "Canicule sans fraîcheur, pompe à chaleur à l'arrêt, eau qui coule sous l'unité : décrivez-nous la panne, on s'occupe du reste. Intervention sous 24h, 7j/7, à Bruxelles et en périphérie, au prix annoncé.",
+      body: `Décrivez-nous la panne, on décroche ${company.promises.emergency}. Un technicien passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.`,
     },
     draft: false,
   },

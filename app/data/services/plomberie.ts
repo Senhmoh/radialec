@@ -1,3 +1,4 @@
+import { company } from "../company";
 import { prices } from "../pricing";
 import type { Service } from "./types";
 
@@ -23,7 +24,7 @@ export const plomberieServices: Service[] = [
     hero: {
       eyebrow: "Urgence plomberie · 7j/7",
       intro:
-        "Fuite sous l'évier, chasse d'eau qui coule sans arrêt, tuyau percé ou pression en berne : nos plombiers interviennent sous 24h, 7j/7, à Bruxelles et en périphérie. Diagnostic clair, réparation durable, prix annoncé avant intervention.",
+        `Fuite sous l'évier, chasse d'eau qui coule sans arrêt, tuyau percé ? Coupez l'eau et appelez-nous, on décroche ${company.promises.emergency}. Un plombier passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.`,
       image: {
         asset: "P30",
         alt: "Plombier réparant un siphon sous un évier",
@@ -31,8 +32,8 @@ export const plomberieServices: Service[] = [
     },
     facts: [
       { icon: "euro", stat: `${prices.depannage.amount}€ TVAC`, label: "Déplacement + diagnostic + 1ère heure" },
-      { icon: "clock", stat: "Sous 24h", label: "Intervention rapide" },
-      { icon: "calendarCheck", stat: "7j/7", label: "Week-end compris" },
+      { icon: "clock", stat: "Sous 24h", label: "Intervention, 7j/7" },
+      { icon: "phone", stat: company.promises.emergency, label: "On décroche pour les urgences" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Sur nos interventions" },
     ],
     blocks: [
@@ -100,7 +101,7 @@ export const plomberieServices: Service[] = [
           {
             title: "Appel",
             description:
-              "Vous nous décrivez la fuite ; nous vous guidons pour limiter les dégâts et planifions l'intervention sous 24h, 7j/7.",
+              "Décrivez-nous la fuite : on vous aide à limiter les dégâts tout de suite, et on fixe un passage sous 24h, 7j/7.",
           },
           {
             title: "Diagnostic sur place",
@@ -143,7 +144,7 @@ export const plomberieServices: Service[] = [
       {
         id: 2,
         question: "Intervenez-vous le week-end ?",
-        answer: "Oui, 7j/7, avec une intervention sous 24h à Bruxelles et en périphérie.",
+        answer: `Oui. On décroche ${company.promises.emergency}, et un plombier passe sous 24h, week-end compris, à Bruxelles et en périphérie.`,
       },
       {
         id: 3,
@@ -192,7 +193,7 @@ export const plomberieServices: Service[] = [
     cta: {
       title: "Une fuite ? Votre plombier est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "Fuite sous l'évier, WC qui coule, tuyau percé : coupez l'eau, appelez-nous, on s'occupe du reste. Intervention sous 24h, 7j/7, à Bruxelles et en périphérie, au prix annoncé avant réparation.",
+      body: `Coupez l'eau et appelez-nous, on décroche ${company.promises.emergency}. Un plombier passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.`,
     },
     draft: false,
   },
@@ -206,7 +207,7 @@ export const plomberieServices: Service[] = [
     pageTitle: "Débouchage de canalisations et de WC à Bruxelles",
     metaTitle: "Débouchage WC et canalisation à Bruxelles",
     metaDescription:
-      "WC, évier, douche ou canalisation bouchés à Bruxelles ? Débouchage à 200€ TVAC, intervention sous 24h, 7j/7, sans abîmer vos tuyaux. Appelez-nous.",
+      `WC, évier, douche ou canalisation bouchés à Bruxelles ? Débouchage à ${prices.debouchage.amount}€ TVAC, intervention sous 24h, 7j/7, sans abîmer vos tuyaux. Appelez-nous.`,
     summary:
       "WC, évier, douche ou colonne bouchés : débouchage professionnel sous 24h, 7j/7, sans abîmer vos canalisations.",
     icon: "toilet",
@@ -215,16 +216,16 @@ export const plomberieServices: Service[] = [
     hero: {
       eyebrow: "Débouchage · 7j/7",
       intro:
-        "Évier qui ne s'écoule plus, WC qui déborde, douche qui refoule ou mauvaises odeurs : nous débouchons vos canalisations avec un matériel professionnel adapté, sans abîmer votre installation, et cherchons la cause pour éviter la récidive.",
+        "Un évier qui ne s'écoule plus, un WC qui déborde, une douche qui refoule ? On débouche avec le matériel adapté au bouchon, sans abîmer vos canalisations, et on cherche pourquoi ça s'est bouché pour que ça ne recommence pas.",
       image: {
         asset: "P31",
         alt: "Débouchage d'une évacuation de douche au furet électrique",
       },
     },
     facts: [
-      { icon: "euro", stat: "200€ TVAC", label: "Canalisation, WC ou lavabo" },
-      { icon: "clock", stat: "Sous 24h", label: "Intervention rapide" },
-      { icon: "calendarCheck", stat: "7j/7", label: "Week-end compris" },
+      { icon: "euro", stat: `${prices.debouchage.amount}€ TVAC`, label: "Canalisation, WC ou lavabo" },
+      { icon: "clock", stat: "Sous 24h", label: "Intervention, 7j/7" },
+      { icon: "phone", stat: company.promises.emergency, label: "On décroche pour les urgences" },
       { icon: "tools", stat: "Matériel pro", label: "Furet ou hydrocurage selon le cas" },
     ],
     blocks: [
@@ -310,7 +311,7 @@ export const plomberieServices: Service[] = [
         type: "pricing",
         title: "Tarif débouchage à Bruxelles",
         intro:
-          "Un prix clair pour déboucher une canalisation, un WC ou un lavabo. Pour une colonne ou un égout, le prix vous est annoncé avant d'intervenir.",
+          "Un prix fixe pour une canalisation, un WC ou un lavabo. Pour une colonne ou un égout, on vous annonce le prix avant de commencer.",
         items: [{ key: "debouchage" }, { key: "depannage", label: "Dépannage sanitaire" }],
       },
       {
@@ -329,13 +330,13 @@ export const plomberieServices: Service[] = [
         id: 1,
         question: "Combien coûte un débouchage à Bruxelles ?",
         answer:
-          "Le débouchage d'une canalisation, d'un WC ou d'un lavabo est à **200€ TVAC**. Pour une colonne ou un égout, le prix vous est annoncé avant l'intervention.",
+          `Le débouchage d'une canalisation, d'un WC ou d'un lavabo est à **${prices.debouchage.amount}€ TVAC**. Pour une colonne ou un égout, le prix vous est annoncé avant l'intervention.`,
       },
       {
         id: 2,
         question: "Intervenez-vous en urgence pour un WC bouché ?",
         answer:
-          "Oui, 7j/7, avec une intervention sous 24h. En attendant, n'actionnez plus la chasse pour éviter le débordement.",
+          `Oui. On décroche ${company.promises.emergency}, et un technicien passe sous 24h, 7j/7. En attendant, n'actionnez plus la chasse pour éviter le débordement.`,
       },
       {
         id: 3,
@@ -353,7 +354,7 @@ export const plomberieServices: Service[] = [
         id: 5,
         question: "Débouchez-vous les colonnes d'immeuble ?",
         answer:
-          "Oui, selon l'accès. Pour les copropriétés, consultez nos [services aux syndics](/professionnels/syndics-coproprietes).",
+          "Oui, selon l'accès. Pour les copropriétés, consultez nos [services aux syndics](/professionnels).",
       },
       {
         id: 6,
@@ -377,7 +378,7 @@ export const plomberieServices: Service[] = [
     cta: {
       title: "Ça bouche ? Votre technicien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "WC qui déborde, évier qui refoule, douche qui ne s'écoule plus : n'attendez pas le dégât des eaux. Intervention sous 24h, 7j/7, à Bruxelles et en périphérie, au prix annoncé.",
+      body: `N'attendez pas que ça déborde : appelez, on décroche ${company.promises.emergency}. Un technicien passe sous 24h, 7j/7, à Bruxelles et en périphérie, au prix annoncé.`,
     },
     draft: false,
   },

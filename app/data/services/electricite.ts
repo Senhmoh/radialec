@@ -1,3 +1,4 @@
+import { company } from "../company";
 import { prices } from "../pricing";
 import type { Service } from "./types";
 
@@ -24,7 +25,7 @@ export const electriciteServices: Service[] = [
     hero: {
       eyebrow: "Urgence électrique · 7j/7",
       intro:
-        "Plus de courant, un différentiel qui saute sans arrêt, une prise qui chauffe ? Nos électriciens localisent la panne, sécurisent votre installation et rétablissent le courant, sous 24h, 7j/7, au prix annoncé avant intervention.",
+        `Plus de courant, un différentiel qui saute sans arrêt, une prise qui chauffe ? Appelez-nous, on décroche ${company.promises.emergency}. Un électricien trouve la panne, met votre installation en sécurité et rétablit le courant, sous 24h, 7j/7. Vous connaissez le prix avant la réparation.`,
       image: {
         asset: "P20",
         alt: "Électricien intervenant sur un tableau électrique ouvert, tournevis isolé en main",
@@ -32,8 +33,8 @@ export const electriciteServices: Service[] = [
     },
     facts: [
       { icon: "euro", stat: `${prices.depannage.amount}€ TVAC`, label: "Déplacement + diagnostic + 1ère heure" },
-      { icon: "clock", stat: "Sous 24h", label: "Intervention rapide" },
-      { icon: "calendarCheck", stat: "7j/7", label: "Week-end compris" },
+      { icon: "clock", stat: "Sous 24h", label: "Intervention, 7j/7" },
+      { icon: "phone", stat: company.promises.emergency, label: "On décroche pour les urgences" },
       { icon: "shield", stat: "Garantie 2 ans", label: "Pièces et interventions" },
     ],
     blocks: [
@@ -43,7 +44,7 @@ export const electriciteServices: Service[] = [
         eyebrow: "Diagnostic",
         title: "Les pannes électriques les plus fréquentes",
         intro:
-          "Une panne électrique n'arrive jamais au bon moment. Chacune a pourtant une cause identifiable, et une solution.",
+          "Voici les pannes qu'on rencontre le plus souvent, et ce qui les cause en général.",
         items: [
           {
             icon: "power",
@@ -58,7 +59,7 @@ export const electriciteServices: Service[] = [
           {
             icon: "plug",
             title: "Prise ou interrupteur hors service",
-            text: "Prise qui ne délivre plus de courant, interrupteur qui grésille ou ne commande plus rien : remplacement dans les règles de l'art.",
+            text: "Prise qui ne délivre plus de courant, interrupteur qui grésille ou ne commande plus rien : remplacement aux normes.",
           },
           {
             icon: "smog",
@@ -84,7 +85,7 @@ export const electriciteServices: Service[] = [
         paragraphs: [
           "**Coupez immédiatement le disjoncteur général** de votre tableau électrique, ne touchez ni aux fils ni à l'appareil en cause et éloignez les enfants.",
           "Ne tentez jamais de réparer vous-même un câble dénudé ou une prise noircie. Si une personne est électrisée, ne la touchez pas avant d'avoir coupé le courant. En cas d'électrisation ou de début d'incendie, appelez le **112** sans attendre.",
-          "Une fois la situation sécurisée, appelez-nous : un électricien intervient sous 24h, 7j/7, pour localiser le défaut et remettre votre installation en service en toute sécurité.",
+          `Une fois la situation sécurisée, appelez-nous (on décroche ${company.promises.emergency}) : un électricien passe sous 24h, 7j/7, trouve le défaut et remet le courant.`,
         ],
       },
       {
@@ -116,24 +117,24 @@ export const electriciteServices: Service[] = [
         title: "Comment se déroule un dépannage électrique",
         steps: [
           {
-            title: "Appel et premiers conseils",
+            title: "Au téléphone, les bons gestes",
             description:
-              "Vous nous décrivez la panne : nous vous donnons les consignes de sécurité et planifions l'intervention sous 24h, 7j/7.",
+              "Décrivez-nous la panne : on vous dit tout de suite quoi couper et quoi ne pas toucher, et on fixe un passage sous 24h, 7j/7.",
           },
           {
-            title: "Diagnostic sur place",
+            title: "Recherche du défaut",
             description:
-              "Votre électricien teste le tableau, les circuits et l'isolement pour localiser précisément le défaut.",
+              "L'électricien teste le tableau, les circuits et l'isolement jusqu'à trouver d'où vient la panne.",
           },
           {
-            title: "Prix annoncé, puis réparation",
+            title: "Vous validez le prix",
             description:
-              "Si des pièces ou du temps supplémentaire sont nécessaires, le prix vous est annoncé avant toute intervention. Vous validez, nous réparons.",
+              "S'il faut une pièce ou plus de temps, vous connaissez le prix avant qu'on commence. Vous validez, on répare.",
           },
           {
-            title: "Remise en service",
+            title: "Tests et remise sous tension",
             description:
-              "Tests de fonctionnement et de sécurité, puis conseils pour éviter que la panne ne se reproduise.",
+              "Tests de fonctionnement et de sécurité, puis quelques conseils pour que ça ne se reproduise pas.",
           },
         ],
       },
@@ -141,7 +142,7 @@ export const electriciteServices: Service[] = [
         type: "pricing",
         title: "Tarif dépannage électrique à Bruxelles",
         intro:
-          "Un forfait clair qui couvre le déplacement, le diagnostic et la première heure de travail. Pièces éventuelles : devis communiqué et validé avant réparation.",
+          "Le forfait couvre le déplacement, le diagnostic et la première heure de travail. S'il faut des pièces, vous en recevez le prix avant la réparation.",
         items: [
           { key: "depannage", label: "Dépannage électrique", popular: true },
           {
@@ -157,7 +158,7 @@ export const electriciteServices: Service[] = [
         id: 1,
         question: "Intervenez-vous en urgence le week-end ?",
         answer:
-          "Oui, nous intervenons 7j/7, week-end compris, avec une intervention sous 24h. Appelez-nous et nous planifions l'intervention au plus vite.",
+          `Oui. On décroche ${company.promises.emergency}, et un électricien passe sous 24h, week-end compris.`,
       },
       {
         id: 2,
@@ -190,11 +191,6 @@ export const electriciteServices: Service[] = [
           "Oui. Si le diagnostic révèle un tableau vétuste ou non conforme, nous vous remettons un devis gratuit pour sa [rénovation](/electricite/renovation) ou sa [mise en conformité](/electricite/mise-en-conformite-electrique).",
       },
       {
-        id: 7,
-        question: "Vos réparations sont-elles garanties ?",
-        answer: "Oui, nos pièces et interventions bénéficient d'une garantie de 2 ans.",
-      },
-      {
         // Garantie 2 ans + même condition que l'installation (gestionnaire, 08/10/2026, Q35).
         id: 8,
         question: "Le dépannage est-il garanti ?",
@@ -211,7 +207,7 @@ export const electriciteServices: Service[] = [
     cta: {
       title: "Plus de courant ? Votre électricien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "Différentiel qui saute, circuit en panne, prise qui chauffe : ne restez pas dans le noir. Nos électriciens interviennent 7j/7 à Bruxelles et en périphérie, sous 24h, au prix annoncé avant intervention. Décrivez-nous la panne, on s'occupe du reste.",
+      body: `Ne restez pas dans le noir : appelez, on décroche ${company.promises.emergency}. Un électricien passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.`,
     },
     draft: false,
   },
