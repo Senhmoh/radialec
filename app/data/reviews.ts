@@ -124,10 +124,8 @@ export function shortReview(maxLength = 110): Review {
   return [...(short.length ? short : reviews)].sort((a, b) => b.date.localeCompare(a.date))[0];
 }
 
-const months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-
-/** « septembre 2026 » ou « 2025 ». */
-export function reviewDate(date: string): string {
+/** « septembre 2026 » ou « 2025 » (mois dans la langue de la page : `months`). */
+export function reviewDate(date: string, months: string[]): string {
   const [year, month] = date.split("-");
   return month ? `${months[Number(month) - 1]} ${year}` : year;
 }

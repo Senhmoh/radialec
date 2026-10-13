@@ -1,7 +1,10 @@
-import { categoryLabels, categoryOrder, getCategory } from "./categories";
+import { categoryLabel, getCategory, hasCategory, localeCategoryOrder } from "./categories";
 import { guideHref, guides } from "./guides";
-import { getServiceByRef, serviceHref, services, type ServiceCategory } from "./services";
+import { existingServices, findServiceByRef, localeServices, serviceHref, services, type ServiceCategory } from "./services";
 import type { ServiceIntent } from "./services/types";
+import { showNl } from "./visibility";
+import { categoryPath, hasPage, pagePath, pagePaths, type PageKey } from "@/lib/i18n/routes";
+import { defaultLocale, locales, type Locale } from "@/lib/i18n/locale";
 
 export interface NavItem {
   label: string;
@@ -19,15 +22,17 @@ export interface NavGroup {
  * Arborescence de navigation dérivée des données (catégories + services).
  * Calculée côté serveur puis passée en props au Header (client) : seul ce
  * petit objet part dans le bundle navigateur, pas le contenu des pages.
+ * En néerlandais : les métiers et pages déjà traduits seulement.
  */
-export function getNavGroups(): NavGroup[] {
-  return categoryOrder.map((category) => ({
+export function getNavGroups(locale: Locale = defaultLocale): NavGroup[] {
+  return localeCategoryOrder(locale).map((category) => ({
     category,
-    label: categoryLabels[category],
-    href: `/${category}`,
-    items: getCategory(category)
-      .services.map(getServiceByRef)
-      .map((service) => ({ label: service.title, href: serviceHref(service) })),
+    label: categoryLabel(category, locale),
+    href: categoryPath(category, locale),
+    items: existingServices(getCategory(category, locale).services, locale).map((service) => ({
+      label: service.title,
+      href: serviceHref(service),
+    })),
   }));
 }
 
@@ -35,6 +40,8 @@ export interface PageAction {
   intent: ServiceIntent;
   /** Sujet du message WhatsApp pré-rempli. */
   label: string;
+  /** Page d'origine transmise au devis / rendez-vous (identifiant français : « chauffage/entretien-chaudiere »). */
+  context: string;
 }
 
 /**
@@ -42,18 +49,55 @@ export interface PageAction {
  * d'actions mobile (client) adapte sa 2e action (devis, rendez-vous, WhatsApp)
  * sans embarquer le contenu des pages dans le navigateur.
  */
-export function getPageActions(): Record<string, PageAction> {
+export function getPageActions(locale: Locale = defaultLocale): Record<string, PageAction> {
   const actions: Record<string, PageAction> = {};
-  for (const category of categoryOrder) {
-    const content = getCategory(category);
-    actions[`/${category}`] = { intent: content.hero.intent, label: content.label };
+  for (const category of localeCategoryOrder(locale)) {
+    const content = getCategory(category, locale);
+    actions[categoryPath(category, locale)] = { intent: content.hero.intent, label: content.label, context: category };
   }
-  for (const service of services) {
-    actions[serviceHref(service)] = { intent: service.intent, label: service.name };
+  for (const service of localeServices(locale)) {
+    actions[serviceHref(service)] = { intent: service.intent, label: service.name, context: `${service.category}/${service.slug}` };
   }
-  for (const guide of guides) {
-    actions[guideHref(guide)] = { intent: guide.intent, label: guide.topic };
+  if (locale === "fr") {
+    for (const guide of guides) {
+      const href = guideHref(guide);
+      actions[href] = { intent: guide.intent, label: guide.topic, context: href.replace(/^\//, "") };
+    }
   }
   return actions;
 }
 
+/**
+ * Correspondance des adresses entre les langues ({ "/chauffage": { fr, nl } }),
+ * pour le sélecteur de langue (en-tête) et les hreflang : uniquement les pages
+ * qui existent dans les deux langues. Vide tant que le néerlandais n'est pas en ligne.
+ */
+export type Alternates = Record<string, Partial<Record<Locale, string>>>;
+
+export function getAlternates(): Alternates {
+  if (!showNl) return {};
+  const pairs: Partial<Record<Locale, string>>[] = [];
+  for (const key of Object.keys(pagePaths) as PageKey[]) {
+    if (locales.every((locale) => hasPage(key, locale))) pairs.push({ fr: pagePath(key, "fr"), nl: pagePath(key, "nl") });
+  }
+  for (const category of localeCategoryOrder("fr")) {
+    if (hasCategory(category, "nl")) pairs.push({ fr: categoryPath(category, "fr"), nl: categoryPath(category, "nl") });
+  }
+  for (const service of services) {
+    const nl = findServiceByRef(`${service.category}/${service.slug}`, "nl");
+    if (nl) pairs.push({ fr: serviceHref(service), nl: serviceHref(nl) });
+  }
+  const map: Alternates = {};
+  for (const pair of pairs) {
+    for (const locale of locales) {
+      const path = pair[locale];
+      if (path) map[path] = pair;
+    }
+  }
+  return map;
+}
+
+/** Adresses de la même page dans chaque langue (métadonnées hreflang), ou undefined. */
+export function alternatesOf(path: string): Partial<Record<Locale, string>> | undefined {
+  return getAlternates()[path];
+}

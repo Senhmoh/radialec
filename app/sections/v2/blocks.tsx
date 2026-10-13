@@ -10,11 +10,14 @@ import { RichText } from "@/components/site/RichText";
 import { cn } from "@/lib/utils";
 import { fr } from "@/lib/typography";
 import { boilerBrands, certifications } from "@/app/data/brands";
-import { categoryLabels } from "@/app/data/categories";
-import { company, contactActionHref } from "@/app/data/company";
+import { categoryLabel } from "@/app/data/categories";
+import { company, companyText, contactActionHref } from "@/app/data/company";
 import { pickReviews, reviewDate, type ReviewContext } from "@/app/data/reviews";
-import { getServiceByRef, serviceHref, type ServiceIntent, type ServiceRef, type Verdict } from "@/app/data/services";
-import { zonesIntervention } from "@/app/data/zones-intervention";
+import { existingServices, findServiceByRef, serviceHref, type ServiceIntent, type ServiceRef, type Verdict } from "@/app/data/services";
+import { localeZones } from "@/app/data/zones-intervention";
+import { intlLocale } from "@/lib/i18n/locale";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { cardBg, toneBg, type Tone } from "./tones";
 import { ButtonLink, Eyebrow, PhoneButton, SectionTitle, WhatsAppButton, type Surface } from "./ui";
 
@@ -23,11 +26,15 @@ import { ButtonLink, Eyebrow, PhoneButton, SectionTitle, WhatsAppButton, type Su
 /* ------------------------------------------------------------------ */
 
 export function BrandsV2({ title, intro, tone = "white" }: { title: string; intro?: string; tone?: Tone }) {
+  const locale = getRequestLocale();
+  const t = ui(locale).brands;
+  // Lien vers l'entretien de chaudière, dans la langue de la page (s'il existe).
+  const maintenance = findServiceByRef("chauffage/entretien-chaudiere", locale);
   return (
     <section className={cn("py-20 lg:py-28", toneBg[tone])} aria-labelledby="marques-titre">
       <div className="container">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-16">
-          <SectionTitle id="marques-titre" eyebrow="Marques installées" title={title} intro={intro} />
+          <SectionTitle id="marques-titre" eyebrow={t.eyebrow} title={title} intro={intro} />
           <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl bg-night/[0.07] ring-1 ring-night/[0.07] sm:grid-cols-4">
             {boilerBrands.map((brand) => (
               <li key={brand.alt} className="group flex h-24 items-center justify-center bg-white px-5 lg:h-28">
@@ -39,15 +46,17 @@ export function BrandsV2({ title, intro, tone = "white" }: { title: string; intr
                 />
               </li>
             ))}
-            <li className="bg-night">
-              <Link
-                href="/chauffage/entretien-chaudiere"
-                className="group flex h-24 items-center justify-center gap-2 px-5 text-center text-sm font-semibold text-white lg:h-28"
-              >
-                Entretien de chaudière
-                <BsArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-              </Link>
-            </li>
+            {maintenance && (
+              <li className="bg-night">
+                <Link
+                  href={serviceHref(maintenance)}
+                  className="group flex h-24 items-center justify-center gap-2 px-5 text-center text-sm font-semibold text-white lg:h-28"
+                >
+                  {t.maintenanceLink}
+                  <BsArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -81,7 +90,7 @@ export function CalloutV2({
     <section className={cn("py-20 lg:py-28", toneBg[tone])} aria-labelledby="choix-titre">
       <div className={cn("container grid gap-12 lg:gap-20", verdicts?.length ? "lg:grid-cols-[1.05fr_0.95fr]" : "")}>
         <div className={verdicts?.length ? undefined : "max-w-3xl"}>
-          <SectionTitle id="choix-titre" eyebrow="Bien choisir" title={title} />
+          <SectionTitle id="choix-titre" eyebrow={ui(getRequestLocale()).callout.eyebrow} title={title} />
           <div className="mt-8 space-y-4 border-l-2 border-night/10 pl-6 text-[17px] leading-relaxed text-night/75">
             {paragraphs.map((paragraph) => (
               <p key={paragraph}>
@@ -191,30 +200,21 @@ export function HighlightV2({
 /* Bandeau d'appel (milieu de page)                                    */
 /* ------------------------------------------------------------------ */
 
-// Textes par défaut du bandeau d'appel, par intention (repris de l'ancien CallBand).
-// Les pages chauffage gardent la version « chaudière » de la page pilote.
-const callBandCopy: Record<ServiceIntent | "chaudiere", { eyebrow: string; title: string; text: string }> = {
-  chaudiere: {
-    eyebrow: "Une question avant de vous lancer ?",
-    title: "Parlons de votre chaudière.",
-    text: `Réparer ou remplacer ? Gaz ou pompe à chaleur ? Posez la question à un technicien, au téléphone : il vous répond ${company.promises.availability}. Pas le temps maintenant ? Laissez votre numéro, on vous rappelle.`,
-  },
-  urgence: {
-    eyebrow: `Dépannage · ${company.promises.emergency}`,
-    title: `Une panne ? On décroche ${company.promises.emergency}.`,
-    text: "Expliquez-nous ce qui se passe : on vous dit tout de suite si ça peut attendre, et un technicien passe sous 24h, week-end compris.",
-  },
-  installation: {
-    eyebrow: "Devis gratuit",
-    title: "Un projet ? Commençons par en parler.",
-    text: "Décrivez-nous ce que vous voulez faire. Si besoin, un technicien passe voir sur place, et vous recevez un devis détaillé sous 24h, sans engagement.",
-  },
-  entretien: {
-    eyebrow: "Entretien planifié",
-    title: "Votre rendez-vous, réservé en deux minutes.",
-    text: "Choisissez un créneau en ligne ou appelez-nous : le rendez-vous est généralement possible sous 24h, au prix affiché sur le site.",
-  },
-};
+// Textes par défaut du bandeau d'appel, par intention (repris de l'ancien CallBand,
+// lib/i18n/ui.ts). Les pages chauffage gardent la version « chaudière » de la page pilote.
+function callBandCopy(key: ServiceIntent | "chaudiere"): { eyebrow: string; title: string; text: string } {
+  const locale = getRequestLocale();
+  const copy = ui(locale).callBand.copy;
+  const { availability, emergency } = companyText(locale).promises;
+  switch (key) {
+    case "chaudiere":
+      return { ...copy.chaudiere, text: copy.chaudiere.text(availability) };
+    case "urgence":
+      return { eyebrow: copy.urgence.eyebrow(emergency), title: copy.urgence.title(emergency), text: copy.urgence.text };
+    default:
+      return copy[key];
+  }
+}
 
 export function CallBandV2({
   context,
@@ -244,15 +244,17 @@ export function CallBandV2({
   attached?: boolean;
 }) {
   const light = surface === "lavender";
+  const locale = getRequestLocale();
+  const t = ui(locale);
   // Pages chauffage : texte « chaudière », sauf en dépannage (texte d'urgence, on décroche 24h/24).
-  const copy = callBandCopy[copyKey ?? (intent !== "urgence" && context?.startsWith("chauffage") ? "chaudiere" : intent)];
+  const copy = callBandCopy(copyKey ?? (intent !== "urgence" && context?.startsWith("chauffage") ? "chaudiere" : intent));
   // Entretien : le rendez-vous reste la 2e action, WhatsApp passe en lien. Ailleurs :
   // WhatsApp (photo de la panne ou du projet), le rappel en repli (prompts/refonte/06).
   const entretien = intent === "entretien";
   const linkClass = cn("font-semibold underline underline-offset-4 hover:no-underline", light ? "text-night" : "text-white");
   return (
     // Pas de fond propre : la section reprend celui de la section qu'elle prolonge, seule la carte lavande se voit.
-    <section className={cn(toneBg[tone], attached ? "pb-16 lg:pb-28" : "py-16 lg:py-24")} aria-label="Parler à un technicien">
+    <section className={cn(toneBg[tone], attached ? "pb-16 lg:pb-28" : "py-16 lg:py-24")} aria-label={t.callBand.ariaLabel}>
       <div className="container">
         <Reveal>
           <div
@@ -269,17 +271,17 @@ export function CallBandV2({
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <PhoneButton variant="primary" className="min-h-[56px] px-7 text-base" />
                 {entretien ? (
-                  <ButtonLink href={contactActionHref("rendezVous", context)} variant="light" className="min-h-[56px]">
-                    Prendre rendez-vous
+                  <ButtonLink href={contactActionHref("rendezVous", context, locale)} variant="light" className="min-h-[56px]">
+                    {t.common.bookAppointment}
                   </ButtonLink>
                 ) : (
                   <WhatsAppButton topic={topic} variant="light" className="min-h-[56px]">
-                    Écrire sur WhatsApp
+                    {t.whatsapp.write}
                   </WhatsAppButton>
                 )}
               </div>
               <p className={cn("mt-5 text-sm font-medium", light ? "text-night/70" : "text-white/70")}>
-                {entretien ? "Une question avant de réserver ? " : "Vous préférez qu'on vous appelle ? "}
+                {entretien ? t.callBand.beforeBooking : t.callBand.preferCall}
                 {entretien && (
                   <>
                     <WhatsAppButton topic={topic} kind="link" className={linkClass}>
@@ -288,15 +290,15 @@ export function CallBandV2({
                     {" · "}
                   </>
                 )}
-                <Link href={contactActionHref("rappel", context)} className={linkClass}>
-                  Être rappelé
+                <Link href={contactActionHref("rappel", context, locale)} className={linkClass}>
+                  {t.common.callback}
                 </Link>
               </p>
             </div>
             <div className="relative mx-auto mt-10 h-[280px] w-[240px] sm:h-[340px] sm:w-[290px] lg:mt-0 lg:h-[400px] lg:w-full">
               <Image
                 src={technicienTablette}
-                alt="Technicien Radialec avec sa tablette"
+                alt={t.callBand.technicianAlt}
                 fill
                 sizes="(min-width: 1024px) 340px, 290px"
                 className="object-contain object-bottom"
@@ -342,30 +344,34 @@ export function ProofV2({
 }) {
   const { rating, reviewsFloor, url } = company.google;
   const picked = pickReviews(context);
+  const locale = getRequestLocale();
+  const t = ui(locale);
   return (
     <section className={cn("py-20 lg:py-28", toneBg[tone])} aria-labelledby="confiance-titre">
       <div className="container">
         <div className="lg:flex lg:items-end lg:justify-between lg:gap-16">
           <div className="max-w-xl">
-            <Eyebrow>Ils nous font confiance</Eyebrow>
+            <Eyebrow>{t.proof.eyebrow}</Eyebrow>
             <h2 id="confiance-titre" className="v2-title mt-5 text-[1.9rem] sm:text-[2.3rem] lg:text-[2.6rem]">
-              {fr("Ce que disent nos clients.")}
+              {fr(t.proof.title)}
             </h2>
+            {/* Avis affichés mot pour mot, dans leur langue d'origine (jamais traduits ni réécrits). */}
+            {t.proof.originalLanguage && <p className="mt-3 text-sm text-night/55">{t.proof.originalLanguage}</p>}
           </div>
           <div className="mt-8 flex items-center gap-5 lg:mt-0">
             <p className="v2-wide font-display text-[4rem] font-extrabold leading-none tracking-[-0.04em] text-night lg:text-[5rem]">
-              {rating.toLocaleString("fr-BE", { minimumFractionDigits: 1 })}
+              {rating.toLocaleString(intlLocale[locale], { minimumFractionDigits: 1 })}
             </p>
             <div>
               <Stars className="h-5" />
-              <p className="mt-1.5 text-sm font-semibold text-night">{`Plus de ${reviewsFloor} avis Google`}</p>
+              <p className="mt-1.5 text-sm font-semibold text-night">{t.proof.reviewsFloor(reviewsFloor)}</p>
               <a
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-night/70 underline decoration-night/20 underline-offset-4 transition-colors hover:text-night hover:decoration-flame"
               >
-                Lire tous les avis
+                {t.proof.readAll}
                 <BsArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </a>
             </div>
@@ -374,7 +380,7 @@ export function ProofV2({
 
         <ul
           className="-mx-5 mt-10 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:scroll-px-0 sm:px-0 lg:mt-14 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible [&::-webkit-scrollbar]:hidden"
-          aria-label="Avis Google de nos clients"
+          aria-label={t.proof.listLabel}
         >
           {picked.map((review) => (
             <li
@@ -382,10 +388,10 @@ export function ProofV2({
               className={cn("flex w-[85%] flex-shrink-0 snap-start flex-col rounded-[28px] p-7 sm:w-[62%] lg:w-auto lg:p-8", cardBg[tone])}
             >
               <Stars className="h-4" />
-              <blockquote className="mb-6 mt-5 text-[16px] leading-relaxed text-night/80 lg:text-[17px]">« {fr(review.text)} »</blockquote>
+              <blockquote lang="fr" className="mb-6 mt-5 text-[16px] leading-relaxed text-night/80 lg:text-[17px]">« {fr(review.text)} »</blockquote>
               <p className="mt-auto border-t border-night/10 pt-5">
                 <span className="v2-semi block font-display font-bold text-night">{review.author}</span>
-                <span className="mt-0.5 block text-xs text-night/50">Avis Google · {reviewDate(review.date)}</span>
+                <span className="mt-0.5 block text-xs text-night/50">{t.proof.source(reviewDate(review.date, t.months))}</span>
               </p>
             </li>
           ))}
@@ -393,14 +399,10 @@ export function ProofV2({
 
         <div className="mt-14 grid gap-8 border-t border-night/10 pt-10 lg:mt-20 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16">
           <div>
-            <p className="v2-semi font-display text-xl font-bold text-night">Techniciens agréés dans les trois régions</p>
+            <p className="v2-semi font-display text-xl font-bold text-night">{t.proof.certTitle}</p>
             <ul className="mt-4 flex flex-col gap-x-8 gap-y-2.5 text-night/75 sm:flex-row sm:flex-wrap">
-              {[
-                // Repris du texte validé de la page (intro, CTA).
-                "Devis détaillé sous 24h",
-                "Travail conforme aux normes (PEB, RGIE)",
-                "Un seul numéro pour le chauffage, l'électricité et la plomberie",
-              ].map((point) => (
+              {/* Repris du texte validé de la page (intro, CTA). */}
+              {t.proof.points.map((point) => (
                 <li key={point} className="flex items-start gap-3">
                   <FaCheck className="mt-1 h-3.5 w-3.5 flex-shrink-0 text-flame" aria-hidden="true" />
                   {point}
@@ -427,17 +429,19 @@ export function ProofV2({
 /* ------------------------------------------------------------------ */
 
 export function ZonesV2({ intro, tone = "white" }: { intro?: string; tone?: Tone }) {
+  const locale = getRequestLocale();
+  const t = ui(locale).zones;
   return (
     <section className={cn("scroll-mt-24 py-20 lg:py-28", toneBg[tone])} aria-labelledby="zones-titre" id="zones">
       <div className="container">
         <SectionTitle
           id="zones-titre"
-          eyebrow="Zone d'intervention"
-          title="Bruxelles et sa périphérie"
-          intro={intro ?? "Les 19 communes bruxelloises et une partie du Brabant flamand et du Brabant wallon."}
+          eyebrow={t.eyebrow}
+          title={t.title}
+          intro={intro ?? t.intro}
         />
         <div className="mt-12 grid gap-10 lg:grid-cols-3">
-          {zonesIntervention.map((zone) => (
+          {localeZones(locale).map((zone) => (
             <div key={zone.region}>
               <h3 className="v2-semi font-display text-base font-bold text-night">{zone.region}</h3>
               <ul className="mt-4 flex flex-wrap gap-2">
@@ -461,8 +465,8 @@ export function ZonesV2({ intro, tone = "white" }: { intro?: string; tone?: Tone
 
 export function RelatedV2({
   refs,
-  eyebrow = "Nos autres services",
-  title = "Un autre besoin ?",
+  eyebrow,
+  title,
   intro,
   tone = "white",
 }: {
@@ -472,12 +476,15 @@ export function RelatedV2({
   intro?: string;
   tone?: Tone;
 }) {
-  if (refs.length === 0) return null;
-  const related = refs.map(getServiceByRef);
+  const locale = getRequestLocale();
+  const t = ui(locale);
+  // En néerlandais, les pages pas encore traduites sont omises.
+  const related = existingServices(refs, locale);
+  if (related.length === 0) return null;
   return (
     <section className={cn("py-20 lg:py-28", toneBg[tone])} aria-labelledby="lies-titre">
       <div className="container">
-        <SectionTitle id="lies-titre" eyebrow={eyebrow} title={title} intro={intro} />
+        <SectionTitle id="lies-titre" eyebrow={eyebrow ?? t.related.eyebrow} title={title ?? t.related.title} intro={intro} />
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {related.map((service) => (
             <li key={serviceHref(service)}>
@@ -493,14 +500,14 @@ export function RelatedV2({
                   <Icon name={service.icon} className="h-4 w-4" />
                 </span>
                 <span className="mt-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-night/45 group-hover:text-white/50">
-                  {categoryLabels[service.category]}
+                  {categoryLabel(service.category, locale)}
                 </span>
                 <span className="v2-semi mt-1.5 font-display text-lg font-bold leading-snug text-night group-hover:text-white">
                   {service.name}
                 </span>
                 <span className="mt-2 line-clamp-3 text-sm leading-relaxed text-night/65 group-hover:text-white/65">{service.summary}</span>
                 <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-semibold text-night group-hover:text-white">
-                  Découvrir
+                  {t.common.discover}
                   <BsArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>
               </Link>

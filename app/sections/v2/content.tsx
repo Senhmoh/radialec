@@ -6,9 +6,13 @@ import { cn } from "@/lib/utils";
 import { fr } from "@/lib/typography";
 import { contactActionHref } from "@/app/data/company";
 import { resolvePrice, type PriceRef } from "@/app/data/pricing";
-import { categoryLabels } from "@/app/data/categories";
+import { categoryLabel } from "@/app/data/categories";
 import { serviceHref, type Feature, type Fact, type ImageSpec, type Option, type Service, type ServiceIntent } from "@/app/data/services";
 import type { AssetId } from "@/app/data/assets-needed";
+import type { Locale } from "@/lib/i18n/locale";
+import { hasPage, pagePath } from "@/lib/i18n/routes";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { MediaSlot } from "./media";
 import { cardBg, toneBg, type Tone } from "./tones";
 import { ButtonLink, Eyebrow, PhoneButton, SectionTitle } from "./ui";
@@ -201,7 +205,7 @@ export function OptionsV2({
 /* ------------------------------------------------------------------ */
 
 export function PricingV2({
-  eyebrow = "Nos prix",
+  eyebrow,
   title,
   intro,
   items,
@@ -220,31 +224,35 @@ export function PricingV2({
   intent?: ServiceIntent;
   tone?: Tone;
 }) {
-  const resolved = items.map(resolvePrice);
+  const locale = getRequestLocale();
+  const t = ui(locale);
+  const resolved = items.map((item) => resolvePrice(item, locale));
   return (
     <section className={cn("py-16 lg:py-28", toneBg[tone])} aria-label={title}>
       <div className="container grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
         <div>
-          <SectionTitle eyebrow={eyebrow} title={title} intro={intro} />
+          <SectionTitle eyebrow={eyebrow ?? t.pricing.eyebrow} title={title} intro={intro} />
           <p className="mt-6 max-w-md text-sm text-night/60">
-            <RichText text={note ?? "Prix TVAC. Pour tout ce qui sort de ces forfaits, on vous annonce le prix avant de commencer."} />
+            <RichText text={note ?? t.pricing.note} />
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             {intent === "urgence" ? (
               <PhoneButton variant="primary" />
             ) : intent === "entretien" ? (
-              <ButtonLink href={contactActionHref("rendezVous", context)} variant="dark" arrow>
-                Prendre rendez-vous
+              <ButtonLink href={contactActionHref("rendezVous", context, locale)} variant="dark" arrow>
+                {t.common.bookAppointment}
               </ButtonLink>
             ) : (
-              <ButtonLink href={contactActionHref("devis", context)} variant="dark" arrow>
-                Demander un devis gratuit
+              <ButtonLink href={contactActionHref("devis", context, locale)} variant="dark" arrow>
+                {t.requestQuote}
               </ButtonLink>
             )}
-            <Link href="/tarifs" className="group inline-flex items-center gap-1.5 px-2 py-3 font-semibold text-night hover:text-flame">
-              Voir tous nos tarifs
-              <BsArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
+            {hasPage("tarifs", locale) && (
+              <Link href={pagePath("tarifs", locale)} className="group inline-flex items-center gap-1.5 px-2 py-3 font-semibold text-night hover:text-flame">
+                {t.pricing.seeAll}
+                <BsArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+            )}
           </div>
         </div>
         <div className="relative isolate overflow-hidden rounded-[28px] bg-night px-5 py-6 text-white sm:px-8 sm:py-8">
@@ -263,11 +271,11 @@ export function PricingV2({
                 <span className="ml-auto flex flex-shrink-0 items-baseline gap-2 tabular-nums">
                   {item.originalAmount !== undefined && <span className="text-sm text-white/40 line-through">{item.originalAmount}€</span>}
                   {item.amount === undefined ? (
-                    <span className="text-xs font-semibold uppercase tracking-[0.15em] text-white/60">Sur devis</span>
+                    <span className="text-xs font-semibold uppercase tracking-[0.15em] text-white/60">{t.pricing.onQuote}</span>
                   ) : (
                     <span className="v2-semi font-display text-xl font-bold text-bolt">
-                      {item.from && <span className="mr-1 text-xs font-medium text-white/60">dès</span>}
-                      {item.amount}€<span className="ml-1 text-[10px] font-normal text-white/45">TVAC</span>
+                      {item.from && <span className="mr-1 text-xs font-medium text-white/60">{t.pricing.from}</span>}
+                      {item.amount}€<span className="ml-1 text-[10px] font-normal text-white/45">{t.pricing.vat}</span>
                     </span>
                   )}
                 </span>
@@ -313,7 +321,7 @@ export function AlertV2({
           <span aria-hidden="true" className={cn("absolute bottom-0 left-0 top-0 w-1.5", danger ? "bg-flame" : "bg-water")} />
           <p className={cn("flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.2em]", danger ? "text-flame" : "text-water")}>
             {danger && <FaExclamationTriangle className="h-3.5 w-3.5" aria-hidden="true" />}
-            {danger ? "Sécurité" : "Bon à savoir"}
+            {danger ? ui(getRequestLocale()).alert.danger : ui(getRequestLocale()).alert.info}
           </p>
           <h2 className="v2-title mt-3 text-[1.5rem] lg:text-[1.9rem]">{fr(title)}</h2>
           <div className="mt-4 space-y-3 text-night/80">
@@ -334,7 +342,7 @@ export function AlertV2({
 /* ------------------------------------------------------------------ */
 
 export function GuideV2({
-  eyebrow = "Le conseil du technicien",
+  eyebrow = ui(getRequestLocale()).guide.eyebrow,
   title,
   paragraphs,
   image,
@@ -375,11 +383,12 @@ export function GuideV2({
 /* Grille de services (pages catégorie, accueil)                       */
 /* ------------------------------------------------------------------ */
 
-export function startingPrice(service: Service): string | undefined {
+export function startingPrice(service: Service, locale: Locale = getRequestLocale()): string | undefined {
   if (!service.price) return undefined;
-  const price = resolvePrice(service.price);
+  const price = resolvePrice(service.price, locale);
   if (price.amount === undefined) return undefined;
-  return `${price.from ? "Dès " : ""}${price.amount}€ TVAC`;
+  const t = ui(locale).pricing;
+  return `${price.from ? `${t.fromCap} ` : ""}${price.amount}€ ${t.vat}`;
 }
 
 /** Carte mise en avant : photo (ou emplacement) + titre + prix. */
@@ -401,7 +410,11 @@ export function FeaturedServiceCard({ service, asset, priceLabel }: { service: S
         <h3 className="v2-semi font-display text-xl font-bold leading-snug text-night">{service.name}</h3>
         <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-night/65">{service.summary}</p>
         <div className="mt-auto flex items-center justify-between gap-3 pt-6">
-          {price ? <span className="v2-semi font-display text-lg font-bold text-flame">{price}</span> : <span className="text-sm font-semibold text-night/60">Devis gratuit</span>}
+          {price ? (
+            <span className="v2-semi font-display text-lg font-bold text-flame">{price}</span>
+          ) : (
+            <span className="text-sm font-semibold text-night/60">{ui(getRequestLocale()).quoteFree}</span>
+          )}
           <BsArrowRight className="h-5 w-5 text-night transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </div>
       </div>
@@ -423,7 +436,7 @@ export function ServiceCardV2({ service, showCategory, tone = "white" }: { servi
       <span className="v2-energy absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" aria-hidden="true" />
       {showCategory && (
         <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-night/45 group-hover:text-white/50">
-          {categoryLabels[service.category]}
+          {categoryLabel(service.category, getRequestLocale())}
         </span>
       )}
       <span className={cn("v2-semi font-display text-lg font-bold leading-snug text-night group-hover:text-white", showCategory && "mt-1.5")}>
@@ -432,7 +445,7 @@ export function ServiceCardV2({ service, showCategory, tone = "white" }: { servi
       <span className="mt-2 line-clamp-3 text-sm leading-relaxed text-night/65 group-hover:text-white/65">{service.summary}</span>
       <span className="mt-auto flex items-center justify-between gap-3 pt-6">
         <span className={cn("text-sm font-semibold", price ? "text-flame group-hover:text-bolt" : "text-night/60 group-hover:text-white/60")}>
-          {price ?? "Devis gratuit"}
+          {price ?? ui(getRequestLocale()).quoteFree}
         </span>
         <BsArrowRight className="h-4 w-4 text-night transition-transform group-hover:translate-x-1 group-hover:text-white" aria-hidden="true" />
       </span>

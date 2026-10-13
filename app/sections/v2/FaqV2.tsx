@@ -5,6 +5,8 @@ import { RichText } from "@/components/site/RichText";
 import { cn } from "@/lib/utils";
 import { fr } from "@/lib/typography";
 import type { FaqItem } from "@/app/data/services/types";
+import { useLocale } from "@/lib/i18n/client";
+import { ui } from "@/lib/i18n/ui";
 import { cardBg, toneBg, type Tone } from "./tones";
 import { Eyebrow, WhatsAppButton } from "./ui";
 
@@ -30,24 +32,25 @@ export function FaqV2({
 }) {
   const [openId, setOpenId] = useState<number | null>(faqs[0]?.id ?? null);
   const baseId = useId();
+  const t = ui(useLocale());
 
   return (
     <section id={id} className={cn("scroll-mt-24 py-20 lg:py-28", toneBg[tone])} aria-labelledby="faq-titre">
       <div className="container grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <Eyebrow>Questions fréquentes</Eyebrow>
+          <Eyebrow>{t.common.faqTitle}</Eyebrow>
           <h2 id="faq-titre" className="v2-title mt-5 text-[1.9rem] sm:text-[2.3rem] lg:text-[2.5rem]">
             {fr(title)}
           </h2>
           <p className="mt-5 max-w-sm text-night/70">
-            {fr("Votre question n'y est pas ? Posez-la sur WhatsApp, photo à l'appui si besoin, ou laissez votre numéro : nous vous rappelons.")}
+            {fr(t.faq.text)}
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
             <WhatsAppButton topic={topic} variant="outline">
-              Poser ma question
+              {t.faq.ask}
             </WhatsAppButton>
             <Link href={rappelHref} className="font-semibold text-night underline underline-offset-4 hover:no-underline">
-              Être rappelé
+              {t.common.callback}
             </Link>
           </div>
         </div>

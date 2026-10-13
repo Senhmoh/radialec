@@ -1,6 +1,9 @@
 // Grille tarifaire unique du site (prix TVAC). Toute page qui affiche un prix
 // passe par ce fichier : modifier un tarif ici le met à jour partout
 // (homepage, pages service, /tarifs, données structurées).
+// Libellés néerlandais : priceTextNl (même montant, un seul endroit).
+
+import type { Locale } from "@/lib/i18n/locale";
 
 /** Supplément par unité intérieure pour l'entretien d'une airco (gestionnaire, 08/10/2026). */
 export const aircoPerIndoorUnit = 90;
@@ -87,6 +90,26 @@ export const prices = {
 
 export type PriceKey = keyof typeof prices;
 
+// Néerlandais : libellé et note de chaque tarif (le montant reste celui de `prices`).
+const priceTextNl: Record<PriceKey, Pick<PriceItem, "label" | "note">> = {
+  entretienChaudiereGaz: { label: "Onderhoud gasketel", note: "Volledige controle + attest" },
+  depannage: { label: "Depannage (ketel, sanitair, elektriciteit, airco/warmtepomp)", note: "Verplaatsing + diagnose + 1e uur" },
+  entretienChaudiereMazout: { label: "Onderhoud stookolieketel", note: "Volledige controle + attest" },
+  entretienChauffeEau: { label: "Onderhoud gasboiler" },
+  entretienBoilerElectrique: { label: "Onderhoud elektrische boiler" },
+  debouchage: { label: "Ontstopping leiding / wc / lavabo", note: "Afvoerkolom en riolering apart geprijsd" },
+  ramonage: { label: "Schoorsteenvegen", note: "Veegattest inbegrepen" },
+  entretienPac: { label: "Onderhoud warmtepomp" },
+  heureSupplementaire: { label: "Extra uur (depannage)" },
+  entretienAirco: { label: "Onderhoud airco", note: `+ ${aircoPerIndoorUnit} € per binnenunit` },
+  detartrage: { label: "Ontkalking" },
+  miseEnConformite: {
+    label: "Elektrische installatie in orde brengen",
+    note: "Inventaris, elektrische schema's en keuring door een erkend organisme, als er niets aangepast moet worden",
+  },
+  contratEntretien: { label: "Onderhoudscontract ketel (2 jaar)", note: "Particulieren" },
+};
+
 /**
  * Conditions tarifaires affichées sous la carte de /tarifs (réponses du
  * gestionnaire, 08/10/2026). Une valeur null n'est pas affichée du tout.
@@ -118,8 +141,8 @@ export interface PriceRef {
   popular?: boolean;
 }
 
-export function resolvePrice(ref: PriceRef): PriceItem {
-  const base: PriceItem = ref.key ? prices[ref.key] : { label: "" };
+export function resolvePrice(ref: PriceRef, locale: Locale = "fr"): PriceItem {
+  const base: PriceItem = ref.key ? (locale === "nl" ? { ...prices[ref.key], ...priceTextNl[ref.key] } : prices[ref.key]) : { label: "" };
   return {
     ...base,
     label: ref.label ?? base.label,
@@ -128,6 +151,6 @@ export function resolvePrice(ref: PriceRef): PriceItem {
   };
 }
 
-export function formatAmount(item: PriceItem): string {
-  return item.amount === undefined ? "Sur devis" : `${item.amount}€`;
+export function formatAmount(item: PriceItem, locale: Locale = "fr"): string {
+  return item.amount === undefined ? (locale === "nl" ? "Op offerte" : "Sur devis") : `${item.amount}€`;
 }

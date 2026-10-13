@@ -9,40 +9,61 @@ import { BsArrowRight } from "react-icons/bs";
 import Logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
 import { company, contactActionHref } from "@/app/data/company";
-import type { NavGroup } from "@/app/data/navigation";
+import type { Alternates, NavGroup } from "@/app/data/navigation";
 import type { ServiceCategory } from "@/app/data/services/types";
+import { useLocale } from "@/lib/i18n/client";
+import { locales, type Locale } from "@/lib/i18n/locale";
+import { pagePath } from "@/lib/i18n/routes";
+import { ui } from "@/lib/i18n/ui";
 import { btn, WhatsAppButton } from "./ui";
 
-interface NavLink {
+export interface NavLink {
   label: string;
   href: string;
   category?: ServiceCategory;
 }
 
-// Même arborescence que l'ancien header (Professionnels reste dans le footer).
-const navLinks: NavLink[] = [
-  { label: "Chauffage", href: "/chauffage", category: "chauffage" },
-  { label: "Électricité", href: "/electricite", category: "electricite" },
-  { label: "Plomberie", href: "/plomberie", category: "plomberie" },
-  { label: "Climatisation", href: "/climatisation", category: "climatisation" },
-  { label: "Tarifs", href: "/tarifs" },
-  { label: "Contact", href: "/contact" },
-];
+// Ordre d'affichage des métiers dans l'en-tête (Professionnels reste dans le footer).
+const headerCategories: ServiceCategory[] = ["chauffage", "electricite", "plomberie", "climatisation"];
+
+/**
+ * Liens du menu : les métiers (dans l'ordre de l'en-tête), puis Tarifs et
+ * Contact. En néerlandais, seuls ceux qui existent déjà (`extra` filtré côté serveur).
+ */
+function menuLinks(groups: NavGroup[], extra: NavLink[]): NavLink[] {
+  const trades = headerCategories
+    .map((category) => groups.find((g) => g.category === category))
+    .filter((g): g is NavGroup => Boolean(g))
+    .map((g) => ({ label: g.label, href: g.href, category: g.category }));
+  return [...trades, ...extra];
+}
+
+/** Lien vers la même page dans l'autre langue (ou son accueil si elle n'est pas traduite). */
+function otherLanguage(locale: Locale, pathname: string, alternates: Alternates) {
+  const target = locales.find((l) => l !== locale)!;
+  return { locale: target, href: alternates[pathname]?.[target] ?? pagePath("home", target), strings: ui(target).language };
+}
 
 /**
  * En-tête refondu : barre claire flottante (le logo reste sur fond clair,
  * exactement tel quel), téléphone toujours visible, devis en action n°1.
  */
-export function HeaderV2({ groups }: { groups: NavGroup[] }) {
+export function HeaderV2({ groups, extraLinks, alternates }: { groups: NavGroup[]; extraLinks: NavLink[]; alternates: Alternates }) {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
+  const locale = useLocale();
+  const t = ui(locale);
+  const home = pagePath("home", locale);
+  const navLinks = menuLinks(groups, extraLinks);
+  // Sélecteur de langue : seulement quand l'autre langue est en ligne (alternates non vide).
+  const other = Object.keys(alternates).length > 0 ? otherLanguage(locale, pathname, alternates) : null;
 
   const itemsFor = (category?: ServiceCategory) => groups.find((g) => g.category === category)?.items ?? [];
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const isActive = (href: string) => (href === home ? pathname === home : pathname.startsWith(href));
 
   const closeAll = () => {
     setIsOpen(false);
@@ -92,14 +113,14 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
         )}
       >
         <div className="flex h-16 items-center justify-between gap-2 pl-3 pr-1.5 sm:gap-3 sm:pl-5 sm:pr-2.5 lg:h-[72px]">
-          <Link href="/" aria-label="Radialec — accueil" className="flex flex-shrink-0 items-center gap-1.5 sm:gap-2" onClick={closeAll}>
+          <Link href={home} aria-label={t.homeLabel} className="flex flex-shrink-0 items-center gap-1.5 sm:gap-2" onClick={closeAll}>
             <Image src={Logo} alt="" height={44} width={39} priority className="h-8 w-auto min-[380px]:h-9 md:h-11" />
             <span className="font-wordmark text-[17px] font-extrabold tracking-tight text-ink min-[360px]:text-[19px] min-[380px]:text-[21px] sm:text-[28px] xl:text-[24px] 2xl:text-[28px]">
               Radialec
             </span>
           </Link>
 
-          <nav aria-label="Navigation principale" className="hidden items-center gap-1 font-display xl:flex">
+          <nav aria-label={t.header.mainNav} className="hidden items-center gap-1 font-display xl:flex">
             {navLinks.map((link) => {
               const items = itemsFor(link.category);
               const hasMenu = items.length > 0;
@@ -168,7 +189,7 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
                             onClick={closeAll}
                             className="mt-1.5 flex items-center justify-between rounded-xl bg-night px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-black"
                           >
-                            Tous nos services {link.label.toLowerCase()}
+                            {t.header.allServices(link.label)}
                             <BsArrowRight className="h-4 w-4" aria-hidden="true" />
                           </Link>
                         </motion.div>
@@ -181,14 +202,26 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link href={contactActionHref("devis")} className={btn("dark", "hidden min-h-[44px] px-5 text-sm lg:inline-flex")}>
-              Devis gratuit
+            {other && (
+              <a
+                href={other.href}
+                hrefLang={other.locale}
+                lang={other.locale}
+                aria-label={other.strings.switchTo}
+                title={other.strings.switchTo}
+                className="hidden h-11 items-center rounded-xl px-2.5 text-sm font-semibold text-night/70 transition-colors hover:bg-night/[0.05] hover:text-night lg:flex"
+              >
+                {other.strings.short}
+              </a>
+            )}
+            <Link href={contactActionHref("devis", undefined, locale)} className={btn("dark", "hidden min-h-[44px] px-5 text-sm lg:inline-flex")}>
+              {t.quoteFree}
             </Link>
             {/* Le numéro : l'élément de conversion n°1, en rouge partout. */}
             <a
               href={company.phone.href}
               className={btn("primary", "min-h-[44px] gap-1.5 whitespace-nowrap px-3 text-[13px] tabular-nums max-[359px]:gap-1 max-[359px]:px-2 max-[359px]:text-xs sm:gap-2 sm:px-4 sm:text-sm")}
-              aria-label={`Appeler le ${company.phone.display}`}
+              aria-label={t.callNumber(company.phone.display)}
             >
               <FaPhoneAlt className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
               <span className="hidden sm:inline">{company.phone.display}</span>
@@ -196,7 +229,7 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
             </a>
             <button
               type="button"
-              aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-label={isOpen ? t.header.closeMenu : t.header.openMenu}
               aria-expanded={isOpen}
               aria-controls="menu-mobile-v2"
               onClick={() => setIsOpen(!isOpen)}
@@ -207,7 +240,7 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
                 <line x1="4" y1="17" x2="20" y2="17" className={cn("origin-center transition", isOpen && "-translate-y-[5px] -rotate-45")} />
               </svg>
               <span aria-hidden="true" className="font-display text-[10px] font-bold uppercase leading-none tracking-[0.12em] sm:text-[13px]">
-                {isOpen ? "Fermer" : "Menu"}
+                {isOpen ? t.header.close : t.header.menu}
               </span>
             </button>
           </div>
@@ -217,7 +250,7 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
           {isOpen && (
             <motion.nav
               id="menu-mobile-v2"
-              aria-label="Navigation mobile"
+              aria-label={t.header.mobileNav}
               initial={{ height: 0 }}
               animate={{ height: "auto" }}
               exit={{ height: 0 }}
@@ -242,7 +275,7 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
                           {items.length > 0 && (
                             <button
                               type="button"
-                              aria-label={`${expanded ? "Masquer" : "Afficher"} les services ${link.label}`}
+                              aria-label={t.header.toggleServices(expanded, link.label)}
                               aria-expanded={expanded}
                               onClick={() => setExpandedMobile(expanded ? null : link.label)}
                               className="flex h-11 w-11 items-center justify-center rounded-xl text-night hover:bg-night/[0.05]"
@@ -267,7 +300,7 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
                               ))}
                               <li className="pb-3">
                                 <Link href={link.href} onClick={closeAll} className="block py-2.5 pl-3 text-sm font-semibold text-flame">
-                                  Tous nos services {link.label.toLowerCase()} →
+                                  {t.header.allServices(link.label)} →
                                 </Link>
                               </li>
                             </motion.ul>
@@ -282,13 +315,24 @@ export function HeaderV2({ groups }: { groups: NavGroup[] }) {
                     <FaPhoneAlt className="h-3.5 w-3.5" aria-hidden="true" />
                     {company.phone.display}
                   </a>
-                  <Link href={contactActionHref("devis")} onClick={closeAll} className={btn("dark", "w-full")}>
-                    Demander un devis gratuit
+                  <Link href={contactActionHref("devis", undefined, locale)} onClick={closeAll} className={btn("dark", "w-full")}>
+                    {t.requestQuote}
                   </Link>
                   <WhatsAppButton variant="outline" className="w-full sm:col-span-2">
-                    Écrire sur WhatsApp
+                    {t.whatsapp.write}
                   </WhatsAppButton>
                 </div>
+                {other && (
+                  <a
+                    href={other.href}
+                    hrefLang={other.locale}
+                    lang={other.locale}
+                    className="mt-4 flex items-center justify-center gap-2 py-2 text-sm font-semibold text-night/70 hover:text-night"
+                  >
+                    <span className="rounded-md bg-night/[0.06] px-1.5 py-0.5 text-xs">{other.strings.short}</span>
+                    {other.strings.name}
+                  </a>
+                )}
               </div>
             </motion.nav>
           )}

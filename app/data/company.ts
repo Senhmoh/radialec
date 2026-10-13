@@ -2,6 +2,12 @@
 // Tout composant qui affiche un numéro, un e-mail, une note Google ou une
 // promesse (délai, garantie…) doit lire ce fichier — ne jamais recopier ces
 // valeurs en dur dans une page.
+// Les textes affichés existent en français (`company`) et en néerlandais
+// (`companyCopy.nl`) : un composant lit companyText(locale).
+
+// Chemin relatif : ce fichier est aussi lu par next.config.ts (sans alias @/).
+import { callbackAnchor, pagePath } from "../../lib/i18n/routes";
+import type { Locale } from "../../lib/i18n/locale";
 
 /** Actions mesurées comme conversions Google Ads (lib/tracking.ts). */
 export type AdsConversion = "devis" | "rappel" | "rendezVous" | "appel" | "whatsapp";
@@ -160,24 +166,90 @@ export const contactActions: Record<
   },
 };
 
+/** Textes de `company` qui changent avec la langue. */
+export interface CompanyCopy {
+  tagline: string;
+  description: string;
+  hours: { summary: string; detail: string | null };
+  whatsappHours: string;
+  promises: { [K in keyof typeof company.promises]: (typeof company.promises)[K] };
+}
+
+// Néerlandais (Flandre, Bruxelles) : à faire relire par un néerlandophone
+// (app/data/visibility.ts, nlPublished). Mêmes promesses que le français, mot pour mot.
+export const companyCopy: Record<Locale, CompanyCopy> = {
+  fr: {
+    tagline: company.tagline,
+    description: company.description,
+    hours: { summary: company.hours.summary, detail: company.hours.detail },
+    whatsappHours: company.whatsapp.hours,
+    promises: company.promises,
+  },
+  nl: {
+    tagline: "Verwarming, elektriciteit, sanitair en airco in Brussel",
+    description:
+      "Chauffagist, elektricien en loodgieter in Brussel en omgeving: installatie, onderhoud en herstelling 7 op 7, interventie binnen 24 uur, gratis offerte.",
+    hours: { summary: "7 op 7", detail: "7 op 7, van 10u tot 21u" },
+    whatsappHours: "7 op 7, van 10u tot 21u",
+    promises: {
+      intervention: "Interventie binnen 24 uur",
+      availability: "7 op 7",
+      quote: "Gratis offerte binnen 24 uur",
+      warranty: "2 jaar garantie",
+      clients: "+200 tevreden klanten",
+      callback: "binnen 2 uur, tussen 10u en 21u",
+      // « On décroche 24h/24 » : « we nemen dag en nacht op ».
+      emergency: "dag en nacht",
+    },
+  },
+};
+
+export function companyText(locale: Locale): CompanyCopy {
+  return companyCopy[locale];
+}
+
 /**
  * Lien WhatsApp avec un message pré-rempli : le client n'a plus qu'à décrire son
  * besoin, Radialec sait de quelle page il vient.
  */
-export function whatsappHref(topic?: string): string {
-  const text = topic
-    ? `Bonjour Radialec, je vous contacte au sujet de : ${topic}.`
-    : "Bonjour Radialec, j'aimerais un renseignement.";
+export function whatsappHref(topic?: string, locale: Locale = "fr"): string {
+  const text =
+    locale === "nl"
+      ? topic
+        ? `Hallo Radialec, ik neem contact op over: ${topic}.`
+        : "Hallo Radialec, ik heb een vraag."
+      : topic
+        ? `Bonjour Radialec, je vous contacte au sujet de : ${topic}.`
+        : "Bonjour Radialec, j'aimerais un renseignement.";
   return `https://wa.me/${company.whatsapp.number}?text=${encodeURIComponent(text)}`;
+}
+
+/** Libellés des trois actions de conversion en néerlandais (le français est dans contactActions). */
+export const contactActionLabelsNl: Record<ContactActionKey, string> = {
+  devis: "Gratis offerte aanvragen",
+  rendezVous: "Afspraak maken",
+  rappel: "Laat u terugbellen",
+};
+
+export function contactActionLabel(key: ContactActionKey, locale: Locale = "fr"): string {
+  return locale === "nl" ? contactActionLabelsNl[key] : contactActions[key].label;
 }
 
 /**
  * `context` = service (« chauffage/pompe-a-chaleur ») ou catégorie
  * (« chauffage ») d'où part le clic : la page de destination se pré-remplit
- * avec (prestation du devis, type de rendez-vous, sujet du rappel).
+ * avec (prestation du devis, type de rendez-vous, sujet du rappel). Le contexte
+ * reste l'identifiant français, quelle que soit la langue de la page.
  */
-export function contactActionHref(key: ContactActionKey, context?: string): string {
-  const href = contactActions[key].href;
+export function contactActionHref(key: ContactActionKey, context?: string, locale: Locale = "fr"): string {
+  const href =
+    locale === "fr"
+      ? contactActions[key].href
+      : key === "devis"
+        ? pagePath("devis", locale)
+        : key === "rendezVous"
+          ? pagePath("rendezVous", locale)
+          : `${pagePath("contact", locale)}#${callbackAnchor[locale]}`;
   if (!href) return `/contact#${contactActions[key].anchor}`;
   if (!context || !href.startsWith("/")) return href;
   // La requête doit précéder l'ancre : /contact?service=…#formulaire-rappel.

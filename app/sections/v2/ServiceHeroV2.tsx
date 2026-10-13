@@ -5,9 +5,12 @@ import { Icon } from "@/components/site/Icon";
 import { JsonLd } from "@/components/site/JsonLd";
 import { breadcrumbJsonLd, type Crumb } from "@/lib/seo";
 import { currentHeating, type CurrentHeating } from "@/lib/quote/schema";
+import { quoteLabels } from "@/lib/quote/labels";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { fr } from "@/lib/typography";
 import { cn } from "@/lib/utils";
-import { company, contactActionHref } from "@/app/data/company";
+import { company, companyText, contactActionHref } from "@/app/data/company";
 import type { AssetId } from "@/app/data/assets-needed";
 import type { Fact, ImageSpec, ServiceIntent } from "@/app/data/services/types";
 import { MediaSlot, resolvePhoto } from "./media";
@@ -66,19 +69,23 @@ export function ServiceHeroV2({
   topic,
 }: ServiceHeroV2Props) {
   const light = surface === "lavender";
+  const locale = getRequestLocale();
+  const t = ui(locale);
+  const promises = companyText(locale).promises;
   // 2e action selon l'intention (prompts/refonte/06) : urgence = WhatsApp (photo de la
   // panne), entretien = rendez-vous, projet = devis.
   const secondary =
     intent === "entretien"
-      ? { href: contactActionHref("rendezVous", context), label: "Prendre rendez-vous" }
-      : { href: contactActionHref("devis", context), label: "Demander un devis gratuit" };
+      ? { href: contactActionHref("rendezVous", context, locale), label: t.common.bookAppointment }
+      : { href: contactActionHref("devis", context, locale), label: t.requestQuote };
   // Devis express : la première question du devis (chauffage actuel), ouvre /devis pré-rempli.
+  const heating = quoteLabels(locale).currentHeating;
   const quick: HeroShortcuts | undefined = quickStart
     ? {
-        label: "Devis express · votre chauffage actuel :",
+        label: t.hero.quickStart,
         links: (Object.keys(currentHeating) as CurrentHeating[]).map((key) => ({
-          label: currentHeating[key],
-          href: `${contactActionHref("devis", context)}&actuel=${key}`,
+          label: heating[key],
+          href: `${contactActionHref("devis", context, locale)}&actuel=${key}`,
         })),
       }
     : shortcuts;
@@ -92,7 +99,7 @@ export function ServiceHeroV2({
 
       <div className="container pb-10 pt-24 sm:pt-28 lg:pb-14 lg:pt-32">
         {breadcrumbs.length > 1 && (
-        <nav aria-label="Fil d'Ariane" className="text-[13px]">
+        <nav aria-label={t.breadcrumbs} className="text-[13px]">
           <ol className={cn("flex flex-wrap items-center gap-x-2 gap-y-1", light ? "text-night/55" : "text-white/55")}>
             {breadcrumbs.map((crumb, index) => {
               const last = index === breadcrumbs.length - 1;
@@ -130,7 +137,7 @@ export function ServiceHeroV2({
               <PhoneButton variant="primary" className="min-h-[56px] px-7 text-base" />
               {intent === "urgence" ? (
                 <WhatsAppButton topic={topic} variant="light" className="min-h-[56px] px-7 text-base">
-                  Envoyer une photo
+                  {t.whatsapp.sendPhoto}
                 </WhatsAppButton>
               ) : (
                 <>
@@ -157,16 +164,16 @@ export function ServiceHeroV2({
                     ))}
                   </span>
                   <span className="underline-offset-4 group-hover:underline">
-                    <strong className={cn("font-semibold", light ? "text-night" : "text-white")}>{company.google.rating}/5</strong> sur Google</span>
+                    <strong className={cn("font-semibold", light ? "text-night" : "text-white")}>{company.google.rating}/5</strong> {t.hero.onGoogle}</span>
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Icon name="shield" className="h-4 w-4 text-water-light" />
-                {company.promises.warranty}
+                {promises.warranty}
               </li>
               <li className="flex items-center gap-2">
                 <Icon name="clock" className="h-4 w-4 text-water-light" />
-                {company.promises.quote}
+                {promises.quote}
               </li>
             </ul>
 

@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { categoryLabels } from "@/app/data/categories";
-import { services } from "@/app/data/services";
-import { attributionRows, newReference, renderEmail } from "@/lib/quote/email";
+import { categoryLabel, categoryLabels } from "@/app/data/categories";
+import { findServiceByRef, services, type ServiceCategory, type ServiceRef } from "@/app/data/services";
+import { parseLocale, type Locale } from "@/lib/i18n/locale";
+import { quoteLabels } from "@/lib/quote/labels";
+import { attributionRows, customerLanguageRows, languageFlag, newReference, renderEmail } from "@/lib/quote/email";
 import {
   callbackTimes,
   callbackTopics,
@@ -21,12 +23,12 @@ export const runtime = "nodejs";
 const MIN_FILL_MS = 1500;
 
 /** Libellé lisible de la page d'origine, ou undefined si la référence est inconnue. */
-function originLabel(context: string): string | undefined {
+function originLabel(context: string, locale: Locale = "fr"): string | undefined {
   if (!context) return undefined;
   const service = services.find((s) => `${s.category}/${s.slug}` === context);
-  if (service) return service.name;
+  if (service) return (locale === "fr" ? service : findServiceByRef(context as ServiceRef, locale) ?? service).name;
   return Object.prototype.hasOwnProperty.call(categoryLabels, context)
-    ? categoryLabels[context as keyof typeof categoryLabels]
+    ? categoryLabel(context as ServiceCategory, locale)
     : undefined;
 }
 
@@ -53,7 +55,9 @@ export async function POST(request: Request) {
     if (typeof value === "string") (callback as Record<string, string>)[key] = value.trim().slice(0, LIMITS.description);
   }
 
-  const errors = validateCallback(callback);
+  // Langue de la page : messages d'erreur et confirmation au client dans cette langue.
+  const locale = parseLocale(form.get("locale"));
+  const errors = validateCallback(callback, locale);
   if (Object.keys(errors).length > 0) {
     return NextResponse.json({ ok: false, errors }, { status: 422 });
   }
@@ -65,7 +69,7 @@ export async function POST(request: Request) {
   const rendezVous = callback.purpose === "rendez-vous";
   const date = receivedAt.toLocaleString("fr-BE", { timeZone: "Europe/Brussels", dateStyle: "full", timeStyle: "short" });
   const { html, text } = renderEmail({
-    kicker: `${rendezVous ? "Rendez-vous à fixer" : "Rappel demandé"}${
+    kicker: `${languageFlag(locale)}${rendezVous ? "Rendez-vous à fixer" : "Rappel demandé"}${
       callback.time === "asap" ? " · Dès que possible" : ""
     }`,
     title: `Rappeler ${callback.name} · ${when.toLowerCase()}`,
@@ -79,6 +83,7 @@ export async function POST(request: Request) {
         rows: [
           ["Référence", reference],
           ["Reçue le", date],
+          ...customerLanguageRows(locale),
           ["Motif", rendezVous ? "Prendre rendez-vous" : "Être rappelé"],
           ["À rappeler", when],
           ["Sujet", topic ?? "Non précisé"],
@@ -100,7 +105,8 @@ export async function POST(request: Request) {
   });
 
   const alertHtml = [
-    `📞 <b>${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} · ${e(when.toLowerCase())}</b>`,
+    `${languageFlag(locale)}📞 <b>${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} · ${e(when.toLowerCase())}</b>`,
+    ...(locale === "nl" ? ["<b>Client néerlandophone : rappeler en néerlandais</b>"] : []),
     "",
     `👤 ${e(callback.name)}`,
     `📞 ${e(callback.phone)}`,
@@ -119,7 +125,7 @@ export async function POST(request: Request) {
         to: quoteRecipient(),
         replyTo: callback.email || undefined,
         reference,
-        subject: `📞 ${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} ${when.toLowerCase()} · ${origin ?? topic ?? "Rappel"} — ${
+        subject: `${languageFlag(locale)}📞 ${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} ${when.toLowerCase()} · ${origin ?? topic ?? "Rappel"} — ${
           callback.name
         } · ${callback.phone}`,
         html,
@@ -134,7 +140,8 @@ export async function POST(request: Request) {
     if (!(email.reason instanceof QuoteDeliveryError)) throw email.reason;
     console.error(`[rappel] ${reference} e-mail non envoyé : ${email.reason.message}${alerted ? " (alerte Telegram reçue)" : ""}`);
     if (!alerted) {
-      return NextResponse.json({ ok: false, message: "L'envoi a échoué de notre côté. Appelez-nous directement." }, { status: 503 });
+      const message = locale === "nl" ? "Het verzenden is bij ons mislukt. Bel ons rechtstreeks." : "L'envoi a échoué de notre côté. Appelez-nous directement.";
+      return NextResponse.json({ ok: false, message }, { status: 503 });
     }
   }
 
@@ -142,7 +149,17 @@ export async function POST(request: Request) {
 
   // Demande bien reçue : confirmation au client s'il a laissé son e-mail (jamais bloquant).
   const confirmed = callback.email
-    ? await sendCustomerConfirmation({ to: callback.email, reference, ...buildCallbackConfirmation({ callback, reference, topic, origin }) })
+    ? await sendCustomerConfirmation({
+        to: callback.email,
+        reference,
+        ...buildCallbackConfirmation({
+          callback,
+          reference,
+          locale,
+          topic: callback.topic ? quoteLabels(locale).callbackTopics[callback.topic] : undefined,
+          origin: originLabel(callback.service, locale),
+        }),
+      })
     : false;
   return NextResponse.json({ ok: true, reference, delivered, confirmed });
 }

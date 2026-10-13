@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { fr } from "@/lib/typography";
 import type { Step } from "@/app/data/services/types";
+import { useLocale } from "@/lib/i18n/client";
+import { ui } from "@/lib/i18n/ui";
 import { MediaSlot } from "./media";
 import { cardBg, toneBg, type Tone } from "./tones";
 import { SectionTitle } from "./ui";
@@ -36,11 +38,12 @@ export function StepsV2({
   const current = steps[active];
   // Étapes sans visuel (la plupart des pages) : une seule colonne, pas d'emplacement vide.
   const hasMedia = steps.some((step) => step.image);
+  const t = ui(useLocale());
 
   return (
     <section className={cn("py-20 lg:py-32", toneBg[tone])} aria-labelledby="etapes-titre">
       <div className="container">
-        <SectionTitle id="etapes-titre" eyebrow={eyebrow ?? "Votre projet, étape par étape"} title={title} intro={intro} />
+        <SectionTitle id="etapes-titre" eyebrow={eyebrow ?? t.steps.eyebrow} title={title} intro={intro} />
 
         <div className={cn("mt-12 grid gap-12 lg:mt-20 lg:gap-20", hasMedia && "lg:grid-cols-2")}>
           {/* Visuel collant (desktop) */}

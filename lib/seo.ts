@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { company } from "@/app/data/company";
+import { company, companyText } from "@/app/data/company";
+import { alternatesOf } from "@/app/data/navigation";
+import { defaultLocale, htmlLang, ogLocale, type Locale } from "@/lib/i18n/locale";
+import { localeOfPath } from "@/lib/i18n/routes";
 import { zonesIntervention } from "@/app/data/zones-intervention";
 import { resolvePrice, type PriceRef } from "@/app/data/pricing";
 import type { FaqItem } from "@/app/data/services/types";
@@ -11,7 +14,17 @@ export function absoluteUrl(path: string): string {
   return `${company.siteUrl}${path === "/" ? "" : path}`;
 }
 
-/** Métadonnées d'une page : titre (suffixé « | Radialec » par le layout), description, canonical, Open Graph. */
+/**
+ * hreflang de la page : ses adresses dans chaque langue, quand elle existe dans
+ * les deux (x-default = français). Rien tant que le néerlandais n'est pas en ligne.
+ */
+export function languageAlternates(path: string): Record<string, string> | undefined {
+  const paths = alternatesOf(path);
+  if (!paths?.fr || !paths.nl) return undefined;
+  return { [htmlLang.fr]: paths.fr, [htmlLang.nl]: paths.nl, "x-default": paths.fr };
+}
+
+/** Métadonnées d'une page : titre (suffixé « | Radialec » par le layout), description, canonical, hreflang, Open Graph. */
 export function pageMetadata({
   title,
   description,
@@ -27,21 +40,31 @@ export function pageMetadata({
   /** Brouillon affiché en aperçu : jamais indexé. */
   noindex?: boolean;
 }): Metadata {
+  // La langue se lit dans l'adresse (/nl/… = néerlandais).
+  const locale = localeOfPath(path);
+  const languages = languageAlternates(path);
   return {
     ...(noindex ? { robots: { index: false, follow: false } } : {}),
     title: absoluteTitle ? { absolute: title } : title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: path, ...(languages && { languages }) },
     openGraph: {
       title: absoluteTitle ? title : `${title} | ${company.name}`,
       description,
       url: path,
       siteName: company.name,
-      locale: "fr_BE",
+      locale: ogLocale[locale],
       type: "website",
       // Image par défaut du site (app/opengraph-image.tsx). Les segments qui ont
       // leur propre opengraph-image (catégories, fiches service) la remplacent.
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${company.name} — ${company.tagline}` }],
+      images: [
+        {
+          url: locale === "nl" ? "/nl/opengraph-image" : "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: `${company.name} — ${companyText(locale).tagline}`,
+        },
+      ],
     },
   };
 }
@@ -112,13 +135,13 @@ export function serviceJsonLd({
   };
 }
 
-export function localBusinessJsonLd(logoUrl: string) {
+export function localBusinessJsonLd(logoUrl: string, locale: Locale = defaultLocale) {
   return {
     "@context": "https://schema.org",
     "@type": ["HVACBusiness", "Electrician", "Plumber"],
     "@id": BUSINESS_ID,
     name: company.name,
-    description: company.description,
+    description: companyText(locale).description,
     url: company.siteUrl,
     logo: logoUrl,
     image: logoUrl,
@@ -142,13 +165,9 @@ export function localBusinessJsonLd(logoUrl: string) {
       opens: `${String(company.hours.opens).padStart(2, "0")}:00`,
       closes: `${String(company.hours.closes).padStart(2, "0")}:00`,
     },
-    knowsAbout: [
-      "Chauffage",
-      "Chaudière",
-      "Pompe à chaleur",
-      "Électricité",
-      "Plomberie",
-      "Climatisation",
-    ],
+    knowsAbout:
+      locale === "nl"
+        ? ["Verwarming", "Verwarmingsketel", "Warmtepomp", "Elektriciteit", "Sanitair", "Airco"]
+        : ["Chauffage", "Chaudière", "Pompe à chaleur", "Électricité", "Plomberie", "Climatisation"],
   };
 }

@@ -13,6 +13,9 @@ import {
   type Consent,
 } from "@/lib/consent";
 import { applyConsent, revokeTracking } from "@/lib/tracking";
+import { useLocale } from "@/lib/i18n/client";
+import { pagePath } from "@/lib/i18n/routes";
+import { ui } from "@/lib/i18n/ui";
 
 // Consentement aux cookies (RGPD / ePrivacy), par finalité :
 //  - mesure d'audience (Google Analytics, Microsoft Clarity si activé) ;
@@ -23,10 +26,7 @@ import { applyConsent, revokeTracking } from "@/lib/tracking";
 // les cookies du site. openCookieSettings() rouvre la bannière.
 
 const adsActive = activePurposes.includes("ads");
-const analyticsNames = vendorNames("analytics");
-const analyticsText = analyticsNames.includes("Microsoft Clarity")
-  ? "statistiques Google Analytics et parcours anonymisés Microsoft Clarity"
-  : "Google Analytics";
+const withClarity = vendorNames("analytics").includes("Microsoft Clarity");
 
 export function openCookieSettings() {
   window.dispatchEvent(new Event(OPEN_EVENT));
@@ -73,6 +73,8 @@ export function CookieConsent() {
   const [customizing, setCustomizing] = useState(false);
   const [draft, setDraft] = useState({ analytics: false, ads: false });
   const titleId = useId();
+  const locale = useLocale();
+  const t = ui(locale).cookies;
 
   useEffect(() => {
     const stored = readConsent();
@@ -126,15 +128,14 @@ export function CookieConsent() {
                 <FaCookieBite className="h-4 w-4" aria-hidden="true" />
               </span>
               <p id={titleId} className="text-lg font-bold tracking-tight text-ink">
-                Votre vie privée
+                {t.title}
               </p>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-ink/75">
-              Avec votre accord, nous mesurons l&apos;audience du site pour l&apos;améliorer ({analyticsText})
-              {adsActive ? " et l'efficacité de nos annonces Google Ads. Pas de publicité ciblée." : ". Aucun cookie publicitaire."}{" "}
-              Vous pouvez changer d&apos;avis à tout moment.{" "}
-              <Link href="/cookies" className="font-semibold text-navy underline underline-offset-2 hover:text-flame">
-                En savoir plus
+              {t.intro(withClarity ? t.analyticsWithClarity : t.analyticsGa)}
+              {adsActive ? t.withAds : t.noAds} {t.changeMind}{" "}
+              <Link href={pagePath("cookies", locale)} className="font-semibold text-navy underline underline-offset-2 hover:text-flame">
+                {t.learnMore}
               </Link>
             </p>
 
@@ -142,25 +143,21 @@ export function CookieConsent() {
               <ul className="mt-4 space-y-2">
                 <li className="flex items-center justify-between gap-4 rounded-2xl bg-lavender/60 px-4 py-3">
                   <span>
-                    <span className="block text-sm font-semibold text-ink">Nécessaires</span>
-                    <span className="block text-xs text-ink/60">Mémoriser votre choix. Toujours actifs.</span>
+                    <span className="block text-sm font-semibold text-ink">{t.necessary}</span>
+                    <span className="block text-xs text-ink/60">{t.necessaryText}</span>
                   </span>
-                  <span className="text-xs font-semibold text-ink/50">Toujours</span>
+                  <span className="text-xs font-semibold text-ink/50">{t.always}</span>
                 </li>
                 <Toggle
-                  label="Mesure d'audience"
-                  description={
-                    analyticsNames.includes("Microsoft Clarity")
-                      ? "Statistiques de visite (Google Analytics) et parcours anonymisés (Microsoft Clarity)."
-                      : "Google Analytics, statistiques de visite."
-                  }
+                  label={t.analytics}
+                  description={withClarity ? t.analyticsTextClarity : t.analyticsTextGa}
                   checked={draft.analytics}
                   onChange={(analytics) => setDraft((d) => ({ ...d, analytics }))}
                 />
                 {adsActive && (
                   <Toggle
-                    label="Publicité"
-                    description="Google Ads : savoir quelles annonces nous amènent des demandes. Pas de publicité ciblée."
+                    label={t.ads}
+                    description={t.adsText}
                     checked={draft.ads}
                     onChange={(ads) => setDraft((d) => ({ ...d, ads }))}
                   />
@@ -170,10 +167,10 @@ export function CookieConsent() {
 
             <div className="mt-5 grid grid-cols-2 gap-2">
               <button type="button" onClick={() => save({ analytics: false, ads: false })} className="btn btn-secondary btn-sm w-full">
-                Tout refuser
+                {t.refuseAll}
               </button>
               <button type="button" onClick={() => save({ analytics: true, ads: true })} className="btn btn-secondary btn-sm w-full">
-                Tout accepter
+                {t.acceptAll}
               </button>
             </div>
             {customizing ? (
@@ -182,7 +179,7 @@ export function CookieConsent() {
                 onClick={() => save(draft)}
                 className="mt-2 w-full rounded-lg py-2 text-sm font-semibold text-navy underline-offset-4 hover:underline"
               >
-                Enregistrer mes choix
+                {t.save}
               </button>
             ) : (
               <button
@@ -193,7 +190,7 @@ export function CookieConsent() {
                 }}
                 className="mt-2 w-full rounded-lg py-2 text-sm font-semibold text-ink/70 underline-offset-4 hover:text-navy hover:underline"
               >
-                Personnaliser
+                {t.customize}
               </button>
             )}
           </div>
@@ -205,9 +202,10 @@ export function CookieConsent() {
 
 /** Bouton « Gérer mes cookies » (footer, page cookies). */
 export function CookieSettingsButton({ className }: { className?: string }) {
+  const t = ui(useLocale()).cookies;
   return (
     <button type="button" onClick={openCookieSettings} className={className}>
-      Gérer mes cookies
+      {t.manage}
     </button>
   );
 }

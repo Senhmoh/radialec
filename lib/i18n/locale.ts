@@ -10,3 +10,8 @@ export const localeName: Record<Locale, string> = { fr: "Français", nl: "Nederl
 
 /** Formate un nombre / une date à la belge, selon la langue. */
 export const intlLocale: Record<Locale, string> = { fr: "fr-BE", nl: "nl-BE" };
+
+/** Langue envoyée par un formulaire (champ « locale ») : français si absente ou inconnue. */
+export function parseLocale(value: unknown): Locale {
+  return locales.includes(value as Locale) ? (value as Locale) : defaultLocale;
+}

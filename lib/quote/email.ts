@@ -1,6 +1,7 @@
 // Mise en forme de la demande de devis envoyée par e-mail à Radialec.
 // Serveur uniquement.
 
+import type { Locale } from "@/lib/i18n/locale";
 import {
   callbackSlots,
   contactPreferences,
@@ -13,6 +14,10 @@ import {
 
 export interface QuoteEmailInput {
   quote: QuoteRequest;
+  /** Langue de la page d'où vient la demande (le client attend une réponse dans cette langue). */
+  locale: Locale;
+  /** Prestation et domaine dans la langue du client (e-mail de confirmation). */
+  customerLabels: { service: string; category: string };
   reference: string;
   receivedAt: Date;
   categoryLabel: string;
@@ -77,6 +82,16 @@ export function attributionRows(a: QuoteAttribution): string[][] {
   ];
 }
 
+/** Client venu de la version néerlandaise : à rappeler en néerlandais (e-mails internes, Telegram). */
+export function customerLanguageRows(locale: Locale): string[][] {
+  return locale === "nl" ? [["Langue du client", "Néerlandais : répondre en néerlandais"]] : [];
+}
+
+/** Préfixe des objets et des alertes pour une demande en néerlandais. */
+export function languageFlag(locale: Locale): string {
+  return locale === "nl" ? "🇳🇱 NL · " : "";
+}
+
 function sections(input: QuoteEmailInput) {
   const { quote } = input;
   const date = input.receivedAt.toLocaleString("fr-BE", { timeZone: "Europe/Brussels", dateStyle: "full", timeStyle: "short" });
@@ -88,6 +103,7 @@ function sections(input: QuoteEmailInput) {
       rows: [
         ["Référence", input.reference],
         ["Reçue le", date],
+        ...customerLanguageRows(input.locale),
         ["Domaine", input.categoryLabel],
         ["Prestation", input.serviceLabel],
         ...(input.displayedPrice ? [["Prix affiché sur le site", input.displayedPrice]] : []),
@@ -217,9 +233,9 @@ export function renderEmail({
 export function buildQuoteEmail(input: QuoteEmailInput) {
   const { quote } = input;
   const urgent = quote.timing === "asap" || quote.requestType === "reparation";
-  const subject = `${urgent ? "🔴 " : ""}Devis ${input.reference} · ${input.serviceLabel} · ${quote.commune} — ${quote.name}`;
+  const subject = `${urgent ? "🔴 " : ""}${languageFlag(input.locale)}Devis ${input.reference} · ${input.serviceLabel} · ${quote.commune} — ${quote.name}`;
   const { html, text } = renderEmail({
-    kicker: `Nouvelle demande de devis${urgent ? " · À traiter vite" : ""}`,
+    kicker: `${languageFlag(input.locale)}Nouvelle demande de devis${urgent ? " · À traiter vite" : ""}`,
     title: `${input.serviceLabel} — ${quote.commune}`,
     reference: input.reference,
     name: quote.name,

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { breadcrumbJsonLd, type Crumb } from "@/lib/seo";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { JsonLd } from "./JsonLd";
 
 /** Fil d'Ariane visible + données structurées BreadcrumbList. */
@@ -15,7 +17,7 @@ export function Breadcrumbs({
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(items)} />
-      <nav aria-label="Fil d'Ariane" className={cn("text-sm", className)}>
+      <nav aria-label={ui(getRequestLocale()).breadcrumbs} className={cn("text-sm", className)}>
         <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-ink/60">
           {items.map((item, index) => {
             const isLast = index === items.length - 1;

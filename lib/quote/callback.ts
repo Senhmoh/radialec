@@ -1,7 +1,8 @@
 // « Être rappelé » : schéma et validation partagés entre le formulaire
 // (client) et /api/rappel (serveur). Aucune dépendance serveur.
 
-import { isValidEmail, isValidPhone, LIMITS } from "./schema";
+import type { Locale } from "@/lib/i18n/locale";
+import { isValidEmail, isValidPhone, LIMITS, validationMessages } from "./schema";
 
 export const callbackTopics = {
   chauffage: "Chauffage",
@@ -58,14 +59,15 @@ export function topicFromContext(context: string | null | undefined): CallbackTo
   return category && has(callbackTopics, category) ? (category as CallbackTopic) : "";
 }
 
-export function validateCallback(data: CallbackRequest): CallbackErrors {
+export function validateCallback(data: CallbackRequest, locale: Locale = "fr"): CallbackErrors {
   const errors: CallbackErrors = {};
-  if (data.name.trim().length < 2 || data.name.length > LIMITS.name) errors.name = "Indiquez votre nom.";
-  if (!isValidPhone(data.phone)) errors.phone = "Numéro invalide (ex. 0486 12 34 56).";
-  if (data.email && (data.email.length > 120 || !isValidEmail(data.email))) errors.email = "Adresse e-mail invalide.";
-  if (!has(callbackTimes, data.time)) errors.time = "Choisissez un moment.";
-  if (data.topic && !has(callbackTopics, data.topic)) errors.topic = "Sujet invalide.";
-  if (data.purpose && data.purpose !== "rendez-vous") errors.purpose = "Motif invalide.";
-  if (data.message.length > LIMITS.description) errors.message = `${LIMITS.description} caractères maximum.`;
+  const m = validationMessages[locale];
+  if (data.name.trim().length < 2 || data.name.length > LIMITS.name) errors.name = m.name;
+  if (!isValidPhone(data.phone)) errors.phone = m.phone;
+  if (data.email && (data.email.length > 120 || !isValidEmail(data.email))) errors.email = m.email;
+  if (!has(callbackTimes, data.time)) errors.time = m.time;
+  if (data.topic && !has(callbackTopics, data.topic)) errors.topic = m.topic;
+  if (data.purpose && data.purpose !== "rendez-vous") errors.purpose = m.purpose;
+  if (data.message.length > LIMITS.description) errors.message = m.tooLong(LIMITS.description);
   return errors;
 }

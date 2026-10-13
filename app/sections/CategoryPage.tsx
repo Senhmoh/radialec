@@ -3,13 +3,17 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { faqJsonLd, pageMetadata } from "@/lib/seo";
 import { getCategory } from "../data/categories";
 import { contactActionHref } from "../data/company";
-import { getServiceByRef, type ServiceCategory, type ServiceRef } from "../data/services";
+import { existingServices, type ServiceCategory, type ServiceRef } from "../data/services";
+import type { Locale } from "@/lib/i18n/locale";
+import { categoryPath, pagePath } from "@/lib/i18n/routes";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { resolveCta } from "./ctaDefaults";
 import { ReachPanel } from "./v2/ReachPanel";
 import { BrandsV2, CallBandV2, ProofV2, ZonesV2 } from "./v2/blocks";
 import { FinalCtaV2 } from "./v2/chrome";
 import { FeaturesV2, GuideV2, PricingV2, ServiceGridV2 } from "./v2/content";
-import { finalCtaVisual } from "./v2/cta";
+import { finalCtaVisualFor } from "./v2/cta";
 import { FaqV2 } from "./v2/FaqV2";
 import { ServiceHeroV2 } from "./v2/ServiceHeroV2";
 import { backgrounds } from "./v2/tones";
@@ -25,12 +29,18 @@ const featuredByCategory: Partial<Record<ServiceCategory, ServiceRef[]>> = {
  * (app/sections/v2) ; contenu dans app/data/categories.ts.
  */
 export function CategoryPage({ category }: { category: ServiceCategory }) {
-  const content = getCategory(category);
+  const locale = getRequestLocale();
+  const t = ui(locale);
+  const content = getCategory(category, locale);
   const featuredRefs = featuredByCategory[category] ?? [];
-  const featured = featuredRefs.map(getServiceByRef);
-  const others = content.services.filter((ref) => !featuredRefs.includes(ref)).map(getServiceByRef);
-  const cta = resolveCta(content.cta.intent, content.cta);
-  const visual = finalCtaVisual[content.cta.intent];
+  // En néerlandais, les pages pas encore traduites sont omises.
+  const featured = existingServices(featuredRefs, locale);
+  const others = existingServices(
+    content.services.filter((ref) => !featuredRefs.includes(ref)),
+    locale
+  );
+  const cta = resolveCta(content.cta.intent, content.cta, locale);
+  const visual = finalCtaVisualFor(content.cta.intent, locale);
   // Fonds blanc / beige en alternance, dans l'ordre des sections (voir v2/tones.ts).
   const bg = backgrounds();
   const grid = bg.next();
@@ -49,8 +59,8 @@ export function CategoryPage({ category }: { category: ServiceCategory }) {
 
       <ServiceHeroV2
         breadcrumbs={[
-          { label: "Accueil", href: "/" },
-          { label: content.label, href: `/${category}` },
+          { label: t.common.home, href: pagePath("home", locale) },
+          { label: content.label, href: categoryPath(category, locale) },
         ]}
         eyebrow={content.hero.eyebrow}
         title={content.hero.title}
@@ -63,13 +73,13 @@ export function CategoryPage({ category }: { category: ServiceCategory }) {
       />
 
       <ServiceGridV2
-        eyebrow={`Nos services · ${content.label}`}
+        eyebrow={t.category.servicesEyebrow(content.label)}
         title={content.servicesTitle}
         intro={content.servicesIntro}
         featured={featured}
-        featuredTitle={featured.length ? "Votre chaudière" : undefined}
+        featuredTitle={featured.length ? t.category.featuredTitle : undefined}
         services={others}
-        othersTitle={featured.length ? "Le reste de votre chauffage" : undefined}
+        othersTitle={featured.length && others.length ? t.category.othersTitle : undefined}
         tone={grid}
       />
       <CallBandV2 context={category} topic={content.label} intent={content.hero.intent} tone={band.tone} attached={band.attached} />
@@ -79,7 +89,7 @@ export function CategoryPage({ category }: { category: ServiceCategory }) {
       {content.guide && <GuideV2 {...content.guide} tone={guide} />}
       <ProofV2 tone={proof} context={{ intent: content.hero.intent, category }} />
       <ZonesV2 tone={zones} />
-      <FaqV2 faqs={content.faqs} title={content.faqTitle} rappelHref={contactActionHref("rappel", category)} topic={content.label} tone={faq} />
+      <FaqV2 faqs={content.faqs} title={content.faqTitle} rappelHref={contactActionHref("rappel", category, locale)} topic={content.label} tone={faq} />
       <FinalCtaV2
         eyebrow={cta.eyebrow}
         title={cta.title}
@@ -96,11 +106,11 @@ export function CategoryPage({ category }: { category: ServiceCategory }) {
   );
 }
 
-export function categoryMetadata(category: ServiceCategory): Metadata {
-  const content = getCategory(category);
+export function categoryMetadata(category: ServiceCategory, locale: Locale = "fr"): Metadata {
+  const content = getCategory(category, locale);
   return pageMetadata({
     title: content.metaTitle,
     description: content.metaDescription,
-    path: `/${category}`,
+    path: categoryPath(category, locale),
   });
 }

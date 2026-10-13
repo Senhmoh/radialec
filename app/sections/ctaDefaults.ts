@@ -3,6 +3,8 @@ import technicienUrgence from "@/assets/technicien_courant_avec_boite_outils_en_
 import technicienInstallation from "@/assets/technicien_debout_regarde_devis_et_ecrit_ecriture-sur-image-technicien-agrée-et-devis-clair-et-transparent-avec-flèche-sortantes.png";
 import technicienEntretien from "@/assets/technicien_noir_debout_souriant_doigt_sur_tablette_coupe_aux_cuisses.png";
 import type { CtaContent, ServiceIntent } from "../data/services/types";
+import type { Locale } from "@/lib/i18n/locale";
+import { getRequestLocale } from "@/lib/i18n/server";
 
 // CTA final par intention (validés sur les pages de référence : urgence sur la
 // homepage, installation sur remplacement-chaudiere, entretien sur
@@ -38,8 +40,30 @@ export const ctaDefaults: Record<
   },
 };
 
-export function resolveCta(intent: ServiceIntent, cta: CtaContent) {
-  const base = ctaDefaults[intent];
+// Néerlandais : mêmes promesses, même mot mis en avant (à faire relire).
+const ctaDefaultsNl: Record<ServiceIntent, { eyebrow: string; title: string; highlight?: string; imageAlt: string }> = {
+  urgence: {
+    eyebrow: "Snelle depannage",
+    title: "Een noodgeval? Uw technicus is (bijna) al onderweg.",
+    highlight: "(bijna)",
+    imageAlt: "Technicus van Radialec onderweg voor een depannage",
+  },
+  installation: {
+    eyebrow: "Installatie & renovatie",
+    title: "Een installatieproject? De offerte is gratis.",
+    highlight: "gratis",
+    imageAlt: "Technicus van Radialec die een offerte opmaakt",
+  },
+  entretien: {
+    eyebrow: "Onderhoud & controle",
+    title: "Is uw onderhoud (bijna) aan de beurt? Maak een afspraak.",
+    highlight: "(bijna)",
+    imageAlt: "Technicus van Radialec, klaar voor uw onderhoud",
+  },
+};
+
+export function resolveCta(intent: ServiceIntent, cta: CtaContent, locale: Locale = getRequestLocale()) {
+  const base = locale === "nl" ? { ...ctaDefaults[intent], ...ctaDefaultsNl[intent] } : ctaDefaults[intent];
   return {
     image: base.image,
     imageAlt: base.imageAlt,

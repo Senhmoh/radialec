@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { categoryLabels } from "../../data/categories";
+import { categoryLabel, categoryLabels } from "../../data/categories";
 import { formatAmount, resolvePrice } from "../../data/pricing";
-import { getServiceByRef, services, type ServiceCategory, type ServiceRef } from "../../data/services";
+import { findServiceByRef, getServiceByRef, services, type ServiceCategory, type ServiceRef } from "../../data/services";
+import { parseLocale } from "@/lib/i18n/locale";
+import { ui } from "@/lib/i18n/ui";
 import { buildQuoteEmail, newReference } from "@/lib/quote/email";
 import {
   emptyQuote,
@@ -49,7 +51,9 @@ export async function POST(request: Request) {
   }
 
   const quote = readQuote(form);
-  const errors = validateQuote(quote, undefined, knownServices);
+  // Langue de la page : messages d'erreur et confirmation au client dans cette langue.
+  const locale = parseLocale(form.get("locale"));
+  const errors = validateQuote(quote, undefined, knownServices, locale);
   if (Object.keys(errors).length > 0) {
     return NextResponse.json({ ok: false, errors }, { status: 422 });
   }
@@ -60,21 +64,35 @@ export async function POST(request: Request) {
     files.some((file) => !file.type.startsWith("image/") || file.size > PHOTO_LIMITS.maxBytes * 1.2)
   ) {
     return NextResponse.json(
-      { ok: false, message: `Photos : ${PHOTO_LIMITS.maxCount} images maximum, 1,5 Mo chacune.` },
+      {
+        ok: false,
+        message:
+          locale === "nl"
+            ? `Foto's: maximaal ${PHOTO_LIMITS.maxCount} afbeeldingen, 1,5 MB per foto.`
+            : `Photos : ${PHOTO_LIMITS.maxCount} images maximum, 1,5 Mo chacune.`,
+      },
       { status: 422 }
     );
   }
 
   const service = quote.service === OTHER_SERVICE ? undefined : getServiceByRef(quote.service as ServiceRef);
   const price = service?.price ? resolvePrice(service.price) : undefined;
+  // Libellés pour le client : la page néerlandaise de la prestation si elle existe.
+  const localService = service && locale !== "fr" ? findServiceByRef(quote.service as ServiceRef, locale) : service;
+  const isCategory = Object.prototype.hasOwnProperty.call(categoryLabels, quote.category);
 
   const emailInput = {
     quote,
+    locale,
     reference,
     receivedAt,
     categoryLabel: categoryLabels[quote.category as ServiceCategory] ?? quote.category,
     serviceLabel: service?.name ?? "Autre besoin (voir description)",
-    displayedPrice: price?.amount !== undefined ? `${formatAmount(price)} TVAC` : undefined,
+    customerLabels: {
+      service: localService?.name ?? service?.name ?? (locale === "nl" ? "Iets anders (zie beschrijving)" : "Autre besoin (voir description)"),
+      category: isCategory ? categoryLabel(quote.category as ServiceCategory, locale) : quote.category,
+    },
+    displayedPrice: price?.amount !== undefined ? `${formatAmount(price)} ${ui(locale).pricing.vat}` : undefined,
     photoCount: files.length,
     attribution: parseAttribution(form.get("attribution")),
   };
@@ -100,7 +118,13 @@ export async function POST(request: Request) {
     // Personne n'a reçu la demande : on le dit au client plutôt que d'afficher un faux succès.
     if (!alerted) {
       return NextResponse.json(
-        { ok: false, message: "L'envoi a échoué de notre côté. Appelez-nous, nous traitons votre demande tout de suite." },
+        {
+          ok: false,
+          message:
+            locale === "nl"
+              ? "Het verzenden is bij ons mislukt. Bel ons, dan behandelen we uw aanvraag meteen."
+              : "L'envoi a échoué de notre côté. Appelez-nous, nous traitons votre demande tout de suite.",
+        },
         { status: 503 }
       );
     }

@@ -5,8 +5,12 @@ import { FaEnvelope, FaStar } from "react-icons/fa";
 import logo from "@/assets/logo.png";
 import { CookieSettingsButton } from "@/components/site/CookieConsent";
 import { fr } from "@/lib/typography";
-import { company, contactActionHref } from "@/app/data/company";
+import { company, companyText, contactActionHref } from "@/app/data/company";
 import { getNavGroups, type NavGroup } from "@/app/data/navigation";
+import type { Locale } from "@/lib/i18n/locale";
+import { hasPage, pagePath, type PageKey } from "@/lib/i18n/routes";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { cn } from "@/lib/utils";
 import type { FinalCtaSecondary } from "./cta";
 import { ButtonLink, Eyebrow, PhoneButton, WhatsAppButton, type Surface } from "./ui";
@@ -57,10 +61,12 @@ export function FinalCtaV2({
 }) {
   const flame = tone === "flame";
   const whatsapp = secondary === "whatsapp";
+  const locale = getRequestLocale();
+  const t = ui(locale);
   const second =
     secondary === "rendezVous"
-      ? { href: contactActionHref("rendezVous", context), label: "Prendre rendez-vous" }
-      : { href: contactActionHref("devis", context), label: "Demander un devis gratuit" };
+      ? { href: contactActionHref("rendezVous", context, locale), label: t.common.bookAppointment }
+      : { href: contactActionHref("devis", context, locale), label: t.requestQuote };
   const linkClass = cn("font-semibold underline underline-offset-4 hover:no-underline", flame ? "text-white" : "text-night");
   return (
     <section
@@ -87,7 +93,7 @@ export function FinalCtaV2({
             <PhoneButton variant={flame ? "light" : "primary"} className="min-h-[56px] px-7 text-base font-bold" />
             {whatsapp ? (
               <WhatsAppButton topic={topic} variant="light" className="min-h-[56px] px-7 text-base">
-                Envoyer une photo
+                {t.whatsapp.sendPhoto}
               </WhatsAppButton>
             ) : (
               <ButtonLink href={second.href} variant={flame ? "dark" : "light"} arrow className="min-h-[56px] px-7 text-base">
@@ -96,15 +102,15 @@ export function FinalCtaV2({
             )}
           </div>
           <p className={cn("mt-5 text-sm font-medium", flame ? "text-white" : "text-night/70")}>
-            Pas le temps maintenant ?{" "}
-            <Link href={contactActionHref("rappel", context)} className={linkClass}>
-              Être rappelé
+            {t.common.noTimeNow}{" "}
+            <Link href={contactActionHref("rappel", context, locale)} className={linkClass}>
+              {t.common.callback}
             </Link>
             {!whatsapp && (
               <>
                 {" · "}
                 <WhatsAppButton topic={topic} kind="link" className={cn(linkClass, "align-middle")}>
-                  Écrire sur WhatsApp
+                  {t.whatsapp.write}
                 </WhatsAppButton>
               </>
             )}
@@ -122,15 +128,14 @@ export function FinalCtaV2({
 /* Pied de page                                                        */
 /* ------------------------------------------------------------------ */
 
-const companyLinks = [
-  { label: "Accueil", href: "/" },
-  { label: "Demander un devis", href: "/devis" },
-  { label: "Prendre rendez-vous", href: "/rendez-vous" },
-  { label: "Nos tarifs", href: "/tarifs" },
-  { label: "Syndics & copropriétés", href: "/professionnels" },
-  { label: "À propos", href: "/a-propos" },
-  { label: "Contact", href: "/contact" },
-];
+const companyPages: PageKey[] = ["home", "devis", "rendezVous", "tarifs", "professionnels", "aPropos", "contact"];
+const legalPages: PageKey[] = ["mentionsLegales", "confidentialite", "cookies"];
+
+/** Liens « Radialec » / légaux du pied de page : les pages qui existent dans cette langue. */
+function pageLinks(keys: PageKey[], locale: Locale) {
+  const labels = ui(locale).footer.links;
+  return keys.filter((key) => hasPage(key, locale)).map((key) => ({ key, label: labels[key], href: pagePath(key, locale) }));
+}
 
 function FooterColumn({
   title,
@@ -168,11 +173,18 @@ function FooterColumn({
 }
 
 /** Footer bleu nuit (demande du 2026-10-05) ; « lavender » reste disponible. */
-export function FooterV2({ surface = "night" }: { surface?: Surface }) {
-  const groups = getNavGroups();
-  const group = (category: NavGroup["category"]) => groups.find((g) => g.category === category)!;
-  const own = (g: NavGroup) => g.items.filter((item) => item.href.startsWith(g.href));
+export function FooterV2({ surface = "night", locale = getRequestLocale() }: { surface?: Surface; locale?: Locale }) {
+  const t = ui(locale);
+  const copy = companyText(locale);
+  const groups = getNavGroups(locale);
   const light = surface === "lavender";
+  const own = (g: NavGroup) => g.items.filter((item) => item.href.startsWith(g.href));
+  // Colonnes : chauffage, électricité, puis climatisation + plomberie empilées (métiers traduits seulement).
+  const column = (category: NavGroup["category"], onlyOwn = false) => {
+    const g = groups.find((g) => g.category === category);
+    return g ? <FooterColumn key={category} title={g.label} href={g.href} links={onlyOwn ? own(g) : g.items} light={light} /> : null;
+  };
+  const home = pagePath("home", locale);
   const muted = light ? "text-night/65 hover:text-night" : "text-white/70 hover:text-white";
 
   return (
@@ -181,14 +193,14 @@ export function FooterV2({ surface = "night" }: { surface?: Surface }) {
       <div className="container py-16 lg:py-20">
         <div className="grid gap-14 lg:grid-cols-[1fr_2fr] lg:gap-16">
           <div>
-            <Link href="/" className="inline-flex items-center gap-3" aria-label="Radialec — accueil">
+            <Link href={home} className="inline-flex items-center gap-3" aria-label={t.homeLabel}>
               <Image src={logo} alt="" height={48} width={43} />
               <span className={cn("font-wordmark text-[28px] font-extrabold tracking-tight", light && "text-ink")}>Radialec</span>
             </Link>
-            <p className={cn("mt-5 max-w-sm text-[15px] leading-relaxed", light ? "text-night/65" : "text-white/60")}>{company.description}</p>
+            <p className={cn("mt-5 max-w-sm text-[15px] leading-relaxed", light ? "text-night/65" : "text-white/60")}>{copy.description}</p>
             <PhoneButton variant="primary" className="mt-8 min-h-[52px] px-6 text-base" />
             <p className={cn("mt-3", light ? "text-night/55" : "text-white/50")}>
-              {company.promises.availability} · {company.promises.intervention.toLowerCase()}
+              {copy.promises.availability} · {copy.promises.intervention.toLowerCase()}
             </p>
             <WhatsAppButton kind="link" className={cn("mt-5 flex w-fit gap-3 font-normal", muted)}>
               WhatsApp · {company.phone.display}
@@ -201,7 +213,7 @@ export function FooterV2({ surface = "night" }: { surface?: Surface }) {
               // Siège social uniquement : pas d'accueil du public (Q20).
               <p className={cn("mt-5", light ? "text-night/65" : "text-white/60")}>
                 <span className={cn("block text-xs font-semibold uppercase tracking-[0.14em]", light ? "text-night/45" : "text-white/40")}>
-                  Siège social
+                  {t.footer.headOffice}
                 </span>
                 {company.address.street}, {company.address.postalCode} {company.address.city}
               </p>
@@ -217,53 +229,45 @@ export function FooterV2({ surface = "night" }: { surface?: Surface }) {
                   <FaStar key={i} className="h-3 w-3" />
                 ))}
               </span>
-              {`${company.google.rating}/5 sur Google · plus de ${company.google.reviewsFloor} avis`}
+              {t.footer.googleRating(company.google.rating, company.google.reviewsFloor)}
             </a>
             {/* Clients qui reviennent chercher le numéro : discret, hors du parcours des prospects. */}
             <a href="/avis" target="_blank" rel="noopener" className={cn("mt-2 block w-fit text-xs underline underline-offset-4", muted)}>
-              Déjà client&nbsp;? Laissez-nous un avis
+              {t.footer.leaveReview}
             </a>
           </div>
 
-          <nav aria-label="Plan du site" className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
-            <FooterColumn title="Chauffage" href="/chauffage" links={group("chauffage").items} light={light} />
-            <FooterColumn title="Électricité" href="/electricite" links={group("electricite").items} light={light} />
-            <div className="space-y-10">
-              <FooterColumn title="Climatisation" href="/climatisation" links={own(group("climatisation"))} light={light} />
-              <FooterColumn title="Plomberie" href="/plomberie" links={group("plomberie").items} light={light} />
-            </div>
-            <FooterColumn title="Radialec" links={companyLinks} light={light} />
+          <nav aria-label={t.footer.siteMap} className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
+            {column("chauffage")}
+            {column("electricite")}
+            {(column("climatisation", true) || column("plomberie")) && (
+              <div className="space-y-10">
+                {column("climatisation", true)}
+                {column("plomberie")}
+              </div>
+            )}
+            <FooterColumn title="Radialec" links={pageLinks(companyPages, locale)} light={light} />
           </nav>
         </div>
 
         <p className={cn("mt-14 max-w-3xl leading-relaxed", light ? "text-night/55" : "text-white/45")}>
-          {fr(
-            "Chauffagiste, électricien et plombier à Bruxelles : intervention dans les 19 communes de la Région bruxelloise, en Brabant flamand (Rhode-Saint-Genèse, Wezembeek-Oppem, Kraainem, Tervuren, Overijse…) et en Brabant wallon (Waterloo, Lasne, La Hulpe, Rixensart…)."
-          )}
+          {locale === "fr" ? fr(t.footer.zones) : t.footer.zones}
         </p>
       </div>
 
       <div className={cn("border-t", light ? "border-night/10" : "border-white/10")}>
         <div className={cn("container flex flex-col items-center justify-between gap-4 py-6 sm:flex-row", light ? "text-night/55" : "text-white/50")}>
           <p>
-            &copy; {new Date().getFullYear()} {company.name}. Tous droits réservés.
+            &copy; {new Date().getFullYear()} {company.name}. {t.footer.rights}
           </p>
           <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            <li>
-              <Link href="/mentions-legales" className={light ? "hover:text-night" : "hover:text-white"}>
-                Mentions légales
-              </Link>
-            </li>
-            <li>
-              <Link href="/confidentialite" className={light ? "hover:text-night" : "hover:text-white"}>
-                Confidentialité
-              </Link>
-            </li>
-            <li>
-              <Link href="/cookies" className={light ? "hover:text-night" : "hover:text-white"}>
-                Cookies
-              </Link>
-            </li>
+            {pageLinks(legalPages, locale).map((link) => (
+              <li key={link.key}>
+                <Link href={link.href} className={light ? "hover:text-night" : "hover:text-white"}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
             <li>
               <CookieSettingsButton className={light ? "hover:text-night" : "hover:text-white"} />
             </li>

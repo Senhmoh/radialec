@@ -1,13 +1,16 @@
 import { JsonLd } from "@/components/site/JsonLd";
 import { faqJsonLd, serviceJsonLd } from "@/lib/seo";
-import { categoryLabels } from "@/app/data/categories";
+import { categoryLabel } from "@/app/data/categories";
 import { contactActionHref } from "@/app/data/company";
 import { serviceHref, type Block, type Service } from "@/app/data/services";
 import { resolveCta } from "../ctaDefaults";
 import { BrandsV2, CallBandV2, CalloutV2, HighlightV2, ProofV2, RelatedV2, ZonesV2 } from "./blocks";
 import { FinalCtaV2 } from "./chrome";
 import { AlertV2, ChecklistV2, FeaturesV2, OptionsV2, PricingV2 } from "./content";
-import { finalCtaVisual } from "./cta";
+import { finalCtaVisualFor } from "./cta";
+import { categoryPath as categoryHref, pagePath } from "@/lib/i18n/routes";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { FaqV2 } from "./FaqV2";
 import { ServiceHeroV2 } from "./ServiceHeroV2";
 import { DraftBanner } from "./DraftBanner";
@@ -30,16 +33,18 @@ function withCallBand(blocks: Block[]): Block[] {
  * beige en alternance dans cet ordre (v2/tones.ts).
  */
 export function ServicePageV2({ service, surface = "lavender" }: { service: Service; surface?: Surface }) {
+  const locale = getRequestLocale();
+  const t = ui(locale);
   const path = serviceHref(service);
   const context = `${service.category}/${service.slug}`;
-  const cta = resolveCta(service.intent, service.cta);
-  const visual = finalCtaVisual[service.intent];
+  const cta = resolveCta(service.intent, service.cta, locale);
+  const visual = finalCtaVisualFor(service.intent, locale);
   const primaryAction = service.intent === "entretien" ? "rendezVous" : "devis";
   // Page fusionnée avec sa catégorie (Professionnels) : pas de niveau intermédiaire.
-  const categoryPath = `/${service.category}`;
+  const categoryPath = categoryHref(service.category, locale);
   const breadcrumbs = [
-    { label: "Accueil", href: "/" },
-    ...(path === categoryPath ? [] : [{ label: categoryLabels[service.category], href: categoryPath }]),
+    { label: t.common.home, href: pagePath("home", locale) },
+    ...(path === categoryPath ? [] : [{ label: categoryLabel(service.category, locale), href: categoryPath }]),
     { label: service.name, href: path },
   ];
 
@@ -63,8 +68,8 @@ export function ServicePageV2({ service, surface = "lavender" }: { service: Serv
               service.intent === "urgence" ? (
                 <PhoneButton variant="primary" />
               ) : (
-                <ButtonLink href={contactActionHref(primaryAction, context)} variant="dark" arrow>
-                  {primaryAction === "devis" ? "Demander un devis gratuit" : "Prendre rendez-vous"}
+                <ButtonLink href={contactActionHref(primaryAction, context, locale)} variant="dark" arrow>
+                  {primaryAction === "devis" ? t.requestQuote : t.common.bookAppointment}
                 </ButtonLink>
               )
             }
@@ -133,15 +138,15 @@ export function ServicePageV2({ service, surface = "lavender" }: { service: Serv
       <ProofV2 tone={bg.next()} context={{ intent: service.intent, category: service.category }} />
       <FaqV2
         faqs={service.faqs}
-        title={service.faqTitle ?? "Questions fréquentes"}
-        rappelHref={contactActionHref("rappel", context)}
+        title={service.faqTitle ?? t.common.faqTitle}
+        rappelHref={contactActionHref("rappel", context, locale)}
         topic={service.name}
         tone={bg.next()}
       />
       <ZonesV2 intro={service.zonesIntro} tone={bg.next()} />
       <RelatedV2
         refs={service.related}
-        eyebrow={service.category === "chauffage" ? "Autour de votre chaudière" : undefined}
+        eyebrow={service.category === "chauffage" ? t.related.aroundBoiler : undefined}
         tone={bg.next()}
       />
       <FinalCtaV2

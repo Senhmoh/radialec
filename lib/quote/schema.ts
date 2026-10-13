@@ -1,6 +1,9 @@
 // Demande de devis : types, libellés et validation — partagés entre le
 // formulaire (client) et la route /api/devis (serveur). Aucune dépendance
 // serveur ici : ce fichier part dans le bundle navigateur.
+// Libellés et messages néerlandais : lib/quote/labels.ts et `validationMessages` ci-dessous.
+
+import type { Locale } from "@/lib/i18n/locale";
 
 export const requestTypes = {
   installation: "Installation / remplacement",
@@ -127,6 +130,50 @@ export function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim());
 }
 
+/** Messages d'erreur des formulaires (devis, rappel), dans chaque langue. */
+export const validationMessages = {
+  fr: {
+    category: "Choisissez le domaine concerné.",
+    service: "Choisissez la prestation (ou « Autre »).",
+    serviceUnknown: "Prestation inconnue.",
+    requestType: "Précisez la nature de votre demande.",
+    timing: "Indiquez le délai souhaité.",
+    property: "Indiquez le type de bien.",
+    descriptionShort: "Décrivez votre besoin en quelques mots (10 caractères minimum).",
+    tooLong: (max: number) => `${max} caractères maximum.`,
+    name: "Indiquez votre nom.",
+    phone: "Numéro invalide (ex. 0486 12 34 56).",
+    email: "Adresse e-mail invalide.",
+    postalCode: "Code postal à 4 chiffres.",
+    commune: "Indiquez votre commune.",
+    address: "Adresse trop longue.",
+    choice: "Choix invalide.",
+    time: "Choisissez un moment.",
+    topic: "Sujet invalide.",
+    purpose: "Motif invalide.",
+  },
+  nl: {
+    category: "Kies het domein.",
+    service: "Kies de dienst (of « Iets anders »).",
+    serviceUnknown: "Onbekende dienst.",
+    requestType: "Geef aan wat voor aanvraag het is.",
+    timing: "Geef aan wanneer het moet gebeuren.",
+    property: "Geef het type pand aan.",
+    descriptionShort: "Beschrijf uw vraag in een paar woorden (minstens 10 tekens).",
+    tooLong: (max: number) => `Maximaal ${max} tekens.`,
+    name: "Vul uw naam in.",
+    phone: "Ongeldig nummer (bv. 0486 12 34 56).",
+    email: "Ongeldig e-mailadres.",
+    postalCode: "Postcode met 4 cijfers.",
+    commune: "Vul uw gemeente in.",
+    address: "Adres te lang.",
+    choice: "Ongeldige keuze.",
+    time: "Kies een moment.",
+    topic: "Ongeldig onderwerp.",
+    purpose: "Ongeldige reden.",
+  },
+} satisfies Record<Locale, Record<string, string | ((max: number) => string)>>;
+
 /**
  * Valide les champs demandés (toutes les étapes par défaut). `knownServices`
  * = références de services existantes, vérifiées côté serveur.
@@ -134,42 +181,37 @@ export function isValidEmail(value: string): boolean {
 export function validateQuote(
   data: QuoteRequest,
   fields: QuoteField[] = stepFields.flat(),
-  knownServices?: Set<string>
+  knownServices?: Set<string>,
+  locale: Locale = "fr"
 ): QuoteErrors {
   const errors: QuoteErrors = {};
   const need = new Set(fields);
   const text = (value: string) => value.trim();
+  const m = validationMessages[locale];
 
-  if (need.has("category") && !text(data.category)) errors.category = "Choisissez le domaine concerné.";
+  if (need.has("category") && !text(data.category)) errors.category = m.category;
   if (need.has("service")) {
-    if (!text(data.service)) errors.service = "Choisissez la prestation (ou « Autre »).";
+    if (!text(data.service)) errors.service = m.service;
     else if (knownServices && data.service !== OTHER_SERVICE && !knownServices.has(data.service))
-      errors.service = "Prestation inconnue.";
+      errors.service = m.serviceUnknown;
   }
-  if (need.has("requestType") && !isOneOf(requestTypes, data.requestType))
-    errors.requestType = "Précisez la nature de votre demande.";
-  if (need.has("timing") && !isOneOf(timings, data.timing)) errors.timing = "Indiquez le délai souhaité.";
-  if (need.has("property") && !isOneOf(properties, data.property)) errors.property = "Indiquez le type de bien.";
+  if (need.has("requestType") && !isOneOf(requestTypes, data.requestType)) errors.requestType = m.requestType;
+  if (need.has("timing") && !isOneOf(timings, data.timing)) errors.timing = m.timing;
+  if (need.has("property") && !isOneOf(properties, data.property)) errors.property = m.property;
   if (need.has("description")) {
-    if (text(data.description).length < 10)
-      errors.description = "Décrivez votre besoin en quelques mots (10 caractères minimum).";
-    else if (data.description.length > LIMITS.description)
-      errors.description = `${LIMITS.description} caractères maximum.`;
+    if (text(data.description).length < 10) errors.description = m.descriptionShort;
+    else if (data.description.length > LIMITS.description) errors.description = m.tooLong(LIMITS.description);
   }
-  if (need.has("name") && (text(data.name).length < 2 || data.name.length > LIMITS.name))
-    errors.name = "Indiquez votre nom.";
-  if (need.has("phone") && !isValidPhone(data.phone))
-    errors.phone = "Numéro invalide (ex. 0486 12 34 56).";
-  if (need.has("email") && !isValidEmail(data.email)) errors.email = "Adresse e-mail invalide.";
-  if (need.has("postalCode") && !/^\d{4}$/.test(text(data.postalCode)))
-    errors.postalCode = "Code postal à 4 chiffres.";
+  if (need.has("name") && (text(data.name).length < 2 || data.name.length > LIMITS.name)) errors.name = m.name;
+  if (need.has("phone") && !isValidPhone(data.phone)) errors.phone = m.phone;
+  if (need.has("email") && !isValidEmail(data.email)) errors.email = m.email;
+  if (need.has("postalCode") && !/^\d{4}$/.test(text(data.postalCode))) errors.postalCode = m.postalCode;
   if (need.has("commune") && (text(data.commune).length < 2 || data.commune.length > LIMITS.commune))
-    errors.commune = "Indiquez votre commune.";
-  if (need.has("address") && data.address.length > LIMITS.address) errors.address = "Adresse trop longue.";
+    errors.commune = m.commune;
+  if (need.has("address") && data.address.length > LIMITS.address) errors.address = m.address;
   if (need.has("contactPreference") && !isOneOf(contactPreferences, data.contactPreference))
-    errors.contactPreference = "Choix invalide.";
-  if (need.has("callbackSlot") && !isOneOf(callbackSlots, data.callbackSlot))
-    errors.callbackSlot = "Choix invalide.";
+    errors.contactPreference = m.choice;
+  if (need.has("callbackSlot") && !isOneOf(callbackSlots, data.callbackSlot)) errors.callbackSlot = m.choice;
 
   return errors;
 }

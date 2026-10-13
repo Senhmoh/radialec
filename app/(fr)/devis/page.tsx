@@ -6,6 +6,7 @@ import { fr } from "@/lib/typography";
 import { company } from "@/app/data/company";
 import { categories } from "@/app/data/categories";
 import { reviewDate, shortReview } from "@/app/data/reviews";
+import { ui } from "@/lib/i18n/ui";
 import { prices, resolvePrice } from "@/app/data/pricing";
 import { getServiceByRef, type ServiceCategory } from "@/app/data/services";
 import type { FaqItem } from "@/app/data/services/types";
@@ -173,7 +174,7 @@ export default function DevisPage() {
                   <figure className="mt-8 hidden max-w-md border-l-2 border-night/15 pl-5 lg:block">
                     <blockquote className="text-[15px] leading-relaxed text-night/75">« {fr(review.text)} »</blockquote>
                     <figcaption className="mt-2 text-xs text-night/50">
-                      <span className="font-semibold text-night">{review.author}</span> · Avis Google, {reviewDate(review.date)}
+                      <span className="font-semibold text-night">{review.author}</span> · Avis Google, {reviewDate(review.date, ui("fr").months)}
                     </figcaption>
                   </figure>
                 </div>

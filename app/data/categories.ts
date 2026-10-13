@@ -1,6 +1,9 @@
 import { company } from "./company";
 import { boilerBrandNames } from "./brands";
 import { prices, type PriceRef } from "./pricing";
+import { categoriesNl, categoryLabelsNl } from "./nl/categories";
+import { showNl } from "./visibility";
+import { defaultLocale, type Locale } from "@/lib/i18n/locale";
 import type {
   CtaContent,
   Fact,
@@ -726,6 +729,26 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
   },
 };
 
-export function getCategory(category: ServiceCategory): CategoryContent {
-  return categories[category];
+const categoriesByLocale: Record<Locale, Partial<Record<ServiceCategory, CategoryContent>>> = {
+  fr: categories,
+  nl: showNl ? categoriesNl : {},
+};
+
+export function getCategory(category: ServiceCategory, locale: Locale = defaultLocale): CategoryContent {
+  const content = categoriesByLocale[locale][category];
+  if (!content) throw new Error(`Catégorie introuvable (${locale}) : ${category}`);
+  return content;
+}
+
+export function hasCategory(category: ServiceCategory, locale: Locale = defaultLocale): boolean {
+  return Boolean(categoriesByLocale[locale][category]);
+}
+
+/** Métiers qui ont leur page dans cette langue, dans l'ordre de priorité commerciale. */
+export function localeCategoryOrder(locale: Locale = defaultLocale): ServiceCategory[] {
+  return categoryOrder.filter((category) => hasCategory(category, locale));
+}
+
+export function categoryLabel(category: ServiceCategory, locale: Locale = defaultLocale): string {
+  return (locale === "nl" ? categoryLabelsNl : categoryLabels)[category];
 }
