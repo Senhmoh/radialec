@@ -9,9 +9,13 @@ import { useAttribution } from "@/components/site/useAttribution";
 import { trackLead } from "@/lib/tracking";
 import { btn, PhoneButton } from "./ui";
 
-/** Heure de Bruxelles, quel que soit le fuseau du visiteur. */
+/**
+ * Heure de Bruxelles (0-23), quel que soit le fuseau du visiteur. Lue dans les
+ * « parts » du format : en fr-BE l'heure s'écrit « 16 h », que Number() ne lit pas.
+ */
 function brusselsHour(): number {
-  return Number(new Intl.DateTimeFormat("fr-BE", { hour: "numeric", hour12: false, timeZone: "Europe/Brussels" }).format(new Date()));
+  const parts = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", hourCycle: "h23", timeZone: "Europe/Brussels" }).formatToParts(new Date());
+  return Number(parts.find((part) => part.type === "hour")?.value);
 }
 
 type Moment = "open" | "closed";
@@ -43,6 +47,8 @@ export function ReachPanel({ context, label }: { context: string; label: string 
     startedAt.current = Date.now();
     const update = () => {
       const h = brusselsHour();
+      // Heure illisible (navigateur exotique) : on garde le texte neutre plutôt qu'un statut faux.
+      if (!Number.isInteger(h)) return;
       setHour(h);
       setMoment(h >= opens && h < closes ? "open" : "closed");
     };
