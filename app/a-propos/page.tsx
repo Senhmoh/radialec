@@ -19,7 +19,7 @@ export const metadata = pageMetadata({
 
 // Uniquement des promesses validées (app/data/company.ts).
 const engagements: Fact[] = [
-  { icon: "clock", stat: `Disponible ${company.promises.availability}`, label: "Week-end compris" },
+  { icon: "clock", stat: `Disponible ${company.promises.availability}`, label: `Et ${company.promises.emergency} pour les urgences` },
   { icon: "stopwatch", stat: company.promises.intervention, label: "À Bruxelles et en périphérie" },
   { icon: "clipboard", stat: company.promises.quote, label: "Gratuit et sans engagement" },
   { icon: "shield", stat: company.promises.warranty, label: "Sur nos pièces et interventions" },
@@ -39,7 +39,7 @@ export default function AProposPage() {
         ]}
         eyebrow="À propos · Bruxelles et environs"
         title="Radialec, votre technicien à Bruxelles"
-        intro="Chauffage, électricité, plomberie, climatisation : un seul interlocuteur pour tout votre habitat, joignable 7j/7."
+        intro={`Chauffage, électricité, plomberie et climatisation, à Bruxelles et alentour. On décroche ${company.promises.availability}, et ${company.promises.emergency} pour les urgences.`}
       >
         <div className="mt-8">
           <PhoneButton variant="primary" className="min-h-[56px] px-7 text-base" />
@@ -48,13 +48,13 @@ export default function AProposPage() {
 
       <section className={cn("py-16 lg:py-24", toneBg[tones.story])} aria-labelledby="histoire-titre">
         <div className="container grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-20">
-          <SectionTitle id="histoire-titre" eyebrow="Qui sommes-nous" title="Un seul interlocuteur pour tout votre habitat" />
+          <SectionTitle id="histoire-titre" eyebrow="Qui sommes-nous" title="Un seul numéro pour toute la maison" />
           <div>
             <div className="space-y-4">
               {/* Faits vérifiés (BCE, 04-reponses Q26). Ne jamais publier la taille de l'équipe ni l'autre employeur du technicien. */}
               <p className="text-[17px] leading-relaxed text-night/75">
                 {fr(
-                  `${company.name} est le nom commercial de ${company.legal.companyName ?? "notre société"}, créée en 2024. Chauffage, électricité, plomberie et climatisation : un seul interlocuteur, du premier appel à la fin de l'intervention.`
+                  `${company.name} est le nom commercial de ${company.legal.companyName ?? "notre société"}, créée en 2024. Une chaudière qui lâche, une prise qui chauffe, une fuite sous l'évier : vous appelez le même numéro, et on s'en occupe du premier appel à la fin de l'intervention.`
                 )}
               </p>
             </div>
@@ -69,7 +69,8 @@ export default function AProposPage() {
       <ZonesV2 tone={tones.zones} />
       <FinalCtaV2
         eyebrow="Parlons de votre projet"
-        title="Un projet d'installation ? Votre devis, sans mauvaise surprise."
+        title="Un projet d'installation ? Le devis est gratuit."
+        highlight="gratuit"
         image={visual.image}
         imageAlt={visual.alt}
       />

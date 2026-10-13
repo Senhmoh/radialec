@@ -8,7 +8,7 @@ export const homeFaqs: FaqItem[] = [
     {
         id: 1,
         question: "Comment obtenir un devis pour l'installation d'une nouvelle chaudière ?",
-        answer: "Pour obtenir un devis pour l’installation d’une nouvelle chaudière, il vous suffit de nous contacter par email ou par appel téléphonique. Nous vous fournissons un devis détaillé. Tout savoir sur le [remplacement de chaudière](/chauffage/remplacement-chaudiere)."
+        answer: "Remplissez le [formulaire de devis](/devis) (deux minutes, photos bienvenues) ou appelez-nous. Vous recevez un devis détaillé sous 24h, gratuit et sans engagement. Tout savoir sur le [remplacement de chaudière](/chauffage/remplacement-chaudiere)."
     },
     {
         id: 2,
@@ -18,12 +18,12 @@ export const homeFaqs: FaqItem[] = [
     {
         id: 3,
         question: "Quel est le type de chaudières que vous prenez en charge ?",
-        answer: "Nos chauffagistes installent une large gamme de chaudières pour répondre à vos besoins en chauffage, y compris des chaudières à condensation ou au gaz. Nous vous conseillons également sur la meilleure marque et le type d’équipement adapté à votre habitation."
+        answer: "Nous installons des chaudières gaz à condensation, et des pompes à chaleur quand le logement s’y prête. Nous vous aidons à choisir la marque et le modèle adaptés à votre logement."
     },
     {
         id: 4,
         question: "Quel est le meilleur moment pour faire l'entretien de ma chaudière ?",
-        answer: "Il est recommandé de faire l’entretien de votre chaudière au gaz tous les deux ans et de votre chaudière au mazout chaque année. Nos chauffagistes vous conseillent de planifier un RDV avant l’hiver pour vous assurer que votre système est prêt à fonctionner de manière optimale tout au long de la saison froide."
+        answer: "Il est recommandé de faire l’entretien de votre chaudière au gaz tous les deux ans et de votre chaudière au mazout chaque année. Le bon moment : avant l’hiver, pour que tout soit prêt quand vous en aurez besoin."
     },
     {
         id: 5,

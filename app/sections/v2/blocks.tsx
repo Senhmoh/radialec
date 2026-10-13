@@ -197,22 +197,22 @@ const callBandCopy: Record<ServiceIntent | "chaudiere", { eyebrow: string; title
   chaudiere: {
     eyebrow: "Une question avant de vous lancer ?",
     title: "Parlons de votre chaudière.",
-    text: `Remplacer ou réparer, gaz ou pompe à chaleur : appelez-nous ${company.promises.availability}, ou laissez votre numéro et nous vous rappelons.`,
+    text: `Réparer ou remplacer ? Gaz ou pompe à chaleur ? Posez la question à un technicien, au téléphone : il vous répond ${company.promises.availability}. Pas le temps maintenant ? Laissez votre numéro, on vous rappelle.`,
   },
   urgence: {
-    eyebrow: "Dépannage 7j/7",
-    title: "Une panne ? Un technicien chez vous sous 24h.",
-    text: "Un appel suffit : nous évaluons la situation avec vous et planifions l'intervention au plus vite, week-end compris.",
+    eyebrow: `Dépannage · ${company.promises.emergency}`,
+    title: `Une panne ? On décroche ${company.promises.emergency}.`,
+    text: "Expliquez-nous ce qui se passe : on vous dit tout de suite si ça peut attendre, et un technicien passe sous 24h, week-end compris.",
   },
   installation: {
     eyebrow: "Devis gratuit",
-    title: "Votre projet mérite un devis clair.",
-    text: "Visite technique, conseils et devis détaillé sous 24h — gratuit et sans engagement. Un seul interlocuteur du premier rendez-vous à la mise en service.",
+    title: "Un projet ? Commençons par en parler.",
+    text: "Décrivez-nous ce que vous voulez faire. Si besoin, un technicien passe voir sur place, et vous recevez un devis détaillé sous 24h, sans engagement.",
   },
   entretien: {
     eyebrow: "Entretien planifié",
-    title: "Réservez votre créneau en un appel.",
-    text: "Nous fixons ensemble un rendez-vous rapide, généralement sous 24h, au prix affiché à l'avance. Vous n'avez plus qu'à ouvrir la porte.",
+    title: "Votre rendez-vous, réservé en deux minutes.",
+    text: "Choisissez un créneau en ligne ou appelez-nous : le rendez-vous est généralement possible sous 24h, au prix affiché sur le site.",
   },
 };
 
@@ -244,7 +244,8 @@ export function CallBandV2({
   attached?: boolean;
 }) {
   const light = surface === "lavender";
-  const copy = callBandCopy[copyKey ?? (context?.startsWith("chauffage") ? "chaudiere" : intent)];
+  // Pages chauffage : texte « chaudière », sauf en dépannage (texte d'urgence, on décroche 24h/24).
+  const copy = callBandCopy[copyKey ?? (intent !== "urgence" && context?.startsWith("chauffage") ? "chaudiere" : intent)];
   // Entretien : le rendez-vous reste la 2e action, WhatsApp passe en lien. Ailleurs :
   // WhatsApp (photo de la panne ou du projet), le rappel en repli (prompts/refonte/06).
   const entretien = intent === "entretien";
@@ -396,9 +397,9 @@ export function ProofV2({
             <ul className="mt-4 flex flex-col gap-x-8 gap-y-2.5 text-night/75 sm:flex-row sm:flex-wrap">
               {[
                 // Repris du texte validé de la page (intro, CTA).
-                "Devis détaillé sous 24 heures",
-                "Normes en vigueur respectées (PEB, RGIE)",
-                "Un seul interlocuteur, du premier rendez-vous à la mise en service",
+                "Devis détaillé sous 24h",
+                "Travail conforme aux normes (PEB, RGIE)",
+                "Un seul numéro pour le chauffage, l'électricité et la plomberie",
               ].map((point) => (
                 <li key={point} className="flex items-start gap-3">
                   <FaCheck className="mt-1 h-3.5 w-3.5 flex-shrink-0 text-flame" aria-hidden="true" />

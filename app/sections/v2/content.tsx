@@ -201,7 +201,7 @@ export function OptionsV2({
 /* ------------------------------------------------------------------ */
 
 export function PricingV2({
-  eyebrow = "Des tarifs clairs, sans surprise",
+  eyebrow = "Nos prix",
   title,
   intro,
   items,
@@ -227,7 +227,7 @@ export function PricingV2({
         <div>
           <SectionTitle eyebrow={eyebrow} title={title} intro={intro} />
           <p className="mt-6 max-w-md text-sm text-night/60">
-            <RichText text={note ?? "Prix TVAC. Devis gratuit et prix annoncé avant toute intervention : le prix annoncé est le prix payé."} />
+            <RichText text={note ?? "Prix TVAC. Pour tout ce qui sort de ces forfaits, on vous annonce le prix avant de commencer."} />
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             {intent === "urgence" ? (

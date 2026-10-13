@@ -24,7 +24,8 @@ export const ctaDefaults: Record<
   },
   installation: {
     eyebrow: "Installation & rénovation",
-    title: "Un projet d'installation ? Votre devis, sans mauvaise surprise.",
+    title: "Un projet d'installation ? Le devis est gratuit.",
+    highlight: "gratuit",
     image: technicienInstallation,
     imageAlt: "Technicien Radialec préparant un devis d'installation",
   },

@@ -78,8 +78,9 @@ export const company = {
     clients: "+200 clients satisfaits",
     // Seul délai confirmé (Q27, 04-reponses) : rappel en journée.
     callback: "sous 2 h, entre 10h et 21h" as string | null,
-    // Urgences par téléphone (demande du 12/10/2026, confirmations devis et rappel).
-    // À CONFIRMER : le reste du site affiche les appels 7j/7 de 10h à 21h (hours.detail).
+    // Urgences (dépannages) : on décroche 24h/24, 7j/7 (confirmé le 13/10/2026).
+    // Hors urgence, les appels sont pris 7j/7 de 10h à 21h (hours.detail). Le délai
+    // d'intervention reste « sous 24h » : ne jamais promettre une intervention de nuit.
     emergency: "24h/24",
   },
 

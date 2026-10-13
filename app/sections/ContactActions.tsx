@@ -20,8 +20,8 @@ const cards: ActionCard[] = [
     key: "devis",
     icon: "clipboard",
     title: "Demander un devis gratuit",
-    text: "Installation, remplacement de chaudière, mise en conformité, rénovation : décrivez votre projet, nous vous répondons avec un devis détaillé.",
-    points: ["Gratuit et sans engagement", "Devis détaillé sous 24h", "Le prix annoncé est le prix payé"],
+    text: "Une chaudière à remplacer, une mise en conformité, une rénovation ? Décrivez votre projet en deux minutes, vous recevez un devis détaillé.",
+    points: ["Gratuit et sans engagement", "Devis détaillé sous 24h", "Pas de frais ajoutés sur la facture"],
     button: "btn btn-dark",
   },
   {

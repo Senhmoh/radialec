@@ -33,7 +33,8 @@ export const metadata = pageMetadata({
 const trust: Fact[] = [
   { icon: "users", stat: company.promises.clients, label: "Ils nous recommandent partout à Bruxelles." },
   { icon: "shield", stat: company.promises.warranty, label: "Toutes nos pièces et interventions couvertes." },
-  { icon: "clock", stat: company.promises.intervention, label: "Une urgence ? On est chez vous le jour même. 7/7" },
+  // « le jour même » remplacé le 13/10 : contredisait « sous 24h » sur la même tuile.
+  { icon: "clock", stat: company.promises.intervention, label: `Une urgence ? On décroche ${company.promises.emergency}, 7j/7.` },
   { icon: "euro", stat: "Prix transparents", label: "Le prix annoncé est le prix payé, point final." },
 ];
 
@@ -145,7 +146,7 @@ export default function Home() {
 
       <ServiceGridV2
         eyebrow="Notre spécialité"
-        title="Entretien, dépannage, remplacement : tout pour votre chaudière"
+        title="Votre chaudière, de l'entretien au remplacement"
         featured={boilerServices.map((ref) => getServiceByRef(ref))}
         services={[]}
         tone={tones.boilers}
@@ -156,8 +157,8 @@ export default function Home() {
           <SectionTitle
             id="metiers-titre"
             eyebrow="Nos métiers"
-            title="Spécialistes en chauffage, oui mais pas que..."
-            intro="Une équipe technique qualifiée au service de tout votre habitat à Bruxelles et ses environs. Découvrez notre gamme complète de prestations en chauffage, plomberie & sanitaire, climatisation et électricité."
+            title="Spécialistes en chauffage, mais pas seulement"
+            intro="Nos techniciens s'occupent aussi de l'électricité, de la plomberie et de la climatisation. Pour tout ce qui touche à la maison, à Bruxelles et alentour, c'est le même numéro."
           />
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4">
             {trades.map((trade) => (
@@ -190,7 +191,7 @@ export default function Home() {
 
       <PricingV2
         title="Tarifs chauffage, électricité et plomberie à Bruxelles"
-        intro="Des interventions au juste prix, sans frais cachés ni mauvaise surprise sur votre facture. Nos techniciens qualifiés assurent des prestations soignées et durables, avec une garantie de 2 ans sur l'ensemble de nos travaux. Devis gratuit avant chaque intervention."
+        intro="Les interventions courantes ont un prix fixe, TVAC, affiché ici. Pour un projet, le devis est gratuit, et rien n'est commencé sans votre accord sur le prix."
         items={pricing}
         tone={tones.pricing}
       />
@@ -201,7 +202,7 @@ export default function Home() {
         eyebrow={urgence.eyebrow}
         title={urgence.title}
         highlight={urgence.highlight}
-        body="Chaudière en panne, fuite d'eau, coupure de courant : une urgence technique ne prévient jamais. Nos techniciens agréés interviennent 7j/7 à Bruxelles et dans toute la région, avec un délai garanti sous 24h. Décrivez votre problème, on s'occupe du reste."
+        body={`Une panne tombe toujours au mauvais moment. Appelez-nous, on décroche ${company.promises.emergency} : un technicien passe sous 24h, week-end compris, et vous connaissez le prix avant qu'il commence.`}
         image={visual.image}
         imageAlt={visual.alt}
         // Page générale : le devis reste la 2e action (WhatsApp en lien sous les boutons).

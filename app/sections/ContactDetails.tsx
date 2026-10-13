@@ -68,7 +68,9 @@ export function ContactDetails({ tone = "white" }: { tone?: Tone }) {
               <Row tone={tone} icon="clock" label="Horaires">
                 <p className="font-semibold">Disponible {hours.summary}</p>
                 {hours.detail ? (
-                  <p className="text-sm text-ink/70">{hours.detail}</p>
+                  <p className="text-sm text-ink/70">
+                    {hours.detail} · urgences {company.promises.emergency}
+                  </p>
                 ) : (
                   <div className="mt-1">
                     <MissingInfo>À fournir : horaires détaillés (ex. lun–ven 7h30–19h, week-end sur urgence)</MissingInfo>

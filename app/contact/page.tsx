@@ -26,12 +26,12 @@ const faqs: FaqItem[] = [
     id: 1,
     question: "Le devis est-il vraiment gratuit ?",
     answer:
-      "Oui. Le devis est gratuit et sans engagement, et vous le recevez sous 24h. Le prix annoncé est le prix payé : pas de frais cachés sur la facture.",
+      "Oui, gratuit et sans engagement, et vous le recevez sous 24h. Le montant du devis est celui de la facture : rien n'est ajouté après coup.",
   },
   {
     id: 2,
     question: "Dans quel délai pouvez-vous intervenir ?",
-    answer: `Nous intervenons sous 24h, 7j/7, à Bruxelles et en périphérie. Pour une urgence, le plus rapide est de nous appeler au **${company.phone.display}**.`,
+    answer: `Un technicien passe sous 24h, 7j/7, à Bruxelles et en périphérie. Pour une urgence, appelez directement le **${company.phone.display}** : on décroche ${company.promises.emergency}.`,
   },
   {
     id: 3,
@@ -73,7 +73,7 @@ export default function ContactPage() {
         ]}
         eyebrow="Contact · Bruxelles et environs"
         title="Contactez Radialec, votre technicien à Bruxelles"
-        intro="Chauffage, électricité, plomberie, climatisation : un seul interlocuteur, joignable 7j/7. Choisissez ce qui vous convient, on s'occupe du reste."
+        intro={`Le plus rapide, c'est d'appeler : on décroche ${company.promises.availability} de 10h à 21h, et ${company.promises.emergency} pour les urgences. Vous préférez écrire ? Demandez un devis, prenez rendez-vous ou laissez votre numéro.`}
       >
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
           <PhoneButton variant="primary" className="min-h-[60px] px-8 text-lg" />
@@ -117,7 +117,7 @@ export default function ContactPage() {
       <CallBandV2
         intent="urgence"
         title="Une urgence ? N'attendez pas de formulaire."
-        text="Panne de chauffage, fuite d'eau, coupure de courant : appelez-nous directement. Nous intervenons 7j/7, sous 24h, à Bruxelles et en périphérie."
+        text={`Appelez directement, on décroche ${company.promises.emergency}. Un technicien passe sous 24h, week-end compris, à Bruxelles et en périphérie.`}
         tone={tones.band.tone}
         attached={tones.band.attached}
       />

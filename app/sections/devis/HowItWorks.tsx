@@ -18,9 +18,9 @@ export function HowItWorks({ tone = "white" }: { tone?: Tone }) {
       <div className="container">
         <SectionTitle
           id="deroule-devis"
-          eyebrow="Simple et transparent"
+          eyebrow="Après votre demande"
           title="Comment se passe votre devis ?"
-          intro="De votre demande à l'intervention, un seul interlocuteur et aucune surprise."
+          intro="Quatre étapes, et rien n'est commandé tant que vous n'avez pas dit oui."
         />
         <ol className="mt-10 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4">
           {steps.map((step, index) => (
