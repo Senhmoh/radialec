@@ -453,7 +453,7 @@ export const chauffageServices: Service[] = [
           {
             title: "Vous appelez",
             description:
-              `Décrivez-nous la panne : ce qui ne marche plus, le code affiché, la marque de la chaudière. On décroche ${company.promises.emergency} et on fixe un passage sous 24h, 7j/7.`,
+              `Décrivez-nous la panne : ce qui ne marche plus, le code affiché, la marque de la chaudière. On fixe un passage sous 24h, 7j/7.`,
           },
           {
             title: "Le technicien trouve la panne",
@@ -558,7 +558,7 @@ export const chauffageServices: Service[] = [
     cta: {
       title: "Chaudière en panne ? Votre technicien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: `Décrivez-nous la panne au téléphone, on décroche ${company.promises.emergency}. Un technicien passe sous 24h, 7j/7, à Bruxelles et alentour, et vous annonce le prix avant de réparer.`,
+      body: "Décrivez-nous la panne au téléphone : un technicien passe sous 24h, 7j/7, à Bruxelles et alentour, et vous annonce le prix avant de réparer.",
     },
     zonesIntro:
       "Dépannage de chaudière sous 24h dans les 19 communes bruxelloises et en périphérie, en Brabant flamand et en Brabant wallon.",

@@ -193,7 +193,7 @@ export const plomberieServices: Service[] = [
     cta: {
       title: "Une fuite ? Votre plombier est (presque) déjà en route.",
       highlight: "(presque)",
-      body: `Coupez l'eau et appelez-nous, on décroche ${company.promises.emergency}. Un plombier passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.`,
+      body: "Coupez l'eau et appelez-nous : un plombier passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.",
     },
     draft: false,
   },
@@ -378,7 +378,7 @@ export const plomberieServices: Service[] = [
     cta: {
       title: "Ça bouche ? Votre technicien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: `N'attendez pas que ça déborde : appelez, on décroche ${company.promises.emergency}. Un technicien passe sous 24h, 7j/7, à Bruxelles et en périphérie, au prix annoncé.`,
+      body: "N'attendez pas que ça déborde : un technicien passe sous 24h, 7j/7, à Bruxelles et en périphérie, au prix annoncé.",
     },
     draft: false,
   },

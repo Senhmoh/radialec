@@ -576,7 +576,7 @@ export const climatisationServices: Service[] = [
     cta: {
       title: "Airco en panne ? Votre technicien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: `Décrivez-nous la panne, on décroche ${company.promises.emergency}. Un technicien passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.`,
+      body: "Décrivez-nous la panne : un technicien passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.",
     },
     draft: false,
   },

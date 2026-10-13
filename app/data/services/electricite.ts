@@ -85,7 +85,7 @@ export const electriciteServices: Service[] = [
         paragraphs: [
           "**Coupez immédiatement le disjoncteur général** de votre tableau électrique, ne touchez ni aux fils ni à l'appareil en cause et éloignez les enfants.",
           "Ne tentez jamais de réparer vous-même un câble dénudé ou une prise noircie. Si une personne est électrisée, ne la touchez pas avant d'avoir coupé le courant. En cas d'électrisation ou de début d'incendie, appelez le **112** sans attendre.",
-          `Une fois la situation sécurisée, appelez-nous (on décroche ${company.promises.emergency}) : un électricien passe sous 24h, 7j/7, trouve le défaut et remet le courant.`,
+          "Une fois la situation sécurisée, appelez-nous : un électricien passe sous 24h, 7j/7, trouve le défaut et remet le courant.",
         ],
       },
       {
@@ -207,7 +207,7 @@ export const electriciteServices: Service[] = [
     cta: {
       title: "Plus de courant ? Votre électricien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: `Ne restez pas dans le noir : appelez, on décroche ${company.promises.emergency}. Un électricien passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.`,
+      body: "Ne restez pas dans le noir : un électricien passe sous 24h, 7j/7, à Bruxelles et en périphérie, et vous annonce le prix avant de réparer.",
     },
     draft: false,
   },
