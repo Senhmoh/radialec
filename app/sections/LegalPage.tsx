@@ -3,6 +3,9 @@ import type { ReactNode } from "react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { MissingInfo } from "@/components/site/MissingInfo";
 import { fr } from "@/lib/typography";
+import { pagePath, type PageKey } from "@/lib/i18n/routes";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 
 interface LegalPageProps {
   title: string;
@@ -12,14 +15,13 @@ interface LegalPageProps {
   children: ReactNode;
 }
 
-const otherPages = [
-  { label: "Mentions légales", href: "/mentions-legales" },
-  { label: "Politique de confidentialité", href: "/confidentialite" },
-  { label: "Politique cookies", href: "/cookies" },
-];
+const legalPages: Extract<PageKey, "mentionsLegales" | "confidentialite" | "cookies">[] = ["mentionsLegales", "confidentialite", "cookies"];
 
 /** Gabarit des pages légales : en-tête compact + article à la typographie de lecture. */
 export function LegalPage({ title, path, updated, intro, children }: LegalPageProps) {
+  const locale = getRequestLocale();
+  const t = ui(locale);
+  const otherPages = legalPages.map((key) => ({ label: t.legal.links[key], href: pagePath(key, locale) }));
   return (
     <>
       <section className="relative isolate overflow-hidden bg-lavender pb-12 pt-24 sm:pt-28 md:pb-16 lg:pt-32">
@@ -27,7 +29,7 @@ export function LegalPage({ title, path, updated, intro, children }: LegalPagePr
         <div className="container">
           <Breadcrumbs
             items={[
-              { label: "Accueil", href: "/" },
+              { label: t.common.home, href: pagePath("home", locale) },
               { label: title, href: path },
             ]}
           />
@@ -36,13 +38,11 @@ export function LegalPage({ title, path, updated, intro, children }: LegalPagePr
               {fr(title)}
             </h1>
             <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-night/55">
-              Dernière mise à jour : {updated}
+              {t.legal.updated(updated)}
             </p>
             {intro && <p className="mt-6 text-lg leading-relaxed text-night/75">{fr(intro)}</p>}
             <p className="mt-6">
-              <MissingInfo>
-                Modèle rédigé pour Radialec : à compléter et à faire relire par un juriste avant publication.
-              </MissingInfo>
+              <MissingInfo>{t.legal.draft}</MissingInfo>
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@ export function LegalPage({ title, path, updated, intro, children }: LegalPagePr
         >
           {children}
 
-          <nav aria-label="Autres informations légales" className="mt-16 border-t border-ink/10 pt-8">
+          <nav aria-label={t.legal.otherPages} className="mt-16 border-t border-ink/10 pt-8">
             <ul className="!mt-0 flex !list-none flex-wrap gap-2 !pl-0">
               {otherPages
                 .filter((page) => page.href !== path)

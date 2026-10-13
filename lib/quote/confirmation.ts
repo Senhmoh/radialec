@@ -235,7 +235,7 @@ export function buildQuoteConfirmation(input: QuoteEmailInput) {
   const recap: [string, string][] = [
     [c.recap.service, input.customerLabels.service],
     [c.recap.category, input.customerLabels.category],
-    ...(input.displayedPrice ? ([[c.recap.price, input.displayedPrice]] as [string, string][]) : []),
+    ...(input.customerLabels.price ? ([[c.recap.price, input.customerLabels.price]] as [string, string][]) : []),
     [c.recap.type, label(l.requestTypes, quote.requestType)],
     [c.recap.timing, label(l.timings, quote.timing)],
     [c.recap.property, label(l.properties, quote.property)],

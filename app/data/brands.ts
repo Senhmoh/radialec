@@ -15,6 +15,8 @@ import wallonie from "@/assets/wallo.png";
 export interface Logo {
   src: StaticImageData;
   alt: string;
+  /** Texte alternatif néerlandais, s'il diffère (nom officiel de l'organisme). */
+  altNl?: string;
 }
 
 // Marques de chaudières installées et entretenues (logos réels du repo). C'est
@@ -31,15 +33,20 @@ export const boilerBrands: Logo[] = [
   { src: chaffoteaux, alt: "Chaffoteaux" },
 ];
 
-/** « Vaillant, Bulex, Bosch, Buderus, Junkers, Viessmann et Chaffoteaux ». */
-export const boilerBrandNames = (() => {
+const brandList = (and: string) => {
   const names = boilerBrands.map((brand) => brand.alt);
-  return `${names.slice(0, -1).join(", ")} et ${names[names.length - 1]}`;
-})();
+  return `${names.slice(0, -1).join(", ")} ${and} ${names[names.length - 1]}`;
+};
+
+/** « Vaillant, Bulex, Bosch, Buderus, Junkers, Viessmann et Chaffoteaux ». */
+export const boilerBrandNames = brandList("et");
+
+/** Néerlandais : « … Viessmann en Chaffoteaux ». */
+export const boilerBrandNamesNl = brandList("en");
 
 // Agréments régionaux (Bruxelles, Flandre, Wallonie).
 export const certifications: Logo[] = [
-  { src: environnement, alt: "Bruxelles Environnement" },
+  { src: environnement, alt: "Bruxelles Environnement", altNl: "Leefmilieu Brussel" },
   { src: vlaams, alt: "VEKA – Vlaams Energie- en Klimaatagentschap" },
-  { src: wallonie, alt: "Wallonie Environnement" },
+  { src: wallonie, alt: "Wallonie Environnement", altNl: "Wallonië Leefmilieu" },
 ];

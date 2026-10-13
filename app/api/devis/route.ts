@@ -91,8 +91,10 @@ export async function POST(request: Request) {
     customerLabels: {
       service: localService?.name ?? service?.name ?? (locale === "nl" ? "Iets anders (zie beschrijving)" : "Autre besoin (voir description)"),
       category: isCategory ? categoryLabel(quote.category as ServiceCategory, locale) : quote.category,
+      price: price?.amount !== undefined ? `${formatAmount(price, locale)} ${ui(locale).pricing.vat}` : undefined,
     },
-    displayedPrice: price?.amount !== undefined ? `${formatAmount(price)} ${ui(locale).pricing.vat}` : undefined,
+    // E-mail interne et Telegram : toujours en français.
+    displayedPrice: price?.amount !== undefined ? `${formatAmount(price)} TVAC` : undefined,
     photoCount: files.length,
     attribution: parseAttribution(form.get("attribution")),
   };

@@ -166,6 +166,16 @@ export const contactActions: Record<
   },
 };
 
+/**
+ * Informations légales rédigées en français dans `company.legal`, en néerlandais
+ * (même société : la dénomination et le numéro BCE ne se traduisent pas).
+ */
+export const legalNl = {
+  legalForm: "Besloten vennootschap (BV, in het Frans SRL)",
+  host: "Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, Verenigde Staten (vercel.com)",
+  publisher: "Houdaifa Senhaji, zaakvoerder van Thermo Tech Solutions SRL",
+};
+
 /** Textes de `company` qui changent avec la langue. */
 export interface CompanyCopy {
   tagline: string;
@@ -271,6 +281,7 @@ export const onlineBooking = {
     {
       calLink: "radialec/entretien-60-min",
       label: "Entretien de chaudière",
+      labelNl: "Ketelonderhoud",
       // Page marque Vaillant (brouillon) : son intention est l'entretien.
       services: ["chauffage/entretien-chaudiere", "chauffage/vaillant"],
     },

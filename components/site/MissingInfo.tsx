@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 
 /** Information que Radialec doit encore fournir : volontairement visible. */
 export function MissingInfo({ children, className }: { children: ReactNode; className?: string }) {
@@ -17,5 +19,5 @@ export function MissingInfo({ children, className }: { children: ReactNode; clas
 
 /** Affiche la valeur si elle existe, sinon un placeholder « À fournir : … ». */
 export function OrMissing({ value, what }: { value: string | null | undefined; what: string }) {
-  return value ? <>{value}</> : <MissingInfo>À fournir : {what}</MissingInfo>;
+  return value ? <>{value}</> : <MissingInfo>{ui(getRequestLocale()).legal.toProvide} {what}</MissingInfo>;
 }

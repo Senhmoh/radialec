@@ -1,10 +1,26 @@
 import type { NextConfig } from "next";
 import { company } from "./app/data/company";
+import { showNl } from "./app/data/visibility";
 
 const nextConfig: NextConfig = {
   // Deux mises en page racines (français, néerlandais) : la 404 des adresses
   // inconnues est app/global-not-found.tsx.
   experimental: { globalNotFound: true },
+  // Version néerlandaise pas encore en ligne (app/data/visibility.ts) : toute
+  // adresse /nl est envoyée vers une adresse inexistante, donc la 404 globale
+  // (française, gabarit complet). Avant le build : les pages /nl ne sont pas servies.
+  async rewrites() {
+    return {
+      beforeFiles: showNl
+        ? []
+        : [
+            { source: "/nl", destination: "/nl-indisponible" },
+            { source: "/nl/:path*", destination: "/nl-indisponible" },
+          ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   // Refonte 2026 : anciennes URL redirigées (301) vers leur équivalent, au cas
   // où elles auraient été indexées ou partagées.
   async redirects() {

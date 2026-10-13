@@ -17,7 +17,7 @@ export interface QuoteEmailInput {
   /** Langue de la page d'où vient la demande (le client attend une réponse dans cette langue). */
   locale: Locale;
   /** Prestation et domaine dans la langue du client (e-mail de confirmation). */
-  customerLabels: { service: string; category: string };
+  customerLabels: { service: string; category: string; price?: string };
   reference: string;
   receivedAt: Date;
   categoryLabel: string;

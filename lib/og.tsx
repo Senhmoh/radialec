@@ -2,8 +2,16 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { company } from "@/app/data/company";
-import { categoryLabels, getCategory } from "@/app/data/categories";
-import { getService, type ServiceCategory } from "@/app/data/services";
+import { categoryLabel, getCategory, hasCategory } from "@/app/data/categories";
+import { getService, getServiceByPath, type ServiceCategory } from "@/app/data/services";
+import { defaultLocale, type Locale } from "@/lib/i18n/locale";
+import { categoryPath } from "@/lib/i18n/routes";
+
+/** Textes fixes des images, par langue. */
+const ogText = {
+  fr: { region: "Bruxelles", footer: (rating: number) => `${rating}/5 sur Google · Sous 24h, 7j/7 · ${company.phone.display}` },
+  nl: { region: "Brussel", footer: (rating: number) => `${rating}/5 op Google · Binnen 24 uur, 7 op 7 · ${company.phone.display}` },
+};
 
 // Images d'aperçu (Open Graph) générées au build : ce qu'affichent WhatsApp,
 // Facebook, LinkedIn… quand on partage un lien du site. Charte Radialec :
@@ -46,10 +54,12 @@ export async function renderOgImage({
   eyebrow,
   title,
   visual = visuals.technicien,
+  locale = defaultLocale,
 }: {
   eyebrow: string;
   title: string;
   visual?: Visual;
+  locale?: Locale;
 }) {
   const [bold, medium, logo, image] = await Promise.all([
     file("assets/fonts/Geist-Bold.ttf"),
@@ -146,7 +156,7 @@ export async function renderOgImage({
               <Star />
             </div>
             <span>
-              {company.google.rating}/5 sur Google · Sous 24h, 7j/7 · {company.phone.display}
+              {ogText[locale].footer(company.google.rating)}
             </span>
           </div>
         </div>
@@ -163,34 +173,42 @@ export async function renderOgImage({
 }
 
 /** Image par défaut du site. */
-export function defaultOgImage() {
-  return renderOgImage({
-    eyebrow: "Bruxelles et environs · 7j/7",
-    title: "Chauffagiste, électricien et plombier à Bruxelles",
-  });
+export function defaultOgImage(locale: Locale = defaultLocale) {
+  return renderOgImage(
+    locale === "nl"
+      ? { eyebrow: "Brussel en omgeving · 7 op 7", title: "Chauffagist, elektricien en loodgieter in Brussel", locale }
+      : { eyebrow: "Bruxelles et environs · 7j/7", title: "Chauffagiste, électricien et plombier à Bruxelles" }
+  );
 }
 
 /** Image d'une page catégorie (hub). */
-export function categoryOgImage(category: ServiceCategory) {
+export function categoryOgImage(category: ServiceCategory, locale: Locale = defaultLocale) {
   return async function Image() {
-    const content = getCategory(category);
+    // Néerlandais pas encore en ligne : la page n'existe pas, image par défaut.
+    if (!hasCategory(category, locale)) return defaultOgImage(locale);
+    const content = getCategory(category, locale);
     return renderOgImage({
-      eyebrow: `${content.label} · Bruxelles`,
+      eyebrow: `${content.label} · ${ogText[locale].region}`,
       title: content.hero.title,
       visual: categoryVisual[category],
+      locale,
     });
   };
 }
 
 /** Image d'une fiche service (/<categorie>/<slug>). */
-export function serviceOgImage(category: ServiceCategory) {
+export function serviceOgImage(category: ServiceCategory, locale: Locale = defaultLocale) {
   return async function Image({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const service = getService(category, slug);
+    // Néerlandais : le segment est la fin de l'adresse néerlandaise (/nl/verwarming/<slug>).
+    const service =
+      locale === "fr" ? getService(category, slug) : getServiceByPath(`${categoryPath(category, locale)}/${slug}`, locale);
+    const label = categoryLabel(category, locale);
     return renderOgImage({
-      eyebrow: `${categoryLabels[category]} · Bruxelles`,
-      title: service?.pageTitle ?? categoryLabels[category],
+      eyebrow: `${label} · ${ogText[locale].region}`,
+      title: service?.pageTitle ?? label,
       visual: categoryVisual[category],
+      locale,
     });
   };
 }

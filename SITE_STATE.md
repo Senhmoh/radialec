@@ -1,6 +1,6 @@
 # État du site Radialec
 
-Mis à jour le 12 octobre 2026. Remplace l'audit du 5 octobre.
+Mis à jour le 13 octobre 2026. Remplace l'audit du 5 octobre.
 
 ## En bref
 
@@ -11,6 +11,7 @@ Mis à jour le 12 octobre 2026. Remplace l'audit du 5 octobre.
   - fonctionnent par e-mail (Resend) ;
   - alerte Telegram instantanée et confirmation au client codées, mais **pas encore activées** (identifiants à fournir) ;
   - suivi Google Ads et Microsoft Clarity codés, mais **pas encore activés**.
+- **Version néerlandaise (`/nl`) en construction**, invisible en production. Faits : accueil, chauffage et ses 3 pages chaudière, contact, offre, rendez-vous, pages légales. Plan, reste à faire et relecture : `prompts/refonte/09-nl.md`.
 - **Il reste surtout des réglages de comptes** (Resend, Telegram, Google Ads, Clarity) et quelques décisions du propriétaire (section 13).
 
 ## 1. Technique et hébergement
@@ -320,6 +321,8 @@ Elle ne part qu'avec un expéditeur sur un domaine vérifié dans Resend (`QUOTE
 | `prompts/refonte/07-suivi-ads-clarity.md` | Mise en route de Google Ads et Clarity |
 | `prompts/refonte/kit-avis/` | Cartes QR à imprimer (format imprimeur et planche A4), QR seul, messages SMS/WhatsApp, modèles de réponse aux avis |
 | `scripts/telegram.mjs` | Mise en route du bot (`npm run telegram -- ids`, puis `-- test`) |
+| `prompts/refonte/09-nl.md` | Version néerlandaise : pages faites, reste à faire, relecture avant mise en ligne |
+| `scripts/check-links.mjs` | `npm run check:links` : liens internes cassés sur un serveur lancé |
 
 ## 16. Historique récent
 
@@ -328,3 +331,4 @@ Elle ne part qu'avec un expéditeur sur un domaine vérifié dans Resend (`QUOTE
 | 08/10 | Réponses du gestionnaire appliquées (prix, conditions, entretien, garanties) ; toutes les pages validées ; Causerie retiré ; pages légales complétées |
 | 11/10 | Devis refait (deux colonnes, plus de ticket) ; boutons par intention, WhatsApp, vrais avis Google ; alerte Telegram ; suivi Ads et Clarity préparés ; kit avis et `/avis` ; ménage du code |
 | 12/10 | E-mails de confirmation client (devis avec récapitulatif, rappel) ; champ e-mail facultatif sur le rappel ; `/logo-signature.png` |
+| 13/10 | Textes réécrits pour ne plus sonner « IA » ; urgences 24h/24 ; carte « Joignable maintenant » sur les pages métier ; début de la version néerlandaise (phase 1, invisible en production) |

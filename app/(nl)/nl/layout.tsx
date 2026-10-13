@@ -6,7 +6,9 @@ import { SiteShell } from "@/app/sections/v2/SiteShell";
 
 // Mise en page racine du site en néerlandais (adresses sous /nl). Chaque page
 // néerlandaise appelle aussi setRequestLocale("nl") : la page peut être rendue
-// avant la mise en page.
+// avant la mise en page. Tant que le néerlandais n'est pas en ligne (showNl),
+// next.config.ts réécrit /nl vers la 404 globale (française). Une adresse /nl
+// inconnue affiche aussi la 404 globale (app/global-not-found.tsx).
 export const metadata: Metadata = {
   metadataBase: new URL(company.siteUrl),
   title: {

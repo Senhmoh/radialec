@@ -5,7 +5,10 @@ import { motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import { fr } from "@/lib/typography";
-import { company } from "@/app/data/company";
+import { companyText } from "@/app/data/company";
+import { useLocale } from "@/lib/i18n/client";
+import { hasPage, pagePath } from "@/lib/i18n/routes";
+import { ui } from "@/lib/i18n/ui";
 import { quoteNextSteps } from "@/lib/quote/messages";
 import type { QuoteRequest } from "@/lib/quote/schema";
 import { PhoneButton } from "../v2/ui";
@@ -27,14 +30,16 @@ export function QuoteSuccess({ quote, reference, delivered, confirmed }: QuoteSu
     headingRef.current?.focus();
   }, []);
 
-  const next = quoteNextSteps(quote);
+  const locale = useLocale();
+  const t = ui(locale);
+  const s = t.quote.success;
+  const next = quoteNextSteps(quote, locale);
 
   return (
     <div className="py-2 sm:py-4">
       {delivered === false && (
         <p className="mb-8 rounded-2xl border border-dashed border-flame/40 bg-flame/[0.04] px-4 py-3 text-xs text-flame">
-          Mode développement : l&apos;e-mail n&apos;a pas été envoyé (Resend pas encore branché). La demande est
-          affichée dans la console du serveur.
+          {s.devBanner}
         </p>
       )}
 
@@ -49,18 +54,18 @@ export function QuoteSuccess({ quote, reference, delivered, confirmed }: QuoteSu
       </motion.div>
 
       <h2 ref={headingRef} tabIndex={-1} className="v2-title mt-8 text-[1.9rem] outline-none sm:text-[2.3rem]">
-        {fr(`Demande envoyée, merci ${firstName} !`)}
+        {fr(s.title(firstName))}
       </h2>
       <p className="mt-3 max-w-lg text-[17px] leading-relaxed text-night/65">
-        Votre demande est bien arrivée chez nos techniciens. Gardez votre référence :
+        {s.text}
       </p>
       <p className="mt-4 inline-flex items-center gap-3 rounded-2xl bg-chalk px-5 py-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-night/45">Référence</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-night/45">{s.reference}</span>
         <span className="v2-semi font-display text-lg font-bold tracking-wider text-night">{reference}</span>
       </p>
       {confirmed && (
         <p className="mt-3 text-sm text-night/60">
-          Récapitulatif envoyé à <strong className="font-semibold text-night">{quote.email}</strong>.
+          {s.recapSent} <strong className="font-semibold text-night">{quote.email}</strong>.
         </p>
       )}
 
@@ -75,12 +80,17 @@ export function QuoteSuccess({ quote, reference, delivered, confirmed }: QuoteSu
       </ol>
 
       <div className="mt-10 flex flex-col gap-3 border-t border-night/[0.08] pt-7 sm:flex-row sm:items-center">
-        <span className="text-sm text-night/55 sm:mr-1">Une urgence&nbsp;? Appelez-nous {company.promises.emergency}</span>
+        <span className="text-sm text-night/55 sm:mr-1">{t.forms.emergency(companyText(locale).promises.emergency)}</span>
         <PhoneButton variant="primary" className="min-h-[52px] px-6" />
-        <Link href="/tarifs" className="group inline-flex items-center justify-center gap-1.5 px-3 py-3 font-semibold text-night hover:text-flame">
-          Voir nos tarifs
-          <BsArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-        </Link>
+        {hasPage("tarifs", locale) && (
+          <Link
+            href={pagePath("tarifs", locale)}
+            className="group inline-flex items-center justify-center gap-1.5 px-3 py-3 font-semibold text-night hover:text-flame"
+          >
+            {s.seePrices}
+            <BsArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+          </Link>
+        )}
       </div>
     </div>
   );

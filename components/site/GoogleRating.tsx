@@ -2,6 +2,8 @@ import { FaStar } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import { cn } from "@/lib/utils";
 import { company } from "@/app/data/company";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 
 export function Stars({ className }: { className?: string }) {
   return (
@@ -39,7 +41,7 @@ export function GoogleRating({
           tone === "light" ? "text-ink" : "text-white/90"
         )}
       >
-        {rating}/5 sur Google
+        {ui(getRequestLocale()).googleRating(rating)}
       </span>
       <BsArrowRight
         aria-hidden="true"

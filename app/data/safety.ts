@@ -11,3 +11,16 @@ export const gasLeakAlert = {
     "Quand la situation est sécurisée, contactez-nous pour contrôler et remettre votre installation en service.",
   ],
 };
+
+// Néerlandais : traduction fidèle des mêmes consignes et des mêmes numéros (Sibelga,
+// Fluvius, ORES), ordre identique. À faire valider par le gestionnaire et un
+// néerlandophone avant la mise en ligne du site néerlandais.
+export const gasLeakAlertNl = {
+  title: "Gasgeur? De juiste reflexen, in deze volgorde",
+  paragraphs: [
+    "**Zet deuren en ramen open.** Geen vlam of vonk: raak geen schakelaar aan, doe geen licht aan, gebruik geen elektrisch toestel en geen telefoon in de woning.",
+    "Kunt u de gaskraan aan de meter dichtdraaien zonder het licht aan te doen, doe het dan. **Verlaat daarna de woning** en bel van buitenaf.",
+    "Gratis noodnummers gas: **Brussel** (Sibelga) **0800 19 400** · **Vlaams-Brabant** (Fluvius) **0800 65 0 65** · **Waals-Brabant** (ORES) **0800 87 087** · of **112**.",
+    "Is de situatie veilig, neem dan contact met ons op om uw installatie te laten controleren en opnieuw in gebruik te nemen.",
+  ],
+};

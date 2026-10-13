@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "telegram": "node --env-file=.env.local scripts/telegram.mjs"
+    "telegram": "node --env-file=.env.local scripts/telegram.mjs",
+    "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",

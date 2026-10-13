@@ -413,7 +413,7 @@ export function ProofV2({
           <ul className="grid grid-cols-3 gap-3 lg:w-[420px]">
             {certifications.map((logo) => (
               <li key={logo.alt} className={cn("flex h-20 items-center justify-center rounded-2xl p-4", cardBg[tone])}>
-                <Image src={logo.src} alt={logo.alt} sizes="140px" className="max-h-full w-auto object-contain" />
+                <Image src={logo.src} alt={(locale === "nl" && logo.altNl) || logo.alt} sizes="140px" className="max-h-full w-auto object-contain" />
               </li>
             ))}
           </ul>

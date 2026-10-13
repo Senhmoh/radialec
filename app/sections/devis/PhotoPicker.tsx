@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { PHOTO_LIMITS } from "@/lib/quote/schema";
 import { ErrorText, FieldLabel } from "@/components/site/FormFields";
+import { useLocale } from "@/lib/i18n/client";
+import { ui } from "@/lib/i18n/ui";
 
 const MAX_SIDE = 1600;
 
@@ -21,7 +23,7 @@ async function compress(file: File): Promise<File> {
   } catch {
     // Format que le navigateur ne sait pas décoder (ex. HEIC hors Safari) : envoyé tel quel s'il est léger.
     if (file.size <= PHOTO_LIMITS.maxBytes) return file;
-    throw new Error("Format non pris en charge ou photo trop lourde.");
+    throw new Error("unsupported");
   }
 }
 
@@ -31,6 +33,7 @@ interface Photo {
 }
 
 export function PhotoPicker({ onChange }: { onChange: (files: File[]) => void }) {
+  const t = ui(useLocale()).quote.photos;
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
@@ -50,7 +53,7 @@ export function PhotoPicker({ onChange }: { onChange: (files: File[]) => void })
     setError(undefined);
     const room = PHOTO_LIMITS.maxCount - photos.length;
     const selected = Array.from(list).slice(0, room);
-    if (list.length > room) setError(`${PHOTO_LIMITS.maxCount} photos maximum.`);
+    if (list.length > room) setError(t.tooMany(PHOTO_LIMITS.maxCount));
     setBusy(true);
     const added: Photo[] = [];
     for (const file of selected) {
@@ -58,7 +61,7 @@ export function PhotoPicker({ onChange }: { onChange: (files: File[]) => void })
         const compressed = await compress(file);
         added.push({ file: compressed, url: URL.createObjectURL(compressed) });
       } catch (e) {
-        setError(`« ${file.name} » : ${(e as Error).message}`);
+        setError(`« ${file.name} » : ${(e as Error).message === "unsupported" ? t.unsupported : (e as Error).message}`);
       }
     }
     setBusy(false);
@@ -74,17 +77,17 @@ export function PhotoPicker({ onChange }: { onChange: (files: File[]) => void })
   return (
     <div>
       <FieldLabel htmlFor="field-photos" optional>
-        Photos
+        {t.label}
       </FieldLabel>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {photos.map((photo, index) => (
           <div key={photo.url} className="relative aspect-square overflow-hidden rounded-2xl bg-chalk ring-1 ring-night/[0.08]">
             {/* eslint-disable-next-line @next/next/no-img-element -- aperçu local (URL blob) */}
-            <img src={photo.url} alt={`Photo ${index + 1}`} className="h-full w-full object-cover" />
+            <img src={photo.url} alt={t.alt(index + 1)} className="h-full w-full object-cover" />
             <button
               type="button"
               onClick={() => remove(index)}
-              aria-label={`Retirer la photo ${index + 1}`}
+              aria-label={t.remove(index + 1)}
               className="absolute right-1.5 top-1.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-night/80 text-white hover:bg-flame"
             >
               <FaTimes className="h-3 w-3" aria-hidden="true" />
@@ -99,7 +102,7 @@ export function PhotoPicker({ onChange }: { onChange: (files: File[]) => void })
             <span aria-hidden="true" className="v2-wide font-display text-2xl font-light leading-none text-night/40 transition-colors group-hover:text-night">
               +
             </span>
-            <span className="text-xs font-semibold">{busy ? "Préparation…" : "Ajouter une photo"}</span>
+            <span className="text-xs font-semibold">{busy ? t.preparing : t.add}</span>
           </label>
         )}
       </div>
@@ -114,8 +117,7 @@ export function PhotoPicker({ onChange }: { onChange: (files: File[]) => void })
         className="sr-only"
       />
       <p id="field-photos-hint" className="mt-3 text-sm leading-relaxed text-night/55">
-        Jusqu&apos;à {PHOTO_LIMITS.maxCount} photos : l&apos;appareil, sa plaque signalétique, la fuite ou le tableau.
-        Elles nous aident à chiffrer au plus juste.
+        {t.hint(PHOTO_LIMITS.maxCount)}
       </p>
       <ErrorText id="field-photos-error">{error}</ErrorText>
     </div>

@@ -4,7 +4,9 @@ import { Icon, type IconKey } from "@/components/site/Icon";
 import { MissingInfo } from "@/components/site/MissingInfo";
 import { Stars } from "@/components/site/GoogleRating";
 import { SectionHeading } from "@/components/site/SectionHeading";
-import { company } from "../data/company";
+import { company, companyText } from "../data/company";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { ui } from "@/lib/i18n/ui";
 import { cn } from "@/lib/utils";
 import { cardBg, toneBg, type Tone } from "./v2/tones";
 import { PhoneButton, WhatsAppButton } from "./v2/ui";
@@ -29,7 +31,12 @@ function Row({ icon, label, children, tone }: { icon: IconKey; label: string; ch
  * et les mentions légales.
  */
 export function ContactDetails({ tone = "white" }: { tone?: Tone }) {
-  const { email, hours, google } = company;
+  const { email, google } = company;
+  const locale = getRequestLocale();
+  const t = ui(locale);
+  const d = t.contact.details;
+  const copy = companyText(locale);
+  const hours = copy.hours;
 
   return (
     <section className={cn("py-16 lg:py-24", toneBg[tone])} aria-labelledby="coordonnees">
@@ -38,38 +45,38 @@ export function ContactDetails({ tone = "white" }: { tone?: Tone }) {
           <div>
             <SectionHeading
               id="coordonnees"
-              title="Nos coordonnées"
-              intro="Le plus rapide reste le téléphone : un technicien vous répond et organise l'intervention."
+              title={d.title}
+              intro={d.intro}
               align="left"
               size="md"
             />
           </div>
           <div>
             <ul className="lg:-mt-5">
-              <Row tone={tone} icon="phone" label="Téléphone">
+              <Row tone={tone} icon="phone" label={d.phone}>
                 <PhoneButton variant="primary" className="mt-1 min-h-[48px] px-5 text-base" />
                 <p className="mt-2 text-sm text-night/60">
-                  {company.promises.availability} · {company.promises.intervention.toLowerCase()}
+                  {copy.promises.availability} · {copy.promises.intervention.toLowerCase()}
                 </p>
               </Row>
-              <Row tone={tone} icon="whatsapp" label="WhatsApp">
+              <Row tone={tone} icon="whatsapp" label={d.whatsapp}>
                 <WhatsAppButton kind="link" className="text-navy">
                   {company.phone.display}
                 </WhatsAppButton>
                 <p className="mt-1 text-sm text-night/60">
-                  Écrivez-nous ou envoyez une photo de la panne ({company.whatsapp.hours}).
+                  {d.whatsappText(copy.whatsappHours)}
                 </p>
               </Row>
-              <Row tone={tone} icon="envelope" label="E-mail">
+              <Row tone={tone} icon="envelope" label={d.email}>
                 <a href={`mailto:${email}`} className="font-semibold text-navy underline-offset-4 hover:underline">
                   {email}
                 </a>
               </Row>
-              <Row tone={tone} icon="clock" label="Horaires">
-                <p className="font-semibold">Disponible {hours.summary}</p>
+              <Row tone={tone} icon="clock" label={d.hours}>
+                <p className="font-semibold">{d.available(hours.summary)}</p>
                 {hours.detail ? (
                   <p className="text-sm text-ink/70">
-                    {hours.detail} · urgences {company.promises.emergency}
+                    {hours.detail} · {d.emergencies(copy.promises.emergency)}
                   </p>
                 ) : (
                   <div className="mt-1">
@@ -77,23 +84,23 @@ export function ContactDetails({ tone = "white" }: { tone?: Tone }) {
                   </div>
                 )}
               </Row>
-              <Row tone={tone} icon="home" label="Zone d'intervention">
-                Les 19 communes bruxelloises, le Brabant flamand et le Brabant wallon —{" "}
+              <Row tone={tone} icon="home" label={d.zone}>
+                {d.zoneText}{" "}
                 <Link href="#zones" className="font-semibold text-navy underline underline-offset-2 hover:text-flame">
-                  voir toutes les communes
+                  {d.zoneLink}
                 </Link>
               </Row>
-              <Row tone={tone} icon="award" label="Avis clients">
+              <Row tone={tone} icon="award" label={d.reviews}>
                 <a href={google.url} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2">
                   <Stars />
                   <span className="font-semibold group-hover:underline">
-                    {google.rating}/5 sur Google
+                    {t.googleRating(google.rating)}
                   </span>
                 </a>
                 <p className="mt-1 text-sm text-night/60">
-                  Déjà client&nbsp;?{" "}
+                  {d.alreadyClient}{" "}
                   <a href="/avis" target="_blank" rel="noopener" className="font-semibold text-navy underline-offset-4 hover:underline">
-                    Laissez-nous un avis
+                    {d.leaveReview}
                   </a>
                 </p>
               </Row>

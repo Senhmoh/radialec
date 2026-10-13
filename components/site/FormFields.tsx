@@ -2,6 +2,8 @@
 import type { ComponentProps, ReactNode } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n/client";
+import { ui } from "@/lib/i18n/ui";
 
 // Champs de formulaire du design « les trois énergies » (devis, rappel) :
 // typographie Archivo, encre night, aucun pictogramme décoratif.
@@ -30,10 +32,11 @@ export function FieldLabel({
   id?: string;
 }) {
   const Tag = as;
+  const locale = useLocale();
   return (
     <Tag id={id} htmlFor={as === "label" ? htmlFor : undefined} className="mb-3 block text-[15px] font-semibold text-night">
       {children}
-      {optional && <span className="ml-1.5 font-normal text-night/45">(facultatif)</span>}
+      {optional && <span className="ml-1.5 font-normal text-night/45">{ui(locale).forms.optional}</span>}
     </Tag>
   );
 }

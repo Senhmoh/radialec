@@ -5,4 +5,6 @@ export const alt = "Radialec — chauffagiste, électricien et plombier à Bruxe
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default defaultOgImage;
+export default function Image() {
+  return defaultOgImage();
+}

@@ -29,17 +29,17 @@ import type { ServiceIntent } from "../../data/services/types";
 import { ErrorText, FieldLabel, inputClass, OptionCard, Pill, TextField } from "@/components/site/FormFields";
 import { btn, PhoneButton, WhatsAppButton } from "../v2/ui";
 import { trackLead } from "@/lib/tracking";
+import { useLocale } from "@/lib/i18n/client";
+import { pagePath } from "@/lib/i18n/routes";
+import { ui } from "@/lib/i18n/ui";
+import { quoteLabels } from "@/lib/quote/labels";
 import { PhotoPicker } from "./PhotoPicker";
 import { QuoteSuccess } from "./QuoteSuccess";
 import { QuoteSummary } from "./QuoteSummary";
 
-export interface CategoryOption {
-  id: string;
-  label: string;
-  /** Exemples affichés sous le libellé (« Chaudière, radiateurs… »). */
-  hint?: string;
-  placeholder: string;
-}
+// Domaines de la 1re étape : contenu de la page (app/data/devis.ts).
+export type { QuoteCategoryOption as CategoryOption } from "../../data/devis";
+import type { QuoteCategoryOption as CategoryOption } from "../../data/devis";
 
 export interface ServiceOption {
   ref: string;
@@ -55,11 +55,7 @@ const intentToType: Record<ServiceIntent, RequestType> = {
   urgence: "reparation",
 };
 
-const steps = [
-  { label: "Votre projet", title: "Quel est votre projet ?", intro: "Choisissez le domaine, puis la prestation qui s'en rapproche le plus." },
-  { label: "Les détails", title: "Parlez-nous de votre besoin", intro: "Plus c'est précis, plus le devis sera juste. Deux minutes suffisent." },
-  { label: "Vos coordonnées", title: "Où et comment vous joindre ?", intro: "Un technicien vous rappelle sous 2 h (entre 10h et 21h), puis vous envoie votre devis." },
-];
+// Les 3 étapes (libellés, titres, textes) : lib/i18n/ui.ts (quote.steps).
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -90,6 +86,11 @@ export function QuoteForm({
   const attribution = useAttribution();
   const honeypot = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const t = ui(locale);
+  const q = t.quote;
+  const labels = quoteLabels(locale);
+  const steps = q.steps;
 
   const category = categories.find((c) => c.id === quote.category);
   const categoryServices = services.filter((s) => s.category === quote.category);
@@ -104,8 +105,8 @@ export function QuoteForm({
     // « Devis express » des pages refondues : le chauffage actuel amorce la description.
     const current = params.get("actuel");
     if (current && Object.prototype.hasOwnProperty.call(currentHeating, current)) {
-      const label = currentHeating[current as CurrentHeating];
-      setQuote((q) => ({ ...q, description: q.description || `Chauffage actuel : ${label.toLowerCase()}. ` }));
+      const label = labels.currentHeating[current as CurrentHeating];
+      setQuote((prev) => ({ ...prev, description: prev.description || q.currentHeating(label) }));
     }
     if (preset) {
       setQuote((q) => ({ ...q, category: preset.category, service: preset.ref, requestType: intentToType[preset.intent] }));
@@ -113,7 +114,8 @@ export function QuoteForm({
     } else if (context && categories.some((c) => c.id === context)) {
       setQuote((q) => ({ ...q, category: context }));
     }
-  }, [services, categories]);
+    // labels et q : objets stables pour une langue donnée (pas de nouvel appel).
+  }, [services, categories, labels, q]);
 
   const set = <K extends QuoteField>(key: K, value: QuoteRequest[K]) => {
     setQuote((q) => ({ ...q, [key]: value }));
@@ -170,7 +172,7 @@ export function QuoteForm({
   };
 
   const submit = async () => {
-    const all = validateQuote(quote);
+    const all = validateQuote(quote, undefined, undefined, locale);
     if (Object.keys(all).length) {
       setErrors(all);
       const index = stepFields.findIndex((fields) => fields.some((f) => all[f]));
@@ -186,6 +188,7 @@ export function QuoteForm({
     body.append("startedAt", String(startedAt.current));
     body.append("website", honeypot.current?.value ?? "");
     body.append("attribution", JSON.stringify(attribution.current));
+    body.append("locale", locale);
     photos.forEach((file) => body.append("photos", file, file.name));
 
     try {
@@ -217,10 +220,10 @@ export function QuoteForm({
         focusFirstError(data.errors);
         return;
       }
-      setServerMessage(data.message ?? "Une erreur est survenue. Réessayez ou appelez-nous.");
+      setServerMessage(data.message ?? t.forms.errorGeneric);
       setStatus("error");
     } catch {
-      setServerMessage("Connexion impossible. Vérifiez votre réseau ou appelez-nous directement.");
+      setServerMessage(t.forms.errorNetwork);
       setStatus("error");
     }
   };
@@ -228,7 +231,7 @@ export function QuoteForm({
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (step < steps.length - 1) {
-      const found = validateQuote(quote, stepFields[step]);
+      const found = validateQuote(quote, stepFields[step], undefined, locale);
       if (Object.keys(found).length) {
         setErrors((e) => ({ ...e, ...found }));
         focusFirstError(found);
@@ -256,12 +259,12 @@ export function QuoteForm({
       <div className="min-w-0 lg:col-start-1 lg:row-start-1">{intro}</div>
 
       {/* Récapitulatif vivant (desktop) : reste visible pendant la saisie. */}
-      <aside className="hidden min-w-0 lg:col-start-1 lg:row-start-2 lg:block" aria-label="Récapitulatif de votre demande">
+      <aside className="hidden min-w-0 lg:col-start-1 lg:row-start-2 lg:block" aria-label={q.summaryLabel}>
         <div className="lg:sticky lg:top-28">
           <QuoteSummary
             quote={quote}
             categoryLabel={category?.label}
-            serviceLabel={quote.service === OTHER_SERVICE ? "Autre besoin" : service?.label}
+            serviceLabel={quote.service === OTHER_SERVICE ? q.otherNeed : service?.label}
             amount={service?.intent !== "installation" ? service?.amount : undefined}
             photoCount={photos.length}
           />
@@ -305,7 +308,7 @@ export function QuoteForm({
                           )}
                         >
                           {s.label}
-                          {index < step && <span className="sr-only"> (terminée, modifier)</span>}
+                          {index < step && <span className="sr-only">{q.stepDone}</span>}
                         </span>
                       </button>
                     </li>
@@ -325,7 +328,7 @@ export function QuoteForm({
                   transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-night/45">
-                    Étape {step + 1} sur {steps.length}
+                    {q.stepOf(step + 1, steps.length)}
                   </p>
                   <h2 id="quote-step-title" className="v2-title mt-3 text-[1.75rem] sm:text-[2.1rem]">
                     {fr(steps[step].title)}
@@ -336,7 +339,7 @@ export function QuoteForm({
                     {step === 0 && (
                       <>
                         <fieldset>
-                          <legend className="sr-only">Domaine</legend>
+                          <legend className="sr-only">{q.domain}</legend>
                           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                             {categories.map((c, index) => (
                               <OptionCard
@@ -357,7 +360,7 @@ export function QuoteForm({
 
                         {category && category.id !== "autre" && (
                           <fieldset>
-                            <FieldLabel as="legend">Quelle prestation&nbsp;?</FieldLabel>
+                            <FieldLabel as="legend">{q.whichService}</FieldLabel>
                             <div className="flex flex-wrap gap-2">
                               {categoryServices.map((s) => (
                                 <Pill
@@ -383,7 +386,7 @@ export function QuoteForm({
                                 onChange={chooseService}
                                 describedBy={err("service")}
                               >
-                                Autre / je ne sais pas
+                                {q.otherService}
                               </Pill>
                             </div>
                             <ErrorText id="field-service-error">{errors.service}</ErrorText>
@@ -393,10 +396,9 @@ export function QuoteForm({
                         {service?.amount !== undefined && service.intent !== "installation" && (
                           <div className="rounded-2xl bg-lavender p-5 text-[15px] leading-relaxed text-night/80">
                             <p>
-                              <strong className="font-semibold text-night">Bon à savoir :</strong> cette prestation a un prix
-                              affiché de <strong className="font-semibold text-night">{service.amount}€ TVAC</strong>. Pas
-                              besoin d&apos;attendre un devis : continuez et nous vous rappelons pour fixer
-                              l&apos;intervention, ou appelez-nous directement.
+                              <strong className="font-semibold text-night">{q.goodToKnow}</strong> {q.fixedPrice(service.amount)[0]}
+                              <strong className="font-semibold text-night">{q.fixedPrice(service.amount)[1]}</strong>
+                              {q.fixedPrice(service.amount)[2]}
                             </p>
                           </div>
                         )}
@@ -408,19 +410,19 @@ export function QuoteForm({
                         {requestTypeKnown && service ? (
                           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl bg-chalk px-5 py-4">
                             <p className="text-[15px] text-night/70">
-                              Pour : <strong className="v2-semi font-display font-bold text-night">{service.label}</strong>
+                              {q.for} <strong className="v2-semi font-display font-bold text-night">{service.label}</strong>
                             </p>
                             <button
                               type="button"
                               onClick={() => goTo(0)}
                               className="text-sm font-semibold text-night underline underline-offset-4 hover:text-flame"
                             >
-                              Modifier
+                              {q.edit}
                             </button>
                           </div>
                         ) : (
                           <fieldset>
-                            <FieldLabel as="legend">Nature de la demande</FieldLabel>
+                            <FieldLabel as="legend">{q.requestType}</FieldLabel>
                             <div className="grid grid-cols-2 gap-3">
                               {(Object.keys(requestTypes) as RequestType[]).map((key) => (
                                 <OptionCard
@@ -429,7 +431,7 @@ export function QuoteForm({
                                   value={key}
                                   checked={quote.requestType === key}
                                   onChange={(v) => set("requestType", v as RequestType)}
-                                  label={requestTypes[key]}
+                                  label={labels.requestTypes[key]}
                                   describedBy={err("requestType")}
                                 />
                               ))}
@@ -439,7 +441,7 @@ export function QuoteForm({
                         )}
 
                         <fieldset>
-                          <FieldLabel as="legend">Délai souhaité</FieldLabel>
+                          <FieldLabel as="legend">{q.timing}</FieldLabel>
                           <div className="flex flex-wrap gap-2">
                             {(Object.keys(timings) as (keyof typeof timings)[]).map((key) => (
                               <Pill
@@ -450,21 +452,21 @@ export function QuoteForm({
                                 onChange={(v) => set("timing", v as keyof typeof timings)}
                                 describedBy={err("timing")}
                               >
-                                {timings[key]}
+                                {labels.timings[key]}
                               </Pill>
                             ))}
                           </div>
                           <ErrorText id="field-timing-error">{errors.timing}</ErrorText>
                           {quote.timing === "asap" && quote.requestType === "reparation" && (
                             <div className="mt-4 flex flex-col gap-3 rounded-2xl bg-chalk p-4 sm:flex-row sm:items-center sm:justify-between">
-                              <p className="text-[15px] text-night/75">Panne en cours ? Le plus rapide reste l&apos;appel.</p>
+                              <p className="text-[15px] text-night/75">{q.breakdownNow}</p>
                               <PhoneButton variant="primary" className="min-h-[44px] px-5 text-sm" />
                             </div>
                           )}
                         </fieldset>
 
                         <fieldset>
-                          <FieldLabel as="legend">Type de bien</FieldLabel>
+                          <FieldLabel as="legend">{q.property}</FieldLabel>
                           <div className="grid grid-cols-2 gap-3">
                             {(Object.keys(properties) as (keyof typeof properties)[]).map((key) => (
                               <OptionCard
@@ -473,7 +475,7 @@ export function QuoteForm({
                                 value={key}
                                 checked={quote.property === key}
                                 onChange={(v) => set("property", v as keyof typeof properties)}
-                                label={properties[key]}
+                                label={labels.properties[key]}
                                 describedBy={err("property")}
                               />
                             ))}
@@ -482,7 +484,7 @@ export function QuoteForm({
                         </fieldset>
 
                         <div>
-                          <FieldLabel htmlFor="field-description">Votre besoin en quelques mots</FieldLabel>
+                          <FieldLabel htmlFor="field-description">{q.description}</FieldLabel>
                           <textarea
                             id="field-description"
                             name="description"
@@ -490,7 +492,7 @@ export function QuoteForm({
                             maxLength={LIMITS.description}
                             value={quote.description}
                             onChange={(e) => set("description", e.target.value)}
-                            placeholder={category?.placeholder ?? "Décrivez votre besoin…"}
+                            placeholder={category?.placeholder ?? q.descriptionPlaceholder}
                             aria-invalid={errors.description ? true : undefined}
                             aria-describedby={errors.description ? "field-description-error" : "field-description-count"}
                             className={cn(inputClass, "resize-y py-3.5 leading-relaxed")}
@@ -511,7 +513,7 @@ export function QuoteForm({
                       <>
                         <TextField
                           name="name"
-                          label="Nom et prénom"
+                          label={q.fullName}
                           autoComplete="name"
                           value={quote.name}
                           onChange={(e) => set("name", e.target.value)}
@@ -521,7 +523,7 @@ export function QuoteForm({
                         <div className="grid gap-6 sm:grid-cols-2">
                           <TextField
                             name="phone"
-                            label="Téléphone"
+                            label={q.phone}
                             type="tel"
                             inputMode="tel"
                             autoComplete="tel"
@@ -532,11 +534,11 @@ export function QuoteForm({
                           />
                           <TextField
                             name="email"
-                            label="E-mail"
+                            label={q.email}
                             type="email"
                             inputMode="email"
                             autoComplete="email"
-                            placeholder="vous@exemple.be"
+                            placeholder={q.emailPlaceholder}
                             value={quote.email}
                             onChange={(e) => set("email", e.target.value)}
                             error={errors.email}
@@ -545,7 +547,7 @@ export function QuoteForm({
                         <div className="grid grid-cols-[minmax(0,7.5rem)_minmax(0,1fr)] gap-4 sm:gap-6">
                           <TextField
                             name="postalCode"
-                            label="Code postal"
+                            label={q.postalCode}
                             inputMode="numeric"
                             autoComplete="postal-code"
                             maxLength={4}
@@ -556,10 +558,10 @@ export function QuoteForm({
                           />
                           <TextField
                             name="commune"
-                            label="Commune"
+                            label={q.commune}
                             autoComplete="address-level2"
                             list="communes-desservies"
-                            placeholder="Ixelles"
+                            placeholder={q.communePlaceholder}
                             value={quote.commune}
                             onChange={(e) => set("commune", e.target.value)}
                             error={errors.commune}
@@ -567,7 +569,7 @@ export function QuoteForm({
                             hint={
                               quote.commune.trim().length > 2 &&
                               !communes.some((c) => c.toLowerCase() === quote.commune.trim().toLowerCase())
-                                ? "Hors de nos communes habituelles ? Envoyez quand même : nous vous confirmons si nous intervenons."
+                                ? q.outsideArea
                                 : undefined
                             }
                           />
@@ -579,10 +581,10 @@ export function QuoteForm({
                         </div>
                         <TextField
                           name="address"
-                          label="Adresse"
+                          label={q.address}
                           optional
                           autoComplete="street-address"
-                          placeholder="Rue et numéro"
+                          placeholder={q.addressPlaceholder}
                           value={quote.address}
                           onChange={(e) => set("address", e.target.value)}
                           error={errors.address}
@@ -590,7 +592,7 @@ export function QuoteForm({
                         />
 
                         <fieldset>
-                          <FieldLabel as="legend">Comment préférez-vous être contacté&nbsp;?</FieldLabel>
+                          <FieldLabel as="legend">{q.contactPreference}</FieldLabel>
                           <div className="flex flex-wrap gap-2">
                             {(Object.keys(contactPreferences) as (keyof typeof contactPreferences)[]).map((key) => (
                               <Pill
@@ -600,7 +602,7 @@ export function QuoteForm({
                                 checked={quote.contactPreference === key}
                                 onChange={(v) => set("contactPreference", v as keyof typeof contactPreferences)}
                               >
-                                {contactPreferences[key]}
+                                {labels.contactPreferences[key]}
                               </Pill>
                             ))}
                           </div>
@@ -608,7 +610,7 @@ export function QuoteForm({
 
                         {quote.contactPreference === "telephone" && (
                           <fieldset>
-                            <FieldLabel as="legend">Meilleur moment pour vous rappeler</FieldLabel>
+                            <FieldLabel as="legend">{q.callbackSlot}</FieldLabel>
                             <div className="flex flex-wrap gap-2">
                               {(Object.keys(callbackSlots) as (keyof typeof callbackSlots)[]).map((key) => (
                                 <Pill
@@ -618,7 +620,7 @@ export function QuoteForm({
                                   checked={quote.callbackSlot === key}
                                   onChange={(v) => set("callbackSlot", v as keyof typeof callbackSlots)}
                                 >
-                                  {callbackSlots[key]}
+                                  {labels.callbackSlots[key]}
                                 </Pill>
                               ))}
                             </div>
@@ -627,7 +629,7 @@ export function QuoteForm({
 
                         {/* Champ piège anti-robots : invisible pour les humains. */}
                         <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
-                          <label htmlFor="field-website">Site web</label>
+                          <label htmlFor="field-website">{t.forms.website}</label>
                           <input ref={honeypot} id="field-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
                         </div>
                       </>
@@ -651,17 +653,17 @@ export function QuoteForm({
                     className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-4 font-semibold text-night/60 transition-colors hover:text-night"
                   >
                     <FaArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-                    Retour
+                    {q.back}
                   </button>
                 ) : (
-                  <p className="hidden text-sm text-night/45 sm:block">2 minutes · gratuit · sans engagement</p>
+                  <p className="hidden text-sm text-night/45 sm:block">{q.reassurance}</p>
                 )}
                 <button
                   type="submit"
                   disabled={sending}
                   className={btn("dark", "group min-h-[56px] w-full px-8 text-base disabled:opacity-70 sm:w-auto")}
                 >
-                  {step < steps.length - 1 ? "Continuer" : sending ? "Envoi en cours…" : "Envoyer ma demande de devis"}
+                  {step < steps.length - 1 ? q.next : sending ? t.forms.sending : q.submit}
                   {!sending && (
                     <BsArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                   )}
@@ -672,9 +674,9 @@ export function QuoteForm({
                 <p className="mt-5 flex items-start gap-2 text-xs leading-relaxed text-night/50">
                   <FaLock className="mt-0.5 h-3 w-3 flex-shrink-0" aria-hidden="true" />
                   <span>
-                    Vos coordonnées servent uniquement à traiter votre demande de devis.{" "}
-                    <Link href="/confidentialite" className="font-semibold text-night underline underline-offset-2 hover:text-flame">
-                      Politique de confidentialité
+                    {q.dataUse}{" "}
+                    <Link href={pagePath("confidentialite", locale)} className="font-semibold text-night underline underline-offset-2 hover:text-flame">
+                      {t.forms.privacy}
                     </Link>
                   </span>
                 </p>
@@ -685,11 +687,11 @@ export function QuoteForm({
 
         {/* Mobile : l'aide « panne en cours » après le formulaire (le récapitulatif reste réservé au desktop). */}
         <div className="mt-6 flex flex-col gap-4 rounded-[28px] bg-night p-6 text-white lg:hidden">
-          <p className="v2-semi font-display text-lg font-bold">Une panne en cours&nbsp;?</p>
-          <p className="-mt-2 text-sm text-white/65">N&apos;attendez pas le devis : appelez-nous directement.</p>
+          <p className="v2-semi font-display text-lg font-bold">{q.breakdownTitle}</p>
+          <p className="-mt-2 text-sm text-white/65">{q.breakdownText}</p>
           <PhoneButton variant="primary" className="min-h-[52px] w-full text-base" />
           <WhatsAppButton variant="outlineLight" className="-mt-1.5 min-h-[48px] w-full text-sm">
-            Envoyer une photo sur WhatsApp
+            {q.whatsappPhoto}
           </WhatsAppButton>
         </div>
       </div>

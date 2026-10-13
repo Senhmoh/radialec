@@ -9,7 +9,11 @@ import { ErrorText, FieldLabel, inputClass, Pill, TextField } from "@/components
 import { PhoneLink } from "@/components/site/Actions";
 import { useAttribution } from "@/components/site/useAttribution";
 import { trackLead } from "@/lib/tracking";
-import { company } from "@/app/data/company";
+import { companyText } from "@/app/data/company";
+import { useLocale } from "@/lib/i18n/client";
+import { pagePath } from "@/lib/i18n/routes";
+import { ui } from "@/lib/i18n/ui";
+import { quoteLabels } from "@/lib/quote/labels";
 import { callbackWhen } from "@/lib/quote/messages";
 import { LIMITS } from "@/lib/quote/schema";
 import {
@@ -43,6 +47,10 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
   const honeypot = useRef<HTMLInputElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
   const attribution = useAttribution();
+  const locale = useLocale();
+  const t = ui(locale).forms;
+  const c = t.callback;
+  const labels = quoteLabels(locale);
 
   useEffect(() => {
     startedAt.current = Date.now();
@@ -66,7 +74,7 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const found = validateCallback(callback);
+    const found = validateCallback(callback, locale);
     if (Object.keys(found).length) {
       setErrors(found);
       focusFirstError(found);
@@ -80,6 +88,7 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
     body.append("startedAt", String(startedAt.current));
     body.append("website", honeypot.current?.value ?? "");
     body.append("attribution", JSON.stringify(attribution.current));
+    body.append("locale", locale);
 
     try {
       const response = await fetch("/api/rappel", { method: "POST", body });
@@ -107,10 +116,10 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
         focusFirstError(data.errors);
         return;
       }
-      setServerMessage(data.message ?? "Une erreur est survenue. Réessayez ou appelez-nous.");
+      setServerMessage(data.message ?? t.errorGeneric);
       setStatus("error");
     } catch {
-      setServerMessage("Connexion impossible. Vérifiez votre réseau ou appelez-nous directement.");
+      setServerMessage(t.errorNetwork);
       setStatus("error");
     }
   };
@@ -121,7 +130,7 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
       <div data-clarity-mask="true" className="py-6 text-center">
         {result.delivered === false && (
           <p className="mx-auto mb-6 max-w-sm rounded-xl border border-dashed border-flame/50 bg-flame/[0.05] px-4 py-2 text-xs text-flame">
-            Mode développement : l&apos;e-mail n&apos;a pas été envoyé (voir la console du serveur).
+            {t.devBanner}
           </p>
         )}
         <motion.div
@@ -133,21 +142,21 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
           <FaCheck className="h-6 w-6" aria-hidden="true" />
         </motion.div>
         <h3 ref={successRef} tabIndex={-1} className="text-gradient mt-5 text-2xl font-bold tracking-tighter outline-none md:text-3xl">
-          C&apos;est noté, {firstName}&nbsp;!
+          {c.done(firstName)}
         </h3>
         <p className="mx-auto mt-3 max-w-sm text-ink/75">
-          Nous vous rappelons {callbackWhen(callback)}, au <strong className="whitespace-nowrap text-ink">{callback.phone}</strong>.
+          {c.willCall} {callbackWhen(callback, locale)}, {c.at} <strong className="whitespace-nowrap text-ink">{callback.phone}</strong>.
         </p>
         <p className="mx-auto mt-4 inline-block rounded-xl bg-lavender px-3 py-1.5 font-mono text-sm font-bold tracking-wider text-navy">
           {result.reference}
         </p>
         {result.confirmed && (
           <p className="mx-auto mt-3 max-w-sm text-sm text-ink/60">
-            Confirmation envoyée à <strong className="font-semibold text-ink">{callback.email}</strong>.
+            {t.confirmationSent} <strong className="font-semibold text-ink">{callback.email}</strong>.
           </p>
         )}
         <p className="mx-auto mt-6 flex max-w-sm flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-ink/70">
-          Une urgence&nbsp;? Appelez-nous {company.promises.emergency}
+          {t.emergency(companyText(locale).promises.emergency)}
           <PhoneLink variant="secondary" className="btn-sm" />
         </p>
       </div>
@@ -162,7 +171,7 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
       <div className="grid gap-6 sm:grid-cols-2">
         <TextField
           name="name"
-          label="Votre nom"
+          label={c.name}
           autoComplete="name"
           value={callback.name}
           onChange={(e) => set("name", e.target.value)}
@@ -171,7 +180,7 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
         />
         <TextField
           name="phone"
-          label="Téléphone"
+          label={c.phone}
           type="tel"
           inputMode="tel"
           autoComplete="tel"
@@ -182,12 +191,12 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
         />
         <TextField
           name="email"
-          label="E-mail"
+          label={c.email}
           type="email"
           inputMode="email"
           autoComplete="email"
           optional
-          hint="Pour recevoir la confirmation de votre demande."
+          hint={c.emailHint}
           value={callback.email}
           onChange={(e) => set("email", e.target.value)}
           error={errors.email}
@@ -197,11 +206,11 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
       </div>
 
       <fieldset>
-        <FieldLabel as="legend">Quand vous rappeler&nbsp;?</FieldLabel>
+        <FieldLabel as="legend">{c.when}</FieldLabel>
         <div className="flex flex-wrap gap-2">
           {(Object.keys(callbackTimes) as CallbackTime[]).map((key) => (
             <Pill key={key} name="time" value={key} checked={callback.time === key} onChange={(v) => set("time", v as CallbackTime)}>
-              {callbackTimes[key]}
+              {labels.callbackTimes[key]}
             </Pill>
           ))}
         </div>
@@ -209,12 +218,12 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
 
       <fieldset>
         <FieldLabel as="legend" optional>
-          Sujet
+          {c.topic}
         </FieldLabel>
         <div className="flex flex-wrap gap-2">
           {(Object.keys(callbackTopics) as CallbackTopic[]).map((key) => (
             <Pill key={key} name="topic" value={key} checked={callback.topic === key} onChange={(v) => set("topic", v as CallbackTopic)}>
-              {callbackTopics[key]}
+              {labels.callbackTopics[key]}
             </Pill>
           ))}
         </div>
@@ -222,14 +231,14 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
 
       <div>
         <FieldLabel htmlFor="field-message" optional>
-          Votre question ou votre besoin
+          {c.message}
         </FieldLabel>
         <textarea
           id="field-message"
           name="message"
           rows={3}
           maxLength={LIMITS.description}
-          placeholder="Ex. : chaudière en panne, devis pour une borne de recharge, une question sur votre installation…"
+          placeholder={c.messagePlaceholder}
           value={callback.message}
           onChange={(e) => set("message", e.target.value)}
           aria-invalid={errors.message ? true : undefined}
@@ -241,7 +250,7 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
 
       {/* Champ piège anti-robots : invisible pour les humains. */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
-        <label htmlFor="callback-website">Site web</label>
+        <label htmlFor="callback-website">{t.website}</label>
         <input ref={honeypot} id="callback-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
@@ -254,15 +263,15 @@ export function CallbackForm({ context, purpose = "" }: { context?: string; purp
 
       <div>
         <button type="submit" disabled={sending} className="btn btn-primary w-full disabled:opacity-70 sm:w-auto">
-          {sending ? "Envoi en cours…" : "Rappelez-moi"}
+          {sending ? t.sending : c.submit}
           {!sending && <BsArrowRight className="h-5 w-5" aria-hidden="true" />}
         </button>
         <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-ink/55">
           <FaLock className="mt-0.5 h-3 w-3 flex-shrink-0" aria-hidden="true" />
           <span>
-            Votre numéro sert uniquement à vous rappeler.{" "}
-            <Link href="/confidentialite" className="font-semibold text-navy underline underline-offset-2 hover:text-flame">
-              Politique de confidentialité
+            {c.numberUse}{" "}
+            <Link href={pagePath("confidentialite", locale)} className="font-semibold text-navy underline underline-offset-2 hover:text-flame">
+              {t.privacy}
             </Link>
           </span>
         </p>
