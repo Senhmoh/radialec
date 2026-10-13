@@ -1,3 +1,4 @@
+import { company } from "./company";
 import { boilerBrandNames } from "./brands";
 import { prices, type PriceRef } from "./pricing";
 import type {
@@ -100,7 +101,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       title: "Chauffagiste à Bruxelles : installation, entretien et dépannage",
       highlight: "Bruxelles",
       intro:
-        `Chaudière en panne, entretien obligatoire ou remplacement : nos techniciens agréés interviennent sous 24h, 7j/7, sur les marques ${boilerBrandNames}. Prix annoncé avant intervention, devis gratuit.`,
+        `Une chaudière en panne, un entretien à faire, une chaudière à remplacer ? Nos techniciens agréés s'occupent des marques ${boilerBrandNames}, 7j/7, avec un passage sous 24h. Le prix est annoncé avant l'intervention, et le devis est gratuit.`,
       intent: "urgence",
     },
     facts: [
@@ -111,7 +112,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
     ],
     servicesTitle: "Tous nos services de chauffage",
     servicesIntro:
-      "De la simple panne au remplacement complet de votre installation : choisissez votre besoin, nous nous occupons du reste.",
+      "Choisissez ce qui correspond à votre situation : chaque page explique ce qu'on fait, combien ça coûte et comment ça se passe.",
     services: [
       "chauffage/remplacement-chaudiere",
       "chauffage/entretien-chaudiere",
@@ -138,19 +139,19 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         {
           icon: "euro",
           title: "Prix affichés",
-          text: "Entretien, dépannage, ramonage : nos tarifs sont publics et le prix annoncé est le prix payé. [Voir nos tarifs](/tarifs).",
+          text: "Entretien, dépannage, ramonage : nos prix sont en ligne, TVAC. Vous savez ce que vous allez payer avant même d'appeler. [Voir nos tarifs](/tarifs).",
         },
         {
           icon: "handshake",
-          title: "Un seul interlocuteur",
-          text: "Chaudière, radiateurs, boiler, pompe à chaleur : une seule équipe suit votre installation dans la durée.",
+          title: "La même équipe, d'année en année",
+          text: "Chaudière, radiateurs, boiler, pompe à chaleur : c'est la même équipe qui entretient et dépanne votre installation.",
         },
       ],
     },
     pricing: {
       title: "Tarifs chauffage à Bruxelles",
       intro:
-        "Les prestations les plus demandées, à prix fixe. Pour une installation ou un remplacement, le [devis est gratuit](/contact#devis).",
+        "Les prestations les plus demandées, à prix fixe. Pour une installation ou un remplacement, le [devis est gratuit](/devis).",
       items: [
         { key: "entretienChaudiereGaz" },
         { key: "depannage", label: "Dépannage chaudière" },
@@ -161,7 +162,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
     brands: {
       title: "Toutes les grandes marques de chaudières",
       intro:
-        "Nous installons, entretenons et dépannons les chaudières des principaux fabricants, pour un matériel fiable et des pièces disponibles sur le long terme.",
+        "Les marques que nous installons, entretenons et dépannons : des fabricants solides, dont les pièces restent disponibles pendant des années.",
     },
     guide: {
       title: "Réparer ou remplacer votre chaudière ?",
@@ -181,7 +182,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         id: 1,
         question: "Intervenez-vous le week-end pour une panne de chauffage ?",
         answer:
-          "Oui. Nous intervenons 7j/7, week-end compris, à Bruxelles et dans ses environs, avec une intervention sous 24h. Appelez-nous : nous évaluons la situation par téléphone et fixons un créneau.",
+          `Oui. On décroche ${company.promises.emergency} pour les urgences, et un technicien passe sous 24h, week-end compris, à Bruxelles et alentour. Au téléphone, on vous dit si ça peut attendre et on fixe un créneau.`,
       },
       {
         id: 2,
@@ -218,7 +219,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       intent: "urgence",
       title: "Plus de chauffage ? Votre chauffagiste est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "Chaudière en sécurité, radiateurs froids, plus d'eau chaude : nos chauffagistes agréés interviennent 7j/7 à Bruxelles et dans ses environs, sous 24h, au prix annoncé avant l'intervention. Décrivez-nous la panne, on s'occupe du reste.",
+      body: "Chaudière en sécurité, radiateurs froids, plus d'eau chaude ? Un chauffagiste passe sous 24h, 7j/7, à Bruxelles et alentour, et vous annonce le prix avant de commencer.",
     },
     draft: false,
   },
@@ -237,7 +238,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       title: "Électricien à Bruxelles : dépannage, installation et conformité",
       highlight: "Bruxelles",
       intro:
-        "Coupure de courant, différentiel qui saute, tableau vétuste ou contrôle RGIE avant une vente : nos électriciens interviennent 7j/7, sous 24h, avec un devis gratuit pour vos travaux.",
+        "Une coupure de courant, un différentiel qui saute, un tableau à changer ou un contrôle RGIE avant de vendre ? Nos électriciens interviennent 7j/7, sous 24h, et le devis est gratuit pour les travaux.",
       intent: "urgence",
     },
     facts: [
@@ -248,7 +249,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
     ],
     servicesTitle: "Tous nos services d'électricité",
     servicesIntro:
-      "Du dépannage urgent à la rénovation complète, en passant par la borne de recharge et le parlophone : un électricien pour tout votre logement.",
+      "Du dépannage à la rénovation complète, de la borne de recharge au parlophone : choisissez votre besoin.",
     services: [
       "electricite/depannage-electrique",
       "electricite/installation-electricite",
@@ -265,7 +266,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         {
           icon: "shield",
           title: "Aux normes RGIE",
-          text: "Chaque circuit posé ou modifié respecte le Règlement général sur les installations électriques, pour passer le contrôle sans mauvaise surprise.",
+          text: "Chaque circuit posé ou modifié respecte le Règlement général sur les installations électriques (RGIE), pour que le contrôle se passe bien.",
         },
         {
           icon: "search",
@@ -275,12 +276,12 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         {
           icon: "euro",
           title: "Prix annoncé",
-          text: "Forfait dépannage affiché, devis gratuit et détaillé pour tous les travaux. Le prix annoncé est le prix payé.",
+          text: "Le forfait dépannage est affiché, et chaque chantier a son devis gratuit, détaillé poste par poste.",
         },
         {
           icon: "handshake",
-          title: "Un seul interlocuteur",
-          text: "Électricité, chauffage, plomberie : une seule équipe pour votre logement, sans multiplier les corps de métier.",
+          title: "Un numéro pour toute la maison",
+          text: "Électricité, chauffage, plomberie : pas besoin de chercher trois artisans différents.",
         },
       ],
     },
@@ -350,7 +351,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       intent: "urgence",
       title: "Plus de courant ? Votre électricien est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "Différentiel qui saute, prise qui chauffe, coupure partielle : nos électriciens interviennent 7j/7 à Bruxelles et dans ses environs, sous 24h, au prix annoncé avant l'intervention. Et pour vos projets, le devis est gratuit.",
+      body: "Un différentiel qui saute, une prise qui chauffe ? Un électricien passe sous 24h, 7j/7, et vous annonce le prix avant de commencer. Pour vos projets, le devis est gratuit.",
     },
     draft: false,
   },
@@ -369,7 +370,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       title: "Plombier à Bruxelles : fuite, débouchage et détartrage",
       highlight: "Bruxelles",
       intro:
-        "Fuite d'eau, WC bouché, évier qui ne s'écoule plus ou robinetterie entartrée : nos plombiers interviennent 7j/7, sous 24h, à prix fixe annoncé avant l'intervention.",
+        "Une fuite, un WC bouché, un évier qui ne s'écoule plus ? Nos plombiers passent sous 24h, 7j/7, à prix fixe annoncé avant l'intervention.",
       intent: "urgence",
     },
     facts: [
@@ -380,7 +381,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
     ],
     servicesTitle: "Nos services de plomberie",
     servicesIntro:
-      "Les interventions sanitaires les plus fréquentes, réalisées proprement, avec un prix connu d'avance.",
+      "Les interventions les plus courantes, avec un prix connu d'avance.",
     services: [
       "plomberie/depannage",
       "plomberie/debouchage",
@@ -392,8 +393,8 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       items: [
         {
           icon: "stopwatch",
-          title: "Réactifs",
-          text: "Une fuite n'attend pas : nous intervenons sous 24h, 7j/7, dans toute la Région bruxelloise et en périphérie.",
+          title: "Sous 24h, 7j/7",
+          text: `Une fuite n'attend pas : un plombier passe sous 24h, week-end compris, à Bruxelles et en périphérie. Et on décroche ${company.promises.emergency}.`,
         },
         {
           icon: "search",
@@ -403,14 +404,14 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         {
           icon: "euro",
           title: "Prix fixes",
-          text: "Dépannage et débouchage à prix fixe TVAC : pas de surprise sur la facture. [Voir nos tarifs](/tarifs).",
+          text: "Dépannage et débouchage à prix fixe TVAC, affichés en ligne. [Voir nos tarifs](/tarifs).",
         },
       ],
     },
     pricing: {
       title: "Tarifs plomberie à Bruxelles",
       intro:
-        "Deux forfaits clairs pour les interventions les plus courantes ; pour le reste, un devis gratuit.",
+        "Deux prix fixes pour les interventions les plus courantes ; pour le reste, un devis gratuit.",
       items: [{ key: "depannage", label: "Dépannage sanitaire" }, { key: "debouchage" }],
     },
     guide: {
@@ -464,14 +465,14 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         id: 6,
         question: "Intervenez-vous en appartement et pour les syndics ?",
         answer:
-          "Oui, chez les particuliers comme dans les parties communes des copropriétés (colonnes, décharges communes). Voir nos services pour [syndics et copropriétés](/professionnels/syndics-coproprietes).",
+          "Oui, chez les particuliers comme dans les parties communes des copropriétés (colonnes, décharges communes). Voir nos services pour [syndics et copropriétés](/professionnels).",
       },
     ],
     cta: {
       intent: "urgence",
       title: "Une fuite ? Votre plombier est (presque) déjà en route.",
       highlight: "(presque)",
-      body: "Fuite, WC bouché, évier qui déborde : nos plombiers interviennent 7j/7 à Bruxelles et dans ses environs, sous 24h, au prix annoncé avant l'intervention. Coupez l'eau, on s'occupe du reste.",
+      body: "Une fuite, un WC bouché ? Coupez l'eau et appelez : un plombier passe sous 24h, 7j/7, et vous annonce le prix avant l'intervention.",
     },
     draft: false,
   },
@@ -490,7 +491,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       title: "Climatisation et pompe à chaleur à Bruxelles",
       highlight: "Bruxelles",
       intro:
-        "Airco réversible ou pompe à chaleur air-eau : nous vous conseillons, installons et entretenons votre équipement pour un confort toute l'année — avec un dépannage 7j/7 si l'appareil faiblit.",
+        "Une airco réversible pour l'été, une pompe à chaleur pour remplacer la chaudière ? On vous conseille, on installe, on entretient, et on dépanne 7j/7 si l'appareil lâche.",
       intent: "installation",
     },
     facts: [
@@ -505,7 +506,7 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
     ],
     servicesTitle: "Nos services climatisation et pompe à chaleur",
     servicesIntro:
-      "Rafraîchir en été, chauffer en hiver, maîtriser la facture : choisissez le service qui correspond à votre projet.",
+      "Installation, entretien ou panne : choisissez votre besoin.",
     services: [
       "climatisation/installation-climatisation",
       "climatisation/entretien-climatisation",
@@ -513,17 +514,17 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
       "chauffage/pompe-a-chaleur",
     ],
     why: {
-      title: "Un projet de confort, pas juste un appareil",
+      title: "Ce qu'on vérifie avant de poser un appareil",
       items: [
         {
           icon: "ruler",
-          title: "Bien dimensionné",
+          title: "La bonne puissance",
           text: "Un appareil trop puissant ou trop faible consomme plus et s'use plus vite : nous calculons la puissance adaptée à vos pièces.",
         },
         {
           icon: "volume",
-          title: "Pensé pour le voisinage",
-          text: "Emplacement de l'unité extérieure, bruit, évacuation des condensats : nous anticipons les contraintes d'une ville dense comme Bruxelles.",
+          title: "L'emplacement et le bruit",
+          text: "Où placer l'unité extérieure, comment limiter le bruit pour vous et vos voisins, où évacuer l'eau : on règle ces questions avant la pose.",
         },
         {
           icon: "sync",
@@ -532,8 +533,8 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
         },
         {
           icon: "tools",
-          title: "Suivi dans la durée",
-          text: "Entretien et dépannage assurés par nos soins après l'installation, avec des tarifs connus d'avance.",
+          title: "Entretien et dépannage ensuite",
+          text: "Après la pose, c'est nous qui entretenons et dépannons l'appareil, à des prix affichés.",
         },
       ],
     },
@@ -600,8 +601,9 @@ export const categories: Record<ServiceCategory, CategoryContent> = {
     ],
     cta: {
       intent: "installation",
-      title: "Un projet d'airco ou de pompe à chaleur ? Votre devis, sans mauvaise surprise.",
-      body: "Rafraîchir les chambres, remplacer une vieille chaudière, réduire la facture : nous étudions votre logement, dimensionnons l'appareil et vous remettons un devis détaillé sous 24h. Un seul interlocuteur, de la visite technique à la mise en service.",
+      title: "Un projet d'airco ou de pompe à chaleur ? Le devis est gratuit.",
+      highlight: "gratuit",
+      body: "On passe voir votre logement, on calcule la puissance qu'il vous faut, et vous recevez un devis détaillé sous 24h, sans engagement.",
     },
     draft: false,
   },
