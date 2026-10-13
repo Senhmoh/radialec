@@ -24,7 +24,7 @@ Quick reference so you don't have to open every file. Keep it in sync whenever a
 | `blocks.tsx` | `BrandsV2`, `CalloutV2` (verdicts), `HighlightV2`, `CallBandV2` (copy by intent, boiler copy on chauffage; phone + WhatsApp, entretien: phone + rdv; rappel as a link), `ProofV2` (« 5,0 » + « plus de 30 avis Google » + 3 real reviews from `pickReviews(context)`, horizontal scroll-snap on mobile, then certifications), `ZonesV2`, `RelatedV2`. |
 | `FaqV2.tsx` (client) | One open at a time; answers stay in the HTML (SEO). Optional `id` (`/#faqs`). Sidebar: WhatsApp « Poser ma question » + « Être rappelé » link. |
 | `chrome.tsx` | `FinalCtaV2` (lavender by default; flame variant unused; `secondary` devis / rendezVous / whatsapp, rappel + WhatsApp links under the buttons), `FooterV2` (night by default, WhatsApp line under the phone). |
-| `HeaderV2.tsx` (client), `MobileActionBar.tsx` (client) | Global chrome, mounted in `app/layout.tsx`. |
+| `HeaderV2.tsx` (client), `MobileActionBar.tsx` (client) | Global chrome, mounted by `SiteShell.tsx` (shared by both root layouts and the global 404). |
 | `cta.ts` | Final CTA technician visual + 2nd action per intent. `fonts.ts`: Archivo. |
 
 ## Other sections

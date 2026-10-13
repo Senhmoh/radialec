@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import { company } from "./app/data/company";
 
 const nextConfig: NextConfig = {
+  // Deux mises en page racines (français, néerlandais) : la 404 des adresses
+  // inconnues est app/global-not-found.tsx.
+  experimental: { globalNotFound: true },
   // Refonte 2026 : anciennes URL redirigées (301) vers leur équivalent, au cas
   // où elles auraient été indexées ou partagées.
   async redirects() {
