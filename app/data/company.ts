@@ -46,8 +46,11 @@ export const company = {
 
   hours: {
     summary: "7j/7",
-    // Appels pris tous les jours de 10h à 21h (Q20). Jamais « 24h/24 ».
+    // Appels pris tous les jours de 10h à 21h (Q20) ; urgences 24h/24 (promises.emergency).
     detail: "7j/7, de 10h à 21h" as string | null,
+    /** Heures pleines, heure de Bruxelles : carte « Joignable maintenant », données structurées. */
+    opens: 10,
+    closes: 21,
   },
 
   google: {

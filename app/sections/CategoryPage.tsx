@@ -5,7 +5,7 @@ import { getCategory } from "../data/categories";
 import { contactActionHref } from "../data/company";
 import { getServiceByRef, type ServiceCategory, type ServiceRef } from "../data/services";
 import { resolveCta } from "./ctaDefaults";
-import { ServicesPanel } from "./v2/aside";
+import { ReachPanel } from "./v2/ReachPanel";
 import { BrandsV2, CallBandV2, ProofV2, ZonesV2 } from "./v2/blocks";
 import { FinalCtaV2 } from "./v2/chrome";
 import { FeaturesV2, GuideV2, PricingV2, ServiceGridV2 } from "./v2/content";
@@ -31,7 +31,6 @@ export function CategoryPage({ category }: { category: ServiceCategory }) {
   const others = content.services.filter((ref) => !featuredRefs.includes(ref)).map(getServiceByRef);
   const cta = resolveCta(content.cta.intent, content.cta);
   const visual = finalCtaVisual[content.cta.intent];
-  const quickLinks = content.services.slice(0, 5).map(getServiceByRef);
   // Fonds blanc / beige en alternance, dans l'ordre des sections (voir v2/tones.ts).
   const bg = backgrounds();
   const grid = bg.next();
@@ -56,7 +55,7 @@ export function CategoryPage({ category }: { category: ServiceCategory }) {
         eyebrow={content.hero.eyebrow}
         title={content.hero.title}
         intro={content.hero.intro}
-        panel={<ServicesPanel eyebrow={content.label} title="Votre besoin ?" services={quickLinks} />}
+        panel={<ReachPanel context={category} label={content.label} />}
         facts={content.facts}
         context={category}
         intent={content.hero.intent}

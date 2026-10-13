@@ -1,5 +1,5 @@
 import type { StaticImageData } from "next/image";
-import technicienUrgence from "@/assets/technicien_courant_avec_boite_outils_en_main_écriture-sur-image-technicien-agree-et-intervention-en-24-heures-avec-fleches-sortantes.png";
+import technicienUrgence from "@/assets/technicien_courant_avec_boite_outils_en_main_écriture-sur-image-technicien-agree-et-intervention-en-24-heures-avec-fleches-sortantes_fr.png";
 import technicienInstallation from "@/assets/technicien_debout_regarde_devis_et_ecrit_ecriture-sur-image-technicien-agrée-et-devis-clair-et-transparent-avec-flèche-sortantes.png";
 import technicienEntretien from "@/assets/technicien_noir_debout_souriant_doigt_sur_tablette_coupe_aux_cuisses.png";
 import type { CtaContent, ServiceIntent } from "../data/services/types";

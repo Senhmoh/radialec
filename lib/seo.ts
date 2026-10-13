@@ -139,8 +139,8 @@ export function localBusinessJsonLd(logoUrl: string) {
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      opens: "10:00",
-      closes: "21:00",
+      opens: `${String(company.hours.opens).padStart(2, "0")}:00`,
+      closes: `${String(company.hours.closes).padStart(2, "0")}:00`,
     },
     knowsAbout: [
       "Chauffage",

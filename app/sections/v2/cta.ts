@@ -1,7 +1,7 @@
 import type { StaticImageData } from "next/image";
 import technicienBrasCroises from "@/assets/technicien_debout_souriant_bras_croises_coupés_aux_cuisses.png";
 import technicienHanches from "@/assets/technicien_debout_souriant_bras_croisés_coupé_aux_hanches.png";
-import technicienCourant from "@/assets/technicien_courant_avec_boite_outils_en_main_écriture-sur-image-technicien-agree-et-intervention-en-24-heures-avec-fleches-sortantes.png";
+import technicienCourant from "@/assets/technicien_courant_avec_boite_outils_en_main_écriture-sur-image-technicien-agree-et-intervention-en-24-heures-avec-fleches-sortantes_fr.png";
 import type { ServiceIntent } from "@/app/data/services/types";
 
 // Visuel et 2e action du CTA final selon l'intention de la page. Le fond est
