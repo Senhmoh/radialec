@@ -10,7 +10,7 @@
 // Sans ces variables, rien n'est envoyé (l'e-mail reste le canal de référence).
 // Une alerte qui échoue ne fait jamais échouer la demande : elle est seulement journalisée.
 
-import { attributionChannel, label, languageFlag, type QuoteEmailInput } from "./email";
+import { attributionChannel, flyerFlag, label, languageFlag, type QuoteEmailInput } from "./email";
 import {
   callbackSlots,
   contactPreferences,
@@ -70,7 +70,8 @@ export function quoteAlertHtml(input: QuoteEmailInput): string {
   const urgent = quote.timing === "asap" || quote.requestType === "reparation";
   const slot = quote.callbackSlot === "indifferent" ? "" : `, ${label(callbackSlots, quote.callbackSlot).toLowerCase()}`;
   return [
-    `${languageFlag(input.locale)}${urgent ? "🔴 <b>Devis à traiter vite</b>" : "<b>Nouvelle demande de devis</b>"}`,
+    `${flyerFlag(input.flyer)}${languageFlag(input.locale)}${urgent ? "🔴 <b>Devis à traiter vite</b>" : "<b>Nouvelle demande de devis</b>"}`,
+    ...(input.flyer ? [`<b>${escapeTelegram(input.flyer.detail)}</b>${input.flyer.code ? ` · zone ${escapeTelegram(input.flyer.code)}` : ""}`] : []),
     ...(input.locale === "nl" ? ["<b>Client néerlandophone : répondre en néerlandais</b>"] : []),
     `<b>${e(input.serviceLabel)}</b> · ${e(input.categoryLabel)}${input.displayedPrice ? ` · prix affiché ${e(input.displayedPrice)}` : ""}`,
     "",

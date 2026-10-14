@@ -9,6 +9,7 @@ import type { Locale } from "@/lib/i18n/locale";
 import { pagePath } from "@/lib/i18n/routes";
 import { label, type QuoteEmailInput } from "./email";
 import type { CallbackRequest } from "./callback";
+import type { FlyerLead } from "./offer";
 import { quoteLabels } from "./labels";
 import { callbackWhen, emergencyLine, quoteNextSteps } from "./messages";
 
@@ -233,6 +234,7 @@ export function buildQuoteConfirmation(input: QuoteEmailInput) {
   const l = quoteLabels(locale);
   const slot = quote.callbackSlot === "indifferent" ? "" : `, ${label(l.callbackSlots, quote.callbackSlot).toLowerCase()}`;
   const recap: [string, string][] = [
+    ...(input.flyer?.customer && input.locale === "fr" ? ([["Votre offre", input.flyer.customer]] as [string, string][]) : []),
     [c.recap.service, input.customerLabels.service],
     [c.recap.category, input.customerLabels.category],
     ...(input.customerLabels.price ? ([[c.recap.price, input.customerLabels.price]] as [string, string][]) : []),
@@ -316,12 +318,15 @@ export function buildCallbackConfirmation(input: {
   topic?: string;
   origin?: string;
   locale: Locale;
+  /** Demande venue du flyer : le prix de l'offre est rappelé par écrit au client. */
+  flyer?: FlyerLead;
 }) {
   const { callback, locale } = input;
   const c = callbackCopy[locale];
   const rendezVous = callback.purpose === "rendez-vous";
   const when = callbackWhen(callback, locale);
   const recap: [string, string][] = [
+    ...(input.flyer?.customer && locale === "fr" ? ([["Votre offre", input.flyer.customer]] as [string, string][]) : []),
     [c.reason, rendezVous ? c.reasonAppointment : c.reasonCallback],
     [c.phone, callback.phone],
     [c.moment, quoteLabels(locale).callbackTimes[callback.time]],

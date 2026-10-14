@@ -17,6 +17,7 @@ import {
 import { buildQuoteConfirmation } from "@/lib/quote/confirmation";
 import { QuoteDeliveryError, quoteRecipient, sendCustomerConfirmation, sendQuoteEmail } from "@/lib/quote/send";
 import { quoteAlertHtml, sendTelegramAlert } from "@/lib/quote/telegram";
+import { flyerLead } from "@/lib/quote/offer";
 
 export const runtime = "nodejs";
 
@@ -81,9 +82,12 @@ export async function POST(request: Request) {
   const localService = service && locale !== "fr" ? findServiceByRef(quote.service as ServiceRef, locale) : service;
   const isCategory = Object.prototype.hasOwnProperty.call(categoryLabels, quote.category);
 
+  const attribution = parseAttribution(form.get("attribution"));
   const emailInput = {
     quote,
     locale,
+    // Visite arrivée par le flyer : prix de l'offre et zone en tête de la demande.
+    flyer: flyerLead({ attribution }),
     reference,
     receivedAt,
     categoryLabel: categoryLabels[quote.category as ServiceCategory] ?? quote.category,
@@ -96,7 +100,7 @@ export async function POST(request: Request) {
     // E-mail interne et Telegram : toujours en français.
     displayedPrice: price?.amount !== undefined ? `${formatAmount(price)} TVAC` : undefined,
     photoCount: files.length,
-    attribution: parseAttribution(form.get("attribution")),
+    attribution,
   };
   const { subject, html, text } = buildQuoteEmail(emailInput);
   const attachments = await Promise.all(

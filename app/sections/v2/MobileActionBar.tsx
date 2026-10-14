@@ -48,7 +48,11 @@ export function MobileActionBar({ actions }: { actions: Record<string, PageActio
       ) : (
         <div className="mx-auto grid max-w-md grid-cols-[1fr_1fr_52px] gap-2">
           {call}
-          {page?.intent === "entretien" ? (
+          {page?.cta ? (
+            <a href={page.cta.href} className={btn("dark", "min-h-[52px] px-3 text-sm")}>
+              {page.cta.label}
+            </a>
+          ) : page?.intent === "entretien" ? (
             <Link href={contactActionHref("rendezVous", context, locale)} className={btn("dark", "min-h-[52px] px-3 text-sm")}>
               {t.appointment}
             </Link>

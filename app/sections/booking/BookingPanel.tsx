@@ -37,6 +37,8 @@ interface BookingPanelProps {
   brandColor: string;
   /** Libellés des pages d'origine possibles (« categorie/slug » ou « categorie »). */
   labels: Record<string, string>;
+  /** Agenda réservé à l'offre flyer (?offre=flyer, depuis /offre). */
+  flyerEvent?: BookingEvent | null;
 }
 
 /**
@@ -45,7 +47,7 @@ interface BookingPanelProps {
  * invité à se faire rappeler pour fixer le créneau (jamais un agenda d'une
  * autre prestation).
  */
-export function BookingPanel({ events, defaultEvent, brandColor, labels }: BookingPanelProps) {
+export function BookingPanel({ events, defaultEvent, brandColor, labels, flyerEvent }: BookingPanelProps) {
   const [context, setContext] = useState<string>();
   const [mode, setMode] = useState<Mode>({ kind: "pending" });
   const panel = useRef<HTMLDivElement>(null);
@@ -58,11 +60,14 @@ export function BookingPanel({ events, defaultEvent, brandColor, labels }: Booki
   const eventLabel = (event: BookingEvent) => (locale === "nl" ? event.labelNl : event.label);
 
   useEffect(() => {
-    const origin = new URLSearchParams(window.location.search).get("service") ?? undefined;
-    const event = origin ? events.find((e) => e.services.includes(origin)) : events.find((e) => e.calLink === defaultEvent);
+    const params = new URLSearchParams(window.location.search);
+    const origin = params.get("service") ?? undefined;
+    // Offre flyer : son propre agenda (prix de l'offre), jamais l'agenda au prix normal.
+    const flyer = params.get("offre") === "flyer" ? flyerEvent ?? undefined : undefined;
+    const event = flyer ?? (origin ? events.find((e) => e.services.includes(origin)) : events.find((e) => e.calLink === defaultEvent));
     setContext(origin);
     setMode(event ? { kind: "booking", event } : { kind: "callback", reason: "unavailable" });
-  }, [events, defaultEvent]);
+  }, [events, defaultEvent, flyerEvent]);
 
   // Après un changement de mode demandé par le visiteur, ramener le haut du
   // nouveau contenu à l'écran (l'agenda est bien plus haut que le formulaire).

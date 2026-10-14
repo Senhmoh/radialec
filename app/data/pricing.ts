@@ -135,17 +135,44 @@ export const pricingPolicy = {
 
 /**
  * Offre imprimée sur le flyer (page /offre, QR radialec.be/f) : entretien de
- * chaudière gaz. `amount` null = prix normal (`prices.entretienChaudiereGaz`).
- * Un prix d'offre ne se publie qu'avec une date de fin (`validUntil`, ex.
- * « 31 décembre 2026 ») et jamais en prix barré. À fixer par le propriétaire
- * avant l'impression : le flyer et la page doivent annoncer le même prix.
+ * chaudière gaz à prix réduit, pour une durée limitée. Décidée le 15/10/2026
+ * (5 000 flyers) : 129 € jusqu'au 31 décembre 2026 inclus. Le reste du site
+ * garde le prix normal (`prices.entretienChaudiereGaz`).
+ * - Jamais de prix barré ni de « au lieu de » : le prix normal est remonté à
+ *   149 € le 08/10/2026, une annonce de réduction devrait se référer au prix le
+ *   plus bas des 30 derniers jours (129 €).
+ * - Après la date de fin, /offre repasse seule au prix normal (page régénérée
+ *   toutes les heures) et les demandes portent la mention « offre terminée ».
+ * - Le flyer et la page doivent annoncer le même prix et la même date.
  */
 export const flyerOffer = {
-  amount: null as number | null,
-  validUntil: null as string | null,
+  amount: 129 as number | null,
+  /** Dernier jour de l'offre (heure de Bruxelles), AAAA-MM-JJ. */
+  until: "2026-12-31" as string | null,
 };
 
-/** Prix de l'offre flyer, tel qu'affiché sur /offre. */
+export interface FlyerOfferState {
+  /** Offre en cours (prix d'offre fixé et date non dépassée). */
+  active: boolean;
+  /** Prix à annoncer aujourd'hui : prix d'offre, ou prix normal une fois l'offre terminée. */
+  amount: number;
+  /** « 31 décembre 2026 ». */
+  untilLabel?: string;
+}
+
+/** État de l'offre flyer à une date donnée (jour de Bruxelles). */
+export function flyerOfferState(now: Date = new Date()): FlyerOfferState {
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Brussels" }).format(now);
+  const active = flyerOffer.amount !== null && (!flyerOffer.until || today <= flyerOffer.until);
+  const untilLabel = flyerOffer.until
+    ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
+        new Date(`${flyerOffer.until}T12:00:00Z`)
+      )
+    : undefined;
+  return { active, amount: active ? flyerOffer.amount! : prices.entretienChaudiereGaz.amount, untilLabel };
+}
+
+/** Prix de l'offre flyer (nom de la campagne des QR : entretien-129). */
 export function flyerOfferAmount(): number {
   return flyerOffer.amount ?? prices.entretienChaudiereGaz.amount;
 }

@@ -274,6 +274,14 @@ export function contactActionHref(key: ContactActionKey, context?: string, local
 // plutôt qu'un créneau qui ne correspond pas à son besoin.
 // Les réservations arrivent dans l'agenda du compte Cal.com qui possède le
 // lien : changer de compte = remplacer `calLink` ici.
+export interface BookingEvent {
+  calLink: string;
+  label: string;
+  labelNl: string;
+  /** Prestations (« categorie/slug ») réservables avec ce type de rendez-vous. */
+  services: string[];
+}
+
 export const onlineBooking = {
   /** Couleur des boutons de l'agenda = flame (tailwind.config.ts). */
   brandColor: "#e52619",
@@ -285,9 +293,16 @@ export const onlineBooking = {
       // Page marque Vaillant (brouillon) : son intention est l'entretien.
       services: ["chauffage/entretien-chaudiere", "chauffage/vaillant"],
     },
-  ],
+  ] as BookingEvent[],
   /** Type proposé quand le visiteur arrive sans prestation précise (accueil, /contact, /tarifs…). */
   defaultEvent: "radialec/entretien-60-min",
+  /**
+   * Type de rendez-vous réservé à l'offre flyer (page /offre) : à créer sur
+   * Cal.com (ex. « Entretien chaudière, offre flyer 129 € », même durée, prix de
+   * l'offre dans la description), puis renseigner son lien ici, ex.
+   * { calLink: "radialec/entretien-offre-flyer", label: "Entretien de chaudière · offre flyer", labelNl: "Ketelonderhoud · flyeraanbod", services: [] }.
+   * Tant qu'il est null, /offre ne propose pas la réservation en ligne : l'agenda
+   * normal affiche le prix normal.
+   */
+  flyerEvent: null as BookingEvent | null,
 };
-
-export type BookingEvent = (typeof onlineBooking.events)[number];

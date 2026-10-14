@@ -26,7 +26,7 @@ Les redirections sont servies par le site lui-même : aucun service de QR payant
 
 | Support | Contenu du QR | Arrive sur |
 |---|---|---|
-| Flyer, zone WO1 | `https://radialec.be/f/WO1` | `/offre?utm_source=flyer&utm_medium=imprime&utm_campaign=entretien-149&utm_content=WO1` |
+| Flyer, zone WO1 | `https://radialec.be/f/WO1` | `/offre?utm_source=flyer&utm_medium=imprime&utm_campaign=entretien-129&utm_content=WO1` |
 | Flyer, autre zone | `https://radialec.be/f/KR1` (un code par zone : lettres, chiffres, tiret, 12 caractères max) | idem, `utm_content=KR1` |
 | Flyer sans zone | `https://radialec.be/f` | idem, sans `utm_content` |
 | Autocollant chaudière | `https://radialec.be/s` | `/ma-chaudiere?utm_source=autocollant&utm_medium=imprime&utm_campaign=autocollant-chaudiere` |
@@ -38,14 +38,17 @@ Les redirections sont servies par le site lui-même : aucun service de QR payant
 
 ### Les deux pages d'arrivée (non indexées, hors menus, hors plan du site)
 
-- **`/offre` (flyer).** La page ne montre que l'offre :
-  - le prix ;
+- **`/offre` (flyer).** Une page d'offre, de haut en bas :
+  - le prix en grand ;
+  - l'appel et WhatsApp ;
+  - le formulaire « Je réserve » ;
+  - « comment ça se passe » en 3 étapes, sans rien payer d'avance ;
   - ce qui est compris (liste validée de la page entretien) ;
-  - l'appel, « Prendre rendez-vous » (agenda en ligne de l'entretien) et WhatsApp ;
-  - un formulaire court (prénom + téléphone, rappel sous 2 h) ;
-  - 3 avis sur l'entretien, puis le CTA final.
+  - 3 avis sur l'entretien ;
+  - les questions sur l'offre ;
+  - le CTA final, qui ramène au formulaire.
 
-  Contenu : `app/data/offre.ts`.
+  Contenu : `app/data/offre.ts` ; formulaire : `app/sections/offre/OfferForm.tsx`.
 
 - **`/ma-chaudiere` (autocollant).** Pour quelqu'un qui veut appeler, pas lire :
   - l'appel en grand et WhatsApp (« Envoyer une photo ») ;
@@ -57,16 +60,41 @@ Les redirections sont servies par le site lui-même : aucun service de QR payant
 
 Dans les deux cas, les tags arrivent dans Google Analytics. Ils sont aussi joints à chaque demande de devis ou de rappel envoyée depuis la visite (ligne « Origine du client » de l'e-mail et de l'alerte Telegram) : on sait quel flyer et quelle zone ont amené le client.
 
-### ⚠️ À décider avant d'imprimer le flyer : le prix
+### Offre du flyer (décidée le 15/10/2026 : 5 000 flyers)
 
-- **Le problème :** ce brief annonce l'entretien à **129 €**, mais le site affiche **149 €** depuis le 08/10/2026. C'est le prix normal de l'entretien gaz, et le prix de lancement à 129 € est terminé.
-- **Ce que montre la page `/offre` aujourd'hui :** le prix normal (149 €). La campagne s'appelle donc `entretien-149`.
-- **Pour une offre flyer à 129 € :**
-  - la renseigner dans `app/data/pricing.ts` (`flyerOffer`) : `amount: 129` **et** une date de fin `validUntil` (ex. « 31 décembre 2026 ») ;
-  - la page affiche alors 129 € et « Offre valable jusqu'au… », sans prix barré ;
-  - la campagne devient `entretien-129` ;
-  - le reste du site garde 149 €.
-- **Règle :** le flyer et la page doivent annoncer le même prix.
+**Le prix et la date**
+- **Entretien de chaudière gaz à 129 € TVAC, jusqu'au 31 décembre 2026 inclus.** Le reste du site reste à 149 €. Réglage : `flyerOffer` dans `app/data/pricing.ts`.
+- **À imprimer sur le flyer, à l'identique de la page :**
+  - le prix (129 €) ;
+  - la date (« jusqu'au 31 décembre 2026 ») ;
+  - le code zone, près du prix (« Code WO1 »).
+- **Pas de prix barré ni de « au lieu de 149 € ».** Le prix normal est remonté à 149 € le 08/10 ; une réduction annoncée devrait se référer au prix le plus bas des 30 derniers jours, qui était 129 €.
+- **Gaz seulement.** L'offre porte sur l'entretien gaz, le mazout reste à 219 €. La page le dit.
+- **Après le 31/12 :**
+  - `/offre` repasse seule au prix normal, avec « offre terminée le 31 décembre 2026 » (page régénérée toutes les heures, rien à redéployer) ;
+  - les demandes portent « offre flyer terminée : prix normal ».
+- **Campagne :** les liens `/f` portent `utm_campaign=entretien-129`.
+
+**Le parcours des clients du flyer.** Même circuit que les autres demandes, mais le client est reconnaissable à chaque étape :
+1. **Sur `/offre`.**
+   - Le prix est en grand, avec le formulaire « Je réserve mon entretien à 129 € » : prénom et nom, téléphone, moment du rappel, e-mail facultatif (« pour recevoir votre prix par écrit »).
+   - Avec un code dans le lien (`/f/WO1`), le formulaire affiche « Code flyer WO1 : 129 € TVAC appliqué ».
+   - Sous le bouton d'appel : « Au téléphone, donnez le code WO1 ».
+2. **À la réception d'une demande.**
+   - L'e-mail interne et l'alerte Telegram commencent par **« 🟠 FLYER WO1 »**, suivi du prix à appliquer.
+   - Même chose pour un devis ou un rappel envoyé depuis une autre page pendant une visite arrivée par le flyer.
+3. **Le client reçoit son prix par écrit** dans l'e-mail de confirmation : « Votre offre : entretien de chaudière gaz à 129 € TVAC (offre flyer jusqu'au 31 décembre 2026) ».
+4. **Au téléphone** (appels directs, invisibles pour les statistiques), le technicien demande ou reçoit le code, applique 129 € et **note la zone**. C'est la seule façon de compter les appels venus du flyer.
+5. **Bilan mensuel par zone :**
+   - appels avec code ;
+   - demandes « FLYER » (e-mail / Telegram) ;
+   - Google Analytics (`utm_content`).
+
+   Il sert à décider où réimprimer.
+
+**Réservation en ligne**
+- **À faire :** créer sur Cal.com un type de rendez-vous « Entretien chaudière, offre flyer » (même durée, 129 € dans la description). Me donner son lien : il se branche dans `onlineBooking.flyerEvent` (`app/data/company.ts`).
+- **Tant qu'il n'existe pas :** `/offre` ne propose pas l'agenda, pour éviter que le client tombe sur l'agenda au prix normal. La barre mobile de `/offre` mène au formulaire de l'offre.
 
 ### Les autres canaux (pas de lien court nécessaire)
 

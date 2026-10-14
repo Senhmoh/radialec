@@ -3,7 +3,8 @@ import { categoryLabel, categoryLabels } from "@/app/data/categories";
 import { findServiceByRef, services, type ServiceCategory, type ServiceRef } from "@/app/data/services";
 import { parseLocale, type Locale } from "@/lib/i18n/locale";
 import { quoteLabels } from "@/lib/quote/labels";
-import { attributionRows, customerLanguageRows, languageFlag, newReference, renderEmail } from "@/lib/quote/email";
+import { attributionRows, customerLanguageRows, flyerFlag, flyerRows, languageFlag, newReference, renderEmail } from "@/lib/quote/email";
+import { flyerLead } from "@/lib/quote/offer";
 import {
   callbackTimes,
   callbackTopics,
@@ -66,10 +67,12 @@ export async function POST(request: Request) {
   const origin = originLabel(callback.service);
   const when = callbackTimes[callback.time];
   const attribution = parseAttribution(form.get("attribution"));
+  // Formulaire de /offre (offre=flyer, code zone) ou visite arrivée par le flyer.
+  const flyer = flyerLead({ offre: form.get("offre"), code: form.get("code"), attribution });
   const rendezVous = callback.purpose === "rendez-vous";
   const date = receivedAt.toLocaleString("fr-BE", { timeZone: "Europe/Brussels", dateStyle: "full", timeStyle: "short" });
   const { html, text } = renderEmail({
-    kicker: `${languageFlag(locale)}${rendezVous ? "Rendez-vous à fixer" : "Rappel demandé"}${
+    kicker: `${flyerFlag(flyer)}${languageFlag(locale)}${rendezVous ? "Rendez-vous à fixer" : "Rappel demandé"}${
       callback.time === "asap" ? " · Dès que possible" : ""
     }`,
     title: `Rappeler ${callback.name} · ${when.toLowerCase()}`,
@@ -84,6 +87,7 @@ export async function POST(request: Request) {
           ["Référence", reference],
           ["Reçue le", date],
           ...customerLanguageRows(locale),
+          ...flyerRows(flyer),
           ["Motif", rendezVous ? "Prendre rendez-vous" : "Être rappelé"],
           ["À rappeler", when],
           ["Sujet", topic ?? "Non précisé"],
@@ -105,7 +109,8 @@ export async function POST(request: Request) {
   });
 
   const alertHtml = [
-    `${languageFlag(locale)}📞 <b>${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} · ${e(when.toLowerCase())}</b>`,
+    `${flyerFlag(flyer)}${languageFlag(locale)}📞 <b>${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} · ${e(when.toLowerCase())}</b>`,
+    ...(flyer ? [`<b>${e(flyer.detail)}</b>${flyer.code ? ` · zone ${e(flyer.code)}` : ""}`] : []),
     ...(locale === "nl" ? ["<b>Client néerlandophone : rappeler en néerlandais</b>"] : []),
     "",
     `👤 ${e(callback.name)}`,
@@ -125,7 +130,7 @@ export async function POST(request: Request) {
         to: quoteRecipient(),
         replyTo: callback.email || undefined,
         reference,
-        subject: `${languageFlag(locale)}📞 ${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} ${when.toLowerCase()} · ${origin ?? topic ?? "Rappel"} — ${
+        subject: `${flyerFlag(flyer)}${languageFlag(locale)}📞 ${rendezVous ? "Rendez-vous à fixer" : "À rappeler"} ${when.toLowerCase()} · ${origin ?? topic ?? "Rappel"} — ${
           callback.name
         } · ${callback.phone}`,
         html,
@@ -156,6 +161,7 @@ export async function POST(request: Request) {
           callback,
           reference,
           locale,
+          flyer,
           topic: callback.topic ? quoteLabels(locale).callbackTopics[callback.topic] : undefined,
           origin: originLabel(callback.service, locale),
         }),

@@ -63,6 +63,7 @@ export function BookingPage({ content }: { content: BookingContent }) {
             defaultEvent={onlineBooking.defaultEvent}
             brandColor={onlineBooking.brandColor}
             labels={originLabels}
+            flyerEvent={locale === "fr" ? onlineBooking.flyerEvent : null}
           />
         </div>
       </section>

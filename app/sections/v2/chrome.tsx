@@ -44,6 +44,7 @@ export function FinalCtaV2({
   topic,
   tone = "lavender",
   secondary = "devis",
+  secondaryAction,
 }: {
   eyebrow: string;
   title: string;
@@ -58,13 +59,16 @@ export function FinalCtaV2({
   /** lavender : toutes les pages depuis le 2026-10-05 · flame : aplat rouge, conservé mais plus utilisé. */
   tone?: "flame" | "lavender";
   secondary?: FinalCtaSecondary;
+  /** 2e action propre à la page (ex. le formulaire de l'offre flyer), à la place de `secondary`. */
+  secondaryAction?: { href: string; label: string };
 }) {
   const flame = tone === "flame";
-  const whatsapp = secondary === "whatsapp";
+  const whatsapp = !secondaryAction && secondary === "whatsapp";
   const locale = getRequestLocale();
   const t = ui(locale);
-  const second =
-    secondary === "rendezVous"
+  const second = secondaryAction
+    ? secondaryAction
+    : secondary === "rendezVous"
       ? { href: contactActionHref("rendezVous", context, locale), label: t.common.bookAppointment }
       : { href: contactActionHref("devis", context, locale), label: t.requestQuote };
   const linkClass = cn("font-semibold underline underline-offset-4 hover:no-underline", flame ? "text-white" : "text-night");

@@ -2,6 +2,7 @@
 // Serveur uniquement.
 
 import type { Locale } from "@/lib/i18n/locale";
+import type { FlyerLead } from "./offer";
 import {
   callbackSlots,
   contactPreferences,
@@ -18,6 +19,8 @@ export interface QuoteEmailInput {
   locale: Locale;
   /** Prestation et domaine dans la langue du client (e-mail de confirmation). */
   customerLabels: { service: string; category: string; price?: string };
+  /** Demande venue du flyer (code zone, prix à appliquer). */
+  flyer?: FlyerLead;
   reference: string;
   receivedAt: Date;
   categoryLabel: string;
@@ -87,6 +90,16 @@ export function customerLanguageRows(locale: Locale): string[][] {
   return locale === "nl" ? [["Langue du client", "Néerlandais : répondre en néerlandais"]] : [];
 }
 
+/** Ligne « Offre flyer » du bloc « La demande ». */
+export function flyerRows(flyer?: FlyerLead): string[][] {
+  return flyer ? [["Offre flyer", `${flyer.detail}${flyer.code ? ` · zone ${flyer.code}` : ""}`]] : [];
+}
+
+/** Préfixe des objets et des alertes pour une demande venue du flyer. */
+export function flyerFlag(flyer?: FlyerLead): string {
+  return flyer ? `🟠 ${flyer.label} · ` : "";
+}
+
 /** Préfixe des objets et des alertes pour une demande en néerlandais. */
 export function languageFlag(locale: Locale): string {
   return locale === "nl" ? "🇳🇱 NL · " : "";
@@ -104,6 +117,7 @@ function sections(input: QuoteEmailInput) {
         ["Référence", input.reference],
         ["Reçue le", date],
         ...customerLanguageRows(input.locale),
+        ...flyerRows(input.flyer),
         ["Domaine", input.categoryLabel],
         ["Prestation", input.serviceLabel],
         ...(input.displayedPrice ? [["Prix affiché sur le site", input.displayedPrice]] : []),
@@ -233,9 +247,9 @@ export function renderEmail({
 export function buildQuoteEmail(input: QuoteEmailInput) {
   const { quote } = input;
   const urgent = quote.timing === "asap" || quote.requestType === "reparation";
-  const subject = `${urgent ? "🔴 " : ""}${languageFlag(input.locale)}Devis ${input.reference} · ${input.serviceLabel} · ${quote.commune} — ${quote.name}`;
+  const subject = `${urgent ? "🔴 " : ""}${flyerFlag(input.flyer)}${languageFlag(input.locale)}Devis ${input.reference} · ${input.serviceLabel} · ${quote.commune} — ${quote.name}`;
   const { html, text } = renderEmail({
-    kicker: `${languageFlag(input.locale)}Nouvelle demande de devis${urgent ? " · À traiter vite" : ""}`,
+    kicker: `${flyerFlag(input.flyer)}${languageFlag(input.locale)}Nouvelle demande de devis${urgent ? " · À traiter vite" : ""}`,
     title: `${input.serviceLabel} — ${quote.commune}`,
     reference: input.reference,
     name: quote.name,

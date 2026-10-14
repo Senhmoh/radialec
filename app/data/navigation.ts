@@ -42,6 +42,8 @@ export interface PageAction {
   label: string;
   /** Page d'origine transmise au devis / rendez-vous (identifiant français : « chauffage/entretien-chaudiere »). */
   context: string;
+  /** 2e bouton propre à la page (ex. le formulaire de l'offre flyer), à la place de devis / rendez-vous. */
+  cta?: { label: string; href: string };
 }
 
 /**
@@ -60,7 +62,13 @@ export function getPageActions(locale: Locale = defaultLocale): Record<string, P
   }
   if (locale === "fr") {
     // Pages d'arrivée des QR imprimés (app/data/short-links.ts), hors menus.
-    actions["/offre"] = { intent: "entretien", label: "Offre entretien de chaudière (flyer)", context: "chauffage/entretien-chaudiere" };
+    // Offre flyer : le 2e bouton mène au formulaire de l'offre, pas à l'agenda au prix normal.
+    actions["/offre"] = {
+      intent: "entretien",
+      label: "Offre flyer entretien de chaudière",
+      context: "chauffage/entretien-chaudiere",
+      cta: { label: "Je réserve", href: "#reserver" },
+    };
     actions["/ma-chaudiere"] = { intent: "urgence", label: "Ma chaudière (autocollant)", context: "chauffage/depannage-chaudiere" };
     for (const guide of guides) {
       const href = guideHref(guide);
