@@ -133,6 +133,23 @@ export const pricingPolicy = {
   promoValidity: null as string | null,
 };
 
+/**
+ * Offre imprimée sur le flyer (page /offre, QR radialec.be/f) : entretien de
+ * chaudière gaz. `amount` null = prix normal (`prices.entretienChaudiereGaz`).
+ * Un prix d'offre ne se publie qu'avec une date de fin (`validUntil`, ex.
+ * « 31 décembre 2026 ») et jamais en prix barré. À fixer par le propriétaire
+ * avant l'impression : le flyer et la page doivent annoncer le même prix.
+ */
+export const flyerOffer = {
+  amount: null as number | null,
+  validUntil: null as string | null,
+};
+
+/** Prix de l'offre flyer, tel qu'affiché sur /offre. */
+export function flyerOfferAmount(): number {
+  return flyerOffer.amount ?? prices.entretienChaudiereGaz.amount;
+}
+
 /** Référence à un tarif de la grille, avec libellé/note surchargeables pour le contexte d'une page. */
 export interface PriceRef {
   key?: PriceKey;

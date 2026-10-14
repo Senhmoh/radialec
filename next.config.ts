@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import { company } from "./app/data/company";
 import { showNl } from "./app/data/visibility";
+import { shortLinkRedirects } from "./app/data/short-links";
 
 const nextConfig: NextConfig = {
   // Deux mises en page racines (français, néerlandais) : la 404 des adresses
@@ -35,6 +36,8 @@ const nextConfig: NextConfig = {
       // Lien court des cartes QR, SMS et WhatsApp : ouvre le formulaire d'avis Google.
       // Temporaire (307) : la cible peut changer sans que les navigateurs gardent l'ancienne.
       { source: "/avis", destination: company.google.reviewUrl, permanent: false },
+      // Liens courts des QR codes imprimés (flyer /f, autocollant /s, carte /c) : app/data/short-links.ts.
+      ...shortLinkRedirects(),
     ];
   },
 };

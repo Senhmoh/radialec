@@ -321,6 +321,7 @@ Elle ne part qu'avec un expéditeur sur un domaine vérifié dans Resend (`QUOTE
 | `prompts/refonte/07-suivi-ads-clarity.md` | Mise en route de Google Ads et Clarity |
 | `prompts/refonte/kit-avis/` | Cartes QR à imprimer (format imprimeur et planche A4), QR seul, messages SMS/WhatsApp, modèles de réponse aux avis |
 | `scripts/telegram.mjs` | Mise en route du bot (`npm run telegram -- ids`, puis `-- test`) |
+| `prompts/refonte/09-qr-code.md` | QR codes imprimés : liens courts `/f`, `/s`, `/c`, pages `/offre` et `/ma-chaudiere`, tags, prix du flyer à décider |
 | `prompts/refonte/09-nl.md` | Version néerlandaise : pages faites, reste à faire, relecture avant mise en ligne |
 | `scripts/check-links.mjs` | `npm run check:links` : liens internes cassés sur un serveur lancé |
 
@@ -332,3 +333,4 @@ Elle ne part qu'avec un expéditeur sur un domaine vérifié dans Resend (`QUOTE
 | 11/10 | Devis refait (deux colonnes, plus de ticket) ; boutons par intention, WhatsApp, vrais avis Google ; alerte Telegram ; suivi Ads et Clarity préparés ; kit avis et `/avis` ; ménage du code |
 | 12/10 | E-mails de confirmation client (devis avec récapitulatif, rappel) ; champ e-mail facultatif sur le rappel ; `/logo-signature.png` |
 | 13/10 | Textes réécrits pour ne plus sonner « IA » ; urgences 24h/24 ; carte « Joignable maintenant » sur les pages métier ; début de la version néerlandaise (phase 1, invisible en production) |
+| 14/10 | Liens courts des QR imprimés (`/f` flyer avec code zone, `/s` autocollant, `/c` carte) et pages d'arrivée `/offre` et `/ma-chaudiere` |

@@ -59,6 +59,9 @@ export function getPageActions(locale: Locale = defaultLocale): Record<string, P
     actions[serviceHref(service)] = { intent: service.intent, label: service.name, context: `${service.category}/${service.slug}` };
   }
   if (locale === "fr") {
+    // Pages d'arrivée des QR imprimés (app/data/short-links.ts), hors menus.
+    actions["/offre"] = { intent: "entretien", label: "Offre entretien de chaudière (flyer)", context: "chauffage/entretien-chaudiere" };
+    actions["/ma-chaudiere"] = { intent: "urgence", label: "Ma chaudière (autocollant)", context: "chauffage/depannage-chaudiere" };
     for (const guide of guides) {
       const href = guideHref(guide);
       actions[href] = { intent: guide.intent, label: guide.topic, context: href.replace(/^\//, "") };

@@ -33,7 +33,16 @@ type Moment = "open" | "closed";
  * - la note Google.
  * Le bouton d'appel du haut de page reste l'action n° 1.
  */
-export function ReachPanel({ context, label }: { context: string; label: string }) {
+export function ReachPanel({
+  context,
+  label,
+  location = "haut_page_metier",
+}: {
+  context: string;
+  label: string;
+  /** Emplacement du formulaire, envoyé avec la conversion (GA4 `form_location`). */
+  location?: string;
+}) {
   // Avant le montage : texte neutre (même rendu serveur / client), puis l'heure réelle.
   const [moment, setMoment] = useState<Moment | null>(null);
   const [hour, setHour] = useState<number | null>(null);
@@ -95,7 +104,7 @@ export function ReachPanel({ context, label }: { context: string; label: string 
         setStatus("success");
         trackLead(
           "rappel",
-          { topic: callback.topic || "autre", callback_time: "asap", form_location: "haut_page_metier" },
+          { topic: callback.topic || "autre", callback_time: "asap", form_location: location },
           { reference: data.reference, phone: callback.phone }
         );
         return;
