@@ -334,4 +334,4 @@ Elle ne part qu'avec un expéditeur sur un domaine vérifié dans Resend (`QUOTE
 | 12/10 | E-mails de confirmation client (devis avec récapitulatif, rappel) ; champ e-mail facultatif sur le rappel ; `/logo-signature.png` |
 | 13/10 | Textes réécrits pour ne plus sonner « IA » ; urgences 24h/24 ; carte « Joignable maintenant » sur les pages métier ; début de la version néerlandaise (phase 1, invisible en production) |
 | 14/10 | Liens courts des QR imprimés (`/f` flyer avec code zone, `/s` autocollant, `/c` carte) et pages d'arrivée `/offre` et `/ma-chaudiere` |
-| 15/10 | Offre flyer : entretien gaz 129 € jusqu'au 31/12/2026 (fin automatique), page `/offre` refaite en page d'offre avec formulaire « Je réserve », code zone du flyer, demandes du flyer signalées « 🟠 FLYER » (e-mail, Telegram) et prix rappelé au client |
+| 15/10 | Offre flyer : entretien gaz 129 € jusqu'au 31/12/2026 (fin automatique), page `/offre` refaite en page d'offre avec formulaire « Je réserve », code zone du flyer, demandes du flyer signalées « 🟠 FLYER » (e-mail, Telegram) et prix rappelé au client ; version néerlandaise de l'offre `/nl/aanbod` (QR `/fn`), seule page néerlandaise en ligne |

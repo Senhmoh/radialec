@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 import { company } from "./app/data/company";
-import { showNl } from "./app/data/visibility";
+import { nlLiveSegments, showNl } from "./app/data/visibility";
 import { shortLinkRedirects } from "./app/data/short-links";
 
 const nextConfig: NextConfig = {
@@ -16,7 +16,8 @@ const nextConfig: NextConfig = {
         ? []
         : [
             { source: "/nl", destination: "/nl-indisponible" },
-            { source: "/nl/:path*", destination: "/nl-indisponible" },
+            // Sauf les pages déjà en ligne (offre flyer : /nl/aanbod) et l'image de partage néerlandaise.
+            { source: `/nl/:path((?!(?:${[...nlLiveSegments, "opengraph-image"].join("|")})(?:$|[-/])).*)`, destination: "/nl-indisponible" },
           ],
       afterFiles: [],
       fallback: [],

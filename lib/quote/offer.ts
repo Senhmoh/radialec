@@ -17,6 +17,8 @@ export interface FlyerLead {
   detail: string;
   /** Ligne du récapitulatif envoyé au client, tant que l'offre court. */
   customer?: string;
+  /** Même ligne pour un client du flyer néerlandais. */
+  customerNl?: string;
 }
 
 /** Code zone : lettres, chiffres, tiret (comme les liens courts /f/<zone>). */
@@ -31,6 +33,7 @@ export function flyerLead(
   if (input.offre !== "flyer" && input.attribution.utm_source !== "flyer") return undefined;
   const code = cleanZoneCode(input.code) ?? cleanZoneCode(input.attribution.utm_content);
   const offer = flyerOfferState(now);
+  const offerNl = flyerOfferState(now, "nl");
   const until = offer.untilLabel ? ` jusqu'au ${offer.untilLabel}` : "";
   return {
     code,
@@ -39,5 +42,8 @@ export function flyerLead(
       ? `Offre flyer : entretien chaudière gaz à ${offer.amount} € TVAC${until}`
       : `Offre flyer terminée${offer.untilLabel ? ` (${offer.untilLabel})` : ""} : prix normal, entretien gaz ${prices.entretienChaudiereGaz.amount} € TVAC`,
     customer: offer.active ? `Entretien de chaudière gaz à ${offer.amount}€ TVAC (offre flyer${until})` : undefined,
+    customerNl: offer.active
+      ? `Onderhoud van uw gasketel aan ${offer.amount}€ btw incl. (flyeraanbod${offerNl.untilLabel ? ` tot ${offerNl.untilLabel}` : ""})`
+      : undefined,
   };
 }

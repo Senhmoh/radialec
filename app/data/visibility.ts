@@ -15,3 +15,9 @@ export function isVisible(item: { draft?: boolean }): boolean {
 // pas de sélecteur de langue, pas de hreflang ni d'entrée dans le plan du site).
 export const nlPublished = false;
 export const showNl = nlPublished || showDrafts;
+
+// Pages néerlandaises déjà en ligne avant le reste (/nl/<segment>) : la page
+// d'offre du flyer néerlandais (lien court /fn, 15/10/2026). Tant que le site
+// néerlandais est masqué, leurs liens vers d'autres pages mènent aux pages
+// françaises (lib/i18n/routes.ts, routeLocale).
+export const nlLiveSegments = ["aanbod"];

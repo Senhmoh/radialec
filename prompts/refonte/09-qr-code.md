@@ -29,6 +29,8 @@ Les redirections sont servies par le site lui-même : aucun service de QR payant
 | Flyer, zone WO1 | `https://radialec.be/f/WO1` | `/offre?utm_source=flyer&utm_medium=imprime&utm_campaign=entretien-129&utm_content=WO1` |
 | Flyer, autre zone | `https://radialec.be/f/KR1` (un code par zone : lettres, chiffres, tiret, 12 caractères max) | idem, `utm_content=KR1` |
 | Flyer sans zone | `https://radialec.be/f` | idem, sans `utm_content` |
+| Flyer en néerlandais, zone WO1 | `https://radialec.be/fn/WO1` | `/nl/aanbod?utm_source=flyer&utm_medium=imprime&utm_campaign=entretien-129-nl&utm_content=WO1` |
+| Flyer en néerlandais sans zone | `https://radialec.be/fn` | idem, sans `utm_content` |
 | Autocollant chaudière | `https://radialec.be/s` | `/ma-chaudiere?utm_source=autocollant&utm_medium=imprime&utm_campaign=autocollant-chaudiere` |
 | Carte de visite | `https://radialec.be/c` | `/?utm_source=carte&utm_medium=imprime&utm_campaign=carte-visite` |
 
@@ -36,7 +38,14 @@ Les redirections sont servies par le site lui-même : aucun service de QR payant
 - **Codes zone :** n'importe quel code fonctionne sans rien changer sur le site. Tenir la liste des codes à côté de la liste des communes du flyer.
 - **`utm_medium` = `imprime`, sans accent :** un accent dans une URL devient `imprim%C3%A9` et se lit mal dans les rapports.
 
-### Les deux pages d'arrivée (non indexées, hors menus, hors plan du site)
+### Les pages d'arrivée (non indexées, hors menus, hors plan du site)
+
+**Version néerlandaise (15/10/2026).** `/nl/aanbod` est la même page que `/offre`, en néerlandais. QR : `radialec.be/fn`.
+- **Contenu :** `app/data/nl/offre.ts` ; gabarit commun : `app/sections/OfferPage.tsx`.
+- **Seule page néerlandaise en ligne** (`nlLiveSegments`, `app/data/visibility.ts`).
+- **Ses liens** (menu, pied de page, confidentialité, cookies) mènent aux pages françaises, jusqu'à la publication du site néerlandais.
+- **Les demandes** arrivent avec « 🟠 FLYER WO1 » et « 🇳🇱 NL ». Le client reçoit sa confirmation en néerlandais, avec « Uw aanbod : … 129 € ».
+
 
 - **`/offre` (flyer).** Une page d'offre, de haut en bas :
   - le prix en grand ;

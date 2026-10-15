@@ -180,6 +180,12 @@ function render(email: CustomerEmail): { html: string; text: string } {
   return { html, text };
 }
 
+/** Ligne « Votre offre » du récapitulatif (client du flyer, offre en cours) : le prix par écrit. */
+function flyerRecap(flyer: FlyerLead | undefined, locale: Locale): [string, string][] {
+  const line = locale === "nl" ? flyer?.customerNl : flyer?.customer;
+  return line ? [[locale === "nl" ? "Uw aanbod" : "Votre offre", line]] : [];
+}
+
 const quoteCopy = {
   fr: {
     recap: {
@@ -234,7 +240,7 @@ export function buildQuoteConfirmation(input: QuoteEmailInput) {
   const l = quoteLabels(locale);
   const slot = quote.callbackSlot === "indifferent" ? "" : `, ${label(l.callbackSlots, quote.callbackSlot).toLowerCase()}`;
   const recap: [string, string][] = [
-    ...(input.flyer?.customer && input.locale === "fr" ? ([["Votre offre", input.flyer.customer]] as [string, string][]) : []),
+    ...flyerRecap(input.flyer, input.locale),
     [c.recap.service, input.customerLabels.service],
     [c.recap.category, input.customerLabels.category],
     ...(input.customerLabels.price ? ([[c.recap.price, input.customerLabels.price]] as [string, string][]) : []),
@@ -326,7 +332,7 @@ export function buildCallbackConfirmation(input: {
   const rendezVous = callback.purpose === "rendez-vous";
   const when = callbackWhen(callback, locale);
   const recap: [string, string][] = [
-    ...(input.flyer?.customer && locale === "fr" ? ([["Votre offre", input.flyer.customer]] as [string, string][]) : []),
+    ...flyerRecap(input.flyer, locale),
     [c.reason, rendezVous ? c.reasonAppointment : c.reasonCallback],
     [c.phone, callback.phone],
     [c.moment, quoteLabels(locale).callbackTimes[callback.time]],

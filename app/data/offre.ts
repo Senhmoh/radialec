@@ -11,10 +11,19 @@ import type { FaqItem, Feature, ImageSpec } from "./services/types";
 const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1);
 const payment = lowerFirst(pricingPolicy.payment ?? "");
 
+export type OffreContent = ReturnType<typeof offreContent>;
+
 export function offreContent(offer: FlyerOfferState) {
   const price = `${offer.amount}€`;
   const until = offer.untilLabel;
   return {
+    /** Adresse de la page, ancre du formulaire, libellés propres à la page. */
+    path: "/offre",
+    anchor: "reserver",
+    vat: "TVAC",
+    topic: "Offre flyer entretien de chaudière",
+    bookingLabel: "Ou choisissez votre créneau en ligne",
+    faqTitle: "Vos questions sur l'offre",
     metaTitle: offer.active ? `Entretien de chaudière gaz à ${price} : offre flyer` : "Entretien de chaudière gaz à Bruxelles",
     metaDescription: `Entretien de chaudière gaz à ${price} TVAC à Bruxelles${offer.active && until ? ` jusqu'au ${until}` : ""} : technicien agréé, attestation le jour même. Laissez votre numéro, on vous rappelle.`,
     eyebrow: offer.active ? `Offre flyer · jusqu'au ${until}` : `Offre flyer terminée${until ? ` le ${until}` : ""}`,

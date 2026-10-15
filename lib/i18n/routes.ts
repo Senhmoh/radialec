@@ -1,4 +1,6 @@
 import type { ServiceCategory } from "@/app/data/services/types";
+// Chemin relatif : ce fichier est aussi lu par next.config.ts (via company.ts).
+import { showNl } from "../../app/data/visibility";
 import { defaultLocale, type Locale } from "./locale";
 
 // Adresses des pages fixes et des pages métier dans chaque langue. Les pages
@@ -51,12 +53,21 @@ export function hasPage(key: PageKey, locale: Locale): boolean {
   return translatedPages[locale].includes(key);
 }
 
+/**
+ * Langue des pages vers lesquelles on fait un lien. Néerlandais pas encore en
+ * ligne (app/data/visibility.ts) : une page néerlandaise déjà publiée (l'offre
+ * flyer) renvoie vers les pages françaises, jamais vers une adresse masquée.
+ */
+export function routeLocale(locale: Locale): Locale {
+  return locale === "nl" && !showNl ? "fr" : locale;
+}
+
 export function pagePath(key: PageKey, locale: Locale = defaultLocale): string {
-  return pagePaths[key][locale];
+  return pagePaths[key][routeLocale(locale)];
 }
 
 export function categoryPath(category: ServiceCategory, locale: Locale = defaultLocale): string {
-  return categoryPaths[category][locale];
+  return categoryPaths[category][routeLocale(locale)];
 }
 
 /** Ancre du formulaire « Être rappelé » sur la page contact. */

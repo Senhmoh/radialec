@@ -60,6 +60,15 @@ export function getPageActions(locale: Locale = defaultLocale): Record<string, P
   for (const service of localeServices(locale)) {
     actions[serviceHref(service)] = { intent: service.intent, label: service.name, context: `${service.category}/${service.slug}` };
   }
+  if (locale === "nl") {
+    // Flyeraanbod (/nl/aanbod) : le 2e bouton mène au formulaire de l'offre.
+    actions["/nl/aanbod"] = {
+      intent: "entretien",
+      label: "Flyeraanbod ketelonderhoud",
+      context: "chauffage/entretien-chaudiere",
+      cta: { label: "Ik reserveer", href: "#reserveren" },
+    };
+  }
   if (locale === "fr") {
     // Pages d'arrivée des QR imprimés (app/data/short-links.ts), hors menus.
     // Offre flyer : le 2e bouton mène au formulaire de l'offre, pas à l'agenda au prix normal.

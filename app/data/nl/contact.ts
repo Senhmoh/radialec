@@ -12,7 +12,7 @@ export const contactNl: ContactContent = {
   header: {
     eyebrow: "Contact · Brussel en omgeving",
     title: "Neem contact op met Radialec, uw technicus in Brussel",
-    intro: `Bellen gaat het snelst: we nemen ${promises.availability} op van 10u tot 21u, en ${promises.emergency} voor dringende gevallen. Schrijft u liever? Vraag een offerte aan, maak een afspraak of laat uw nummer achter.`,
+    intro: `Bellen gaat het snelst: we zijn ${promises.availability} bereikbaar van 10u tot 21u, en ${promises.emergency} voor dringende gevallen. Schrijft u liever? Vraag een offerte aan, maak een afspraak of laat uw nummer achter.`,
   },
   callback: {
     eyebrow: "Laat u terugbellen",

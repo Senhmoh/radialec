@@ -6,7 +6,7 @@
 // (`companyCopy.nl`) : un composant lit companyText(locale).
 
 // Chemin relatif : ce fichier est aussi lu par next.config.ts (sans alias @/).
-import { callbackAnchor, pagePath } from "../../lib/i18n/routes";
+import { callbackAnchor, pagePath, routeLocale } from "../../lib/i18n/routes";
 import type { Locale } from "../../lib/i18n/locale";
 
 /** Actions mesurées comme conversions Google Ads (lib/tracking.ts). */
@@ -259,7 +259,7 @@ export function contactActionHref(key: ContactActionKey, context?: string, local
         ? pagePath("devis", locale)
         : key === "rendezVous"
           ? pagePath("rendezVous", locale)
-          : `${pagePath("contact", locale)}#${callbackAnchor[locale]}`;
+          : `${pagePath("contact", locale)}#${callbackAnchor[routeLocale(locale)]}`;
   if (!href) return `/contact#${contactActions[key].anchor}`;
   if (!context || !href.startsWith("/")) return href;
   // La requête doit précéder l'ancre : /contact?service=…#formulaire-rappel.

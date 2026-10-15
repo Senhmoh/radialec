@@ -133,6 +133,11 @@ export const pricingPolicy = {
   promoValidity: null as string | null,
 };
 
+/** Conditions de `pricingPolicy` en néerlandais (même contenu). */
+export const pricingPolicyNl = {
+  payment: "Cash of via een bankapp (Wero, Payconiq)" as string | null,
+};
+
 /**
  * Offre imprimée sur le flyer (page /offre, QR radialec.be/f) : entretien de
  * chaudière gaz à prix réduit, pour une durée limitée. Décidée le 15/10/2026
@@ -160,12 +165,12 @@ export interface FlyerOfferState {
   untilLabel?: string;
 }
 
-/** État de l'offre flyer à une date donnée (jour de Bruxelles). */
-export function flyerOfferState(now: Date = new Date()): FlyerOfferState {
+/** État de l'offre flyer à une date donnée (jour de Bruxelles) ; date affichée dans la langue demandée. */
+export function flyerOfferState(now: Date = new Date(), locale: Locale = "fr"): FlyerOfferState {
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Brussels" }).format(now);
   const active = flyerOffer.amount !== null && (!flyerOffer.until || today <= flyerOffer.until);
   const untilLabel = flyerOffer.until
-    ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
+    ? new Intl.DateTimeFormat(locale === "nl" ? "nl-BE" : "fr-BE", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
         new Date(`${flyerOffer.until}T12:00:00Z`)
       )
     : undefined;

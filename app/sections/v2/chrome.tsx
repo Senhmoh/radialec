@@ -45,6 +45,7 @@ export function FinalCtaV2({
   tone = "lavender",
   secondary = "devis",
   secondaryAction,
+  rappelHref,
 }: {
   eyebrow: string;
   title: string;
@@ -61,6 +62,8 @@ export function FinalCtaV2({
   secondary?: FinalCtaSecondary;
   /** 2e action propre à la page (ex. le formulaire de l'offre flyer), à la place de `secondary`. */
   secondaryAction?: { href: string; label: string };
+  /** Lien « Être rappelé » propre à la page (ex. le formulaire de l'offre). */
+  rappelHref?: string;
 }) {
   const flame = tone === "flame";
   const whatsapp = !secondaryAction && secondary === "whatsapp";
@@ -107,7 +110,7 @@ export function FinalCtaV2({
           </div>
           <p className={cn("mt-5 text-sm font-medium", flame ? "text-white" : "text-night/70")}>
             {t.common.noTimeNow}{" "}
-            <Link href={contactActionHref("rappel", context, locale)} className={linkClass}>
+            <Link href={rappelHref ?? contactActionHref("rappel", context, locale)} className={linkClass}>
               {t.common.callback}
             </Link>
             {!whatsapp && (

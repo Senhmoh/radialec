@@ -29,6 +29,8 @@ export const shortLinks: ShortLink[] = [
   // Flyer : lecteur froid, il doit retrouver l'offre qui l'a fait scanner.
   // La campagne porte le prix affiché (entretien-149, entretien-129…).
   { path: "/f", destination: "/offre", source: "flyer", medium: "imprime", campaign: `entretien-${flyerOfferAmount()}`, zone: true },
+  // Flyer en néerlandais : même offre, page /nl/aanbod (en ligne avant le reste du site néerlandais).
+  { path: "/fn", destination: "/nl/aanbod", source: "flyer", medium: "imprime", campaign: `entretien-${flyerOfferAmount()}-nl`, zone: true },
   // Autocollant sur la chaudière : client qui a un souci ou veut reprogrammer, il veut appeler.
   { path: "/s", destination: "/ma-chaudiere", source: "autocollant", medium: "imprime", campaign: "autocollant-chaudiere" },
   // Carte de visite : remise après un échange, public qui veut voir services et tarifs.
