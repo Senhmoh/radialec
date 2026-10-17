@@ -5,6 +5,40 @@ import { fr } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 import type { getPolicyRows, ResolvedGroup } from "../../data/tarifs";
 import { toneBg, type Tone } from "../v2/tones";
+import type { Locale } from "@/lib/i18n/locale";
+import { pagePath } from "@/lib/i18n/routes";
+import { getRequestLocale } from "@/lib/i18n/server";
+
+const copy: Record<Locale, { eyebrow: string; title: string; intro: string; services: string; onQuote: string; vat: string; conditions: string; vatRow: string; vatIncluded: string; pros: string; prosLink: string }> = {
+  fr: {
+    eyebrow: "La carte complète",
+    title: "Tous nos tarifs à Bruxelles, métier par métier",
+    intro:
+      "Prix TVAC. Entretiens et dépannages à prix fixe ; installations et rénovations sur devis gratuit, détaillé et sans engagement.",
+    services: "Les services",
+    onQuote: "sur devis",
+    vat: "TVAC",
+    conditions: "Conditions",
+    vatRow: "TVA",
+    vatIncluded: "comprise dans tous les prix",
+    pros: "Syndic, gestionnaire ou copropriété ?",
+    prosLink: "Parlons de vos parties communes",
+  },
+  nl: {
+    eyebrow: "De volledige kaart",
+    title: "Al onze tarieven in Brussel, vak per vak",
+    intro:
+      "Prijzen btw inbegrepen. Onderhoud en depannage aan een vaste prijs; installaties en renovaties op gratis offerte, gedetailleerd en vrijblijvend.",
+    services: "De diensten",
+    onQuote: "op offerte",
+    vat: "btw incl.",
+    conditions: "Voorwaarden",
+    vatRow: "Btw",
+    vatIncluded: "inbegrepen in alle prijzen",
+    pros: "Syndicus, beheerder of mede-eigendom?",
+    prosLink: "Laten we het over uw gemene delen hebben",
+  },
+};
 
 /** Répartit les métiers (dans l'ordre) en deux colonnes de hauteur équivalente. */
 function balanceColumns(groups: ResolvedGroup[]): ResolvedGroup[][] {
@@ -34,6 +68,8 @@ export function PriceMenu({
   /** Conditions générales (pied de carte), seulement celles qui sont décidées. */
   policies: ReturnType<typeof getPolicyRows>;
 }) {
+  const locale = getRequestLocale();
+  const c = copy[locale];
   return (
     <section className={cn("section-y", toneBg[tone])} aria-labelledby="carte-tarifs">
       <div className="container">
@@ -48,14 +84,11 @@ export function PriceMenu({
           />
 
           <div className="mx-auto max-w-2xl text-center">
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-amber">La carte complète</p>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-amber">{c.eyebrow}</p>
             <h2 id="carte-tarifs" className="mt-4 text-3xl font-bold tracking-tighter md:text-5xl md:leading-[1.08]">
-              {fr("Tous nos tarifs à Bruxelles, métier par métier")}
+              {fr(c.title)}
             </h2>
-            <p className="mt-5 text-white/70 md:text-lg">
-              Prix TVAC. Entretiens et dépannages à prix fixe ; installations et rénovations sur devis
-              gratuit, détaillé et sans engagement.
-            </p>
+            <p className="mt-5 text-white/70 md:text-lg">{c.intro}</p>
           </div>
 
           <div className="mt-14 grid gap-x-14 gap-y-12 lg:grid-cols-2">
@@ -70,7 +103,7 @@ export function PriceMenu({
                           href={group.href}
                           className="group hidden flex-shrink-0 items-center gap-1 text-sm font-semibold text-white/60 hover:text-amber sm:inline-flex"
                         >
-                          Les services
+                          {c.services}
                           <BsArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                         </Link>
                       </div>
@@ -96,11 +129,11 @@ export function PriceMenu({
                                 )}
                                 {line.amount === undefined ? (
                                   <span className="text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
-                                    sur devis
+                                    {c.onQuote}
                                   </span>
                                 ) : (
                                   <span className="text-xl font-bold text-amber">
-                                    {line.amount}€<span className="ml-1 text-[10px] font-normal text-white/45">TVAC</span>
+                                    {line.amount}€<span className="ml-1 text-[10px] font-normal text-white/45">{c.vat}</span>
                                   </span>
                                 )}
                               </span>
@@ -116,12 +149,12 @@ export function PriceMenu({
           </div>
 
           <div className="mt-14 border-t-2 border-white/15 pt-8">
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-amber">Conditions</p>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-amber">{c.conditions}</p>
             <ul className="mt-4 grid gap-x-14 gap-y-3 text-sm sm:grid-cols-2">
               <li className="flex items-baseline gap-3">
-                <span className="text-white/80">TVA</span>
+                <span className="text-white/80">{c.vatRow}</span>
                 <span aria-hidden="true" className="min-w-[1.5rem] flex-1 -translate-y-1 border-b-2 border-dotted border-white/15" />
-                <span className="font-mono font-semibold text-white">comprise dans tous les prix</span>
+                <span className="font-mono font-semibold text-white">{c.vatIncluded}</span>
               </li>
               {policies.map((policy) => (
                 <li key={policy.label} className="flex items-baseline gap-3">
@@ -134,9 +167,9 @@ export function PriceMenu({
           </div>
 
           <p className="mt-12 text-center text-sm text-white/60">
-            Syndic, gestionnaire ou copropriété ?{" "}
-            <Link href="/professionnels" className="font-semibold text-white underline underline-offset-4 hover:text-amber">
-              Parlons de vos parties communes
+            {c.pros}{" "}
+            <Link href={pagePath("professionnels", locale)} className="font-semibold text-white underline underline-offset-4 hover:text-amber">
+              {c.prosLink}
             </Link>
           </p>
         </div>

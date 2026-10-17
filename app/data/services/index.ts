@@ -4,6 +4,10 @@ import { plomberieServices } from "./plomberie";
 import { climatisationServices } from "./climatisation";
 import { professionnelsServices } from "./professionnels";
 import { chauffageServicesNl } from "../nl/services/chauffage";
+import { plomberieServicesNl } from "../nl/services/plomberie";
+import { climatisationServicesNl } from "../nl/services/climatisation";
+import { electriciteServicesNl } from "../nl/services/electricite";
+import { professionnelsServicesNl } from "../nl/services/professionnels";
 import { isVisible, showNl } from "../visibility";
 import { defaultLocale, type Locale } from "@/lib/i18n/locale";
 import type { Service, ServiceCategory, ServiceRef } from "./types";
@@ -27,7 +31,13 @@ export const services: Service[] = [
 // `slug` que la page française correspondante (ce sont ses identifiants : liens
 // entre pages, contexte des formulaires), adresse néerlandaise dans `path`.
 // Une page pas encore traduite n'existe tout simplement pas en néerlandais.
-const servicesNl: Service[] = showNl ? [...chauffageServicesNl].filter(isVisible) : [];
+const servicesNl: Service[] = showNl ? [
+      ...chauffageServicesNl,
+      ...electriciteServicesNl,
+      ...plomberieServicesNl,
+      ...climatisationServicesNl,
+      ...professionnelsServicesNl,
+    ].filter(isVisible) : [];
 
 export function localeServices(locale: Locale = defaultLocale): Service[] {
   return locale === "nl" ? servicesNl : services;

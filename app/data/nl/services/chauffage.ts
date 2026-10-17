@@ -544,4 +544,792 @@ export const chauffageServicesNl: Service[] = [
       "Depannage van uw ketel binnen 24 uur in de 19 Brusselse gemeenten en in de rand, in Vlaams-Brabant en Waals-Brabant.",
     draft: false,
   },
+
+  // --- Boiler & geiser ---
+  {
+    category: "chauffage",
+    slug: "entretien-chauffe-eau-boiler",
+    path: "/nl/verwarming/onderhoud-boiler",
+    title: "Boiler & geiser",
+    name: "Onderhoud van boiler en geiser",
+    pageTitle: "Onderhoud van uw boiler of geiser in Brussel",
+    metaTitle: "Onderhoud boiler en geiser in Brussel",
+    metaDescription: `Onderhoud van uw boiler of elektrische boiler in Brussel: ontkalking, anode, veiligheidsgroep. Vanaf ${prices.entretienChauffeEau.amount}€ btw incl., prijs op de site. Maak een afspraak.`,
+    summary:
+      "Ontkalking, controle van de anode en de veiligheidsgroep: betrouwbaar warm water en een toestel dat langer meegaat.",
+    icon: "drop",
+    intent: "entretien",
+    price: { key: "entretienChauffeEau", note: "Onderhoud gasboiler" },
+    hero: {
+      eyebrow: "Warm water · Onderhoud",
+      intro:
+        "Brussels leidingwater is kalkrijk: zonder onderhoud verkalkt uw boiler, verbruikt hij meer en geeft hij het uiteindelijk op. Onze technici ontkalken, controleren de anode en de veiligheidsgroep, voor betrouwbaar warm water het hele jaar door.",
+      image: { asset: "P17", alt: "Verkalkte anode uit een elektrische boiler gehaald" },
+    },
+    facts: [
+      { icon: "euro", stat: `Vanaf ${prices.entretienChauffeEau.amount}€ btw incl.`, label: "Onderhoud gasboiler" },
+      { icon: "calendarCheck", stat: "Snel een afspraak", label: "Meestal binnen 24 uur" },
+      { icon: "tools", stat: "Alle types", label: "Elektrische boiler, voorraadvat, combiketel" },
+      { icon: "shield", stat: "2 jaar garantie", label: "Op ons werk" },
+    ],
+    blocks: [
+      {
+        type: "features",
+        title: "Waarom uw boiler laten onderhouden?",
+        intro: "In Brussel is het leidingwater hard: kalk zet zich jaar na jaar af op het verwarmingselement en op de bodem van het vat.",
+        items: [
+          {
+            icon: "piggy",
+            title: "Minder verbruik",
+            text: "Een verkalkt verwarmingselement verwarmt slechter: uw boiler draait langer voor dezelfde hoeveelheid warm water.",
+          },
+          {
+            icon: "clock",
+            title: "Een langere levensduur",
+            text: "De anode beschermt het vat tegen roest. Op tijd vervangen voorkomt ze het lek waardoor het hele toestel eruit moet.",
+          },
+          {
+            icon: "shield",
+            title: "Meer veiligheid",
+            text: "De veiligheidsgroep beschermt het vat tegen overdruk. Dan moet ze wel werken: we testen ze bij elk onderhoud.",
+          },
+        ],
+      },
+      {
+        type: "checklist",
+        title: "Wat het onderhoud omvat",
+        items: [
+          "Gedeeltelijk of volledig aftappen van het vat, afhankelijk van de staat",
+          "Ontkalking van het verwarmingselement en verwijderen van afzetting",
+          "Controle van de anode, vervanging voorgesteld als ze versleten is",
+          "Test van de veiligheidsgroep en het overdrukventiel",
+          "Controle van de thermostaat en de ingestelde temperatuur",
+          "Controle van de aansluitingen en de dichtheid",
+          "Controle van de elektrische voeding (elektrische boiler)",
+          "Tips om kalk en verbruik te beperken",
+        ],
+        note: "Moet er een onderdeel vervangen worden (anode, verwarmingselement, veiligheidsgroep)? U kent de prijs voor we eraan beginnen.",
+        image: { asset: "P19", alt: "Verkalkt verwarmingselement van een boiler naast een nieuw exemplaar" },
+      },
+      {
+        type: "options",
+        title: "Welk toestel hebt u?",
+        intro:
+          "Het onderhoud hangt af van hoe uw warm water gemaakt wordt. Twijfelt u, dan volstaat een foto van het toestel om u verder te helpen.",
+        items: [
+          {
+            title: "Elektrische boiler",
+            text: "Een watervat dat verwarmd wordt door een elektrisch verwarmingselement. Dit toestel heeft het meest last van kalk.",
+            points: ["Ontkalking van het verwarmingselement", "Controle van de anode", "Test van de veiligheidsgroep"],
+          },
+          {
+            title: "Voorraadvat gekoppeld aan de ketel",
+            text: "Het water in het vat wordt via een spiraal door uw ketel verwarmd. Het wordt onderhouden zoals een boiler.",
+            points: ["Controle van de anode en de veiligheidsgroep", "Controle van de sonde en de spiraal"],
+          },
+          {
+            title: "Combiketel",
+            text: "Geen voorraad: de ketel verwarmt het water zelf, op het moment dat u het nodig hebt.",
+            points: [
+              "Gecontroleerd tijdens het [ketelonderhoud](/nl/verwarming/ketelonderhoud)",
+              "Ontkalking van de sanitaire warmtewisselaar indien nodig",
+            ],
+          },
+        ],
+      },
+      {
+        type: "features",
+        layout: "list",
+        title: "Tekenen dat uw boiler onderhoud nodig heeft",
+        items: [
+          { icon: "tempLow", title: "Lauw water of water dat snel afkoelt", text: "Het verkalkte verwarmingselement krijgt het vat niet meer helemaal warm." },
+          { icon: "volume", title: "Geluiden zoals een waterkoker", text: "Kraken of fluiten tijdens het opwarmen: er zit kalk op de bodem van het vat." },
+          { icon: "drop", title: "Troebel of roestig water", text: "Mogelijk teken van een versleten anode en een vat dat begint te roesten." },
+          {
+            icon: "water",
+            title: "Veiligheidsgroep die blijft lekken",
+            text: "Een beetje water tijdens het opwarmen is normaal; water dat voortdurend loopt niet.",
+          },
+          { icon: "euro", title: "Hogere elektriciteitsfactuur", text: "Een vuile boiler verbruikt meer voor hetzelfde comfort." },
+          {
+            icon: "calendar",
+            title: "Meer dan 2 jaar geen onderhoud",
+            text: "Met water dat zo kalkrijk is als in Brussel is een onderhoud om de 1 à 2 jaar meestal aangeraden.",
+          },
+        ],
+      },
+      {
+        type: "pricing",
+        title: "Tarieven onderhoud boiler en geiser",
+        items: [{ key: "entretienChauffeEau" }, { key: "entretienBoilerElectrique" }],
+      },
+    ],
+    faqTitle: "Veelgestelde vragen over het onderhoud van boiler en geiser",
+    faqs: [
+      {
+        id: 1,
+        question: "Hoeveel kost het onderhoud van een boiler in Brussel?",
+        answer: `Het onderhoud van een gasboiler kost **${prices.entretienChauffeEau.amount}€ btw inbegrepen** en dat van een elektrische boiler **${prices.entretienBoilerElectrique.amount}€ btw inbegrepen**. Moet er een onderdeel vervangen worden, dan kent u de prijs voor de interventie.`,
+      },
+      {
+        id: 2,
+        question: "Hoe vaak moet een boiler ontkalkt worden?",
+        answer: "Met het kalkrijke Brusselse water is een onderhoud om de 1 à 2 jaar meestal aangeraden, afhankelijk van hoeveel warm water u gebruikt.",
+      },
+      {
+        id: 3,
+        question: "Waarvoor dient de anode van een boiler?",
+        answer:
+          "De anode slijt in de plaats van het vat, om het tegen roest te beschermen. Is ze opgebruikt, dan begint het vat te roesten: daarom controleert u ze best regelmatig.",
+      },
+      {
+        id: 4,
+        question: "Mijn veiligheidsgroep druppelt, is dat normaal?",
+        answer:
+          "Een beetje water tijdens het opwarmen is normaal: het water zet uit. Loopt ze voortdurend, dan is de veiligheidsgroep waarschijnlijk defect en moet ze vervangen worden.",
+      },
+      {
+        id: 5,
+        question: "Hoelang gaat een boiler mee?",
+        answer: "Gemiddeld 10 à 15 jaar, afhankelijk van de waterkwaliteit en het onderhoud. Een boiler die in Brussel nooit ontkalkt wordt, veroudert merkbaar sneller.",
+      },
+      {
+        id: 6,
+        question: "Moet ik de boiler uitzetten tijdens de vakantie?",
+        answer:
+          "Voor een korte afwezigheid zet u de temperatuur gewoon lager. Voor een lange afwezigheid kunt u hem uitzetten: laat hem bij uw terugkeer minstens één keer tot 60 °C opwarmen voor u het water gebruikt.",
+      },
+      {
+        id: 7,
+        question: "Herstelt u ook boilers in panne?",
+        answer: "Ja. Geen warm water meer, een lek, een zekering die springt: we komen voor een [depannage](/nl/sanitair/depannage) 7 op 7, binnen 24 uur.",
+      },
+    ],
+    related: ["plomberie/detartrage", "chauffage/entretien-chaudiere", "plomberie/depannage", "chauffage/desembouage"],
+    cta: {
+      title: "Wordt uw boiler moe? Maak een afspraak (voor) de panne.",
+      highlight: "(voor)",
+      body: "Elektrische boiler, voorraadvat aan de ketel of combiketel? Maak een afspraak: de technicus ontkalkt, controleert en zegt u in welke staat uw toestel is. De prijs kent u op voorhand.",
+    },
+    draft: false,
+  },
+
+  // --- Ontslibben ---
+  {
+    category: "chauffage",
+    slug: "desembouage",
+    path: "/nl/verwarming/ontslibben",
+    title: "Ontslibben",
+    name: "Ontslibben van de verwarmingsinstallatie",
+    pageTitle: "Uw verwarmingsinstallatie ontslibben in Brussel",
+    metaTitle: "Radiatoren en verwarming ontslibben in Brussel",
+    metaDescription:
+      "Radiatoren onderaan koud, geluiden, hoger verbruik? Ontslibben van uw verwarmingsinstallatie in Brussel door een erkende chauffagist. Gratis offerte binnen 24 uur.",
+    summary:
+      "Slib en roest verstoppen uw radiatoren? We reinigen de hele installatie, zodat de warmte weer gelijk verdeeld wordt en de ketel beschermd is.",
+    icon: "sync",
+    intent: "entretien",
+    hero: {
+      eyebrow: "Verwarming · Radiatoren",
+      intro:
+        "Lauwe radiatoren, onderaan koud, geluiden in de leidingen? Er heeft zich slib opgehoopt in uw installatie. We reinigen de hele installatie: de radiatoren worden weer van boven tot onder warm, en de ketel moet minder hard werken.",
+      image: { asset: "P16", alt: "Slibrijk water uit een verwarmingsinstallatie, naast de ontslibbingsmachine" },
+    },
+    facts: [
+      { icon: "euro", stat: "Gratis offerte", label: "Binnen 24 uur" },
+      { icon: "award", stat: "Erkende chauffagist", label: "Brussel, Vlaanderen, Wallonië" },
+      { icon: "shield", stat: "2 jaar garantie", label: "Op ons werk" },
+      { icon: "calendar", stat: "7 op 7", label: "Wanneer het u past" },
+    ],
+    blocks: [
+      {
+        type: "features",
+        layout: "list",
+        title: "Tekenen van slib in uw verwarmingsinstallatie",
+        intro: "Na verloop van jaren vormen roest, kalk en resten een slib dat zich onderaan de radiatoren en tot in de ketel afzet.",
+        items: [
+          { icon: "tempLow", title: "Radiatoren onderaan koud", text: "Boven wordt het warm, onderaan blijft het koud: het slib ligt in het onderste deel van de radiator." },
+          { icon: "thermometer", title: "Ongelijke warmte tussen de kamers", text: "Sommige radiatoren worden goed warm, andere nauwelijks, ondanks het ontluchten." },
+          { icon: "volume", title: "Stromingsgeluiden", text: "Borrelen, fluiten of tikken in de leidingen en de ketel." },
+          { icon: "drop", title: "Zwart water bij het ontluchten", text: "Zwart of roodachtig water uit de ontluchter wijst op slib en roest." },
+          { icon: "euro", title: "Hoger verbruik", text: "De ketel draait langer om dezelfde temperatuur te halen." },
+          { icon: "alert", title: "Ketel die in storing gaat", text: "Slib remt de waterstroom af en kan de warmtewisselaar oververhitten." },
+        ],
+      },
+      {
+        type: "options",
+        title: "De juiste methode voor uw installatie",
+        intro: "Na de diagnose stellen we de methode voor die past bij de leeftijd en de vervuiling van uw installatie.",
+        items: [
+          {
+            title: "Chemisch ontslibben",
+            text: "Een ontslibbingsmiddel wordt in de installatie gebracht en circuleert terwijl de verwarming werkt, meestal enkele weken, gevolgd door een volledige spoeling.",
+            points: ["Lichte tot matige vervuiling", "Weinig werk ter plaatse", "Ideaal als preventief onderhoud"],
+          },
+          {
+            title: "Hydrodynamisch ontslibben",
+            badge: "Sterk vervuilde installatie",
+            text: "Een ontslibbingspomp laat het water met een hoog debiet circuleren, met wisselende stroomrichting, om de afzetting radiator per radiator los te maken.",
+            points: ["Resultaat zichtbaar in het afgevoerde water", "Vaak gecombineerd met een ontslibbingsmiddel", "Aangeraden voor een nieuwe ketel"],
+          },
+          {
+            title: "De installatie nadien beschermen",
+            text: "Een corrosie-inhibitor in het schone water vertraagt de vorming van nieuw slib. Op de retour van de ketel kan ook een magnetische filter geplaatst worden.",
+            points: ["Corrosie-inhibitor", "Magnetische filter als optie, op offerte", "Tips om minder water bij te vullen"],
+          },
+        ],
+      },
+      {
+        type: "steps",
+        title: "Zo verloopt het ontslibben",
+        steps: [
+          {
+            title: "Diagnose en offerte",
+            description: "We controleren de staat van de installatie, de radiatoren en de ketel, en bezorgen u binnen 24 uur een gratis offerte.",
+          },
+          {
+            title: "Voorbereiding",
+            description: "Afschermen van de werkzone, de ketel afsluiten indien nodig, het materiaal aansluiten.",
+          },
+          { title: "Ontslibben", description: "De installatie radiator per radiator reinigen, tot het water er helder uitkomt." },
+          { title: "Spoelen en beschermen", description: "Vullen met schoon water, inhibitor toevoegen, ontluchten en op druk brengen." },
+          { title: "Eindcontrole", description: "Controle van de warmte van elke radiator en waterzijdig inregelen indien nodig." },
+        ],
+      },
+      {
+        type: "callout",
+        title: "Nieuwe ketel of warmtepomp? Eerst ontslibben",
+        paragraphs: [
+          "Een nieuwe ketel plaatsen op een installatie vol slib betekent dat hij vanaf de eerste winter dezelfde afzetting krijgt. Veel fabrikanten vragen trouwens een schone installatie om hun garantie te laten gelden.",
+          "Voor een [warmtepomp](/nl/verwarming/warmtepomp), die gevoelig is voor de waterkwaliteit van de installatie, geldt dat nog meer. Bij het [vervangen van een ketel](/nl/verwarming/ketel-vervangen) zeggen we u of ontslibben aangeraden is.",
+        ],
+      },
+    ],
+    faqTitle: "Veelgestelde vragen over ontslibben",
+    faqs: [
+      {
+        id: 1,
+        question: "Wat is het ontslibben van een verwarming?",
+        answer:
+          "Het is de volledige reiniging van de centrale verwarming (leidingen, radiatoren, ketel) om slib, roest en kalk te verwijderen die zich met de tijd ophopen.",
+      },
+      {
+        id: 2,
+        question: "Hoe weet ik of mijn radiatoren ontslibd moeten worden?",
+        answer:
+          "Radiatoren die onderaan koud blijven, ongelijke warmte tussen de kamers, geluiden in de leidingen of zwart water bij het ontluchten zijn de meest voorkomende tekenen. Twijfelt u, dan doen wij de diagnose.",
+      },
+      {
+        id: 3,
+        question: "Hoeveel kost ontslibben in Brussel?",
+        answer:
+          "De prijs hangt af van het aantal radiatoren, de mate van vervuiling en de gekozen methode. U krijgt binnen 24 uur een gratis en gedetailleerde offerte, vrijblijvend.",
+      },
+      {
+        id: 4,
+        question: "Hoelang duurt het ontslibben?",
+        answer:
+          "Ontslibben met de pomp duurt meestal een halve tot een hele dag, afhankelijk van het aantal radiatoren. Een chemische behandeling werkt over enkele weken.",
+      },
+      {
+        id: 5,
+        question: "Hoe vaak moet ik laten ontslibben?",
+        answer:
+          "Er is geen vaste frequentie: een installatie met inhibitor en filter kan lang schoon blijven. Meestal raden we een controle om de 5 à 10 jaar aan, en ontslibben zodra de symptomen opduiken.",
+      },
+      {
+        id: 6,
+        question: "Is ontslibben verplicht voor een nieuwe ketel?",
+        answer:
+          "Het is geen wettelijke verplichting, maar het is sterk aangeraden en fabrikanten vragen het vaak voor de garantie. Een nieuwe ketel op een vervuilde installatie slijt sneller.",
+      },
+      {
+        id: 7,
+        question: "Moet ik mijn radiatoren aftappen voor u komt?",
+        answer: "Nee, wij doen alles: aftappen, reinigen, vullen, ontluchten en op druk brengen.",
+      },
+    ],
+    related: ["chauffage/entretien-chaudiere", "chauffage/installation-radiateurs", "chauffage/remplacement-chaudiere", "chauffage/depannage-chaudiere"],
+    cta: {
+      title: "Lauwe radiatoren? (Eindelijk) weer overal dezelfde warmte.",
+      highlight: "(Eindelijk)",
+      body: "Radiatoren onderaan koud, geluiden, een ketel die het moeilijk heeft: beschrijf ons de symptomen. We stellen de juiste ontslibbingsmethode voor, met een gratis en gedetailleerde offerte binnen 24 uur.",
+    },
+    draft: false,
+  },
+
+  // --- Radiatoren ---
+  {
+    category: "chauffage",
+    slug: "installation-radiateurs",
+    path: "/nl/verwarming/radiatoren-plaatsen",
+    title: "Radiatoren",
+    name: "Radiatoren plaatsen en vervangen",
+    pageTitle: "Radiatoren plaatsen en vervangen in Brussel",
+    metaTitle: "Radiatoren plaatsen in Brussel",
+    metaDescription:
+      "Radiatoren vervangen, bijplaatsen of verplaatsen in Brussel: staal, handdoekdroger, lage temperatuur. Verzorgde plaatsing, gratis offerte binnen 24 uur.",
+    summary: "Een radiator vervangen, bijplaatsen of verplaatsen: we berekenen het vermogen, plaatsen en sluiten netjes aan op uw bestaande installatie.",
+    icon: "thermometer",
+    intent: "installation",
+    hero: {
+      eyebrow: "Centrale verwarming · Radiatoren",
+      intro:
+        "Een te oude radiator, een kamer die koud blijft, een badkamer die vernieuwd wordt? We kiezen het juiste vermogen, plaatsen uw radiatoren en sluiten ze aan op uw centrale verwarming, met thermostatische kranen en het inregelen van de installatie.",
+      image: { asset: "P14", alt: "Nieuwe radiator geplaatst onder een raam" },
+    },
+    facts: [
+      { icon: "euro", stat: "Gratis offerte", label: "Binnen 24 uur" },
+      { icon: "ruler", stat: "Kamer per kamer", label: "Vermogen berekend voor elke kamer" },
+      { icon: "shield", stat: "2 jaar garantie", label: "Op ons werk" },
+      { icon: "award", stat: "Erkende chauffagist", label: "Plaatsing volgens de normen" },
+    ],
+    blocks: [
+      {
+        type: "options",
+        title: "Welke radiator voor welke kamer?",
+        intro: "De juiste radiator hangt af van de kamer, uw ketel en uw plannen. We adviseren u voor we iets plaatsen.",
+        items: [
+          {
+            title: "Stalen paneelradiator",
+            badge: "Het meest gebruikt",
+            text: "De standaard voor centrale verwarming: goed rendement, beperkte prijs en veel afmetingen om aan te sluiten op de bestaande aansluitingen.",
+            points: ["Snel op temperatuur", "Ook verticaal verkrijgbaar", "Werkt met elke ketel"],
+          },
+          {
+            title: "Handdoekdroger",
+            text: "Voor de badkamer: hij verwarmt de ruimte en droogt de handdoeken. Aangesloten op de centrale verwarming, elektrisch of gemengd.",
+            points: ["Aansluiting op warm water of elektrisch", "Veel maten en afwerkingen", "Ideaal bij een badkamerrenovatie"],
+          },
+          {
+            title: "Lagetemperatuurradiator",
+            text: "Een groter verwarmend oppervlak om met minder warm water te verwarmen: ideaal bij een condensatieketel of een [warmtepomp](/nl/verwarming/warmtepomp).",
+            points: ["Bereidt de overstap naar een warmtepomp voor", "Beter rendement van de condensatieketel", "Zachtere, gelijkmatige warmte"],
+          },
+        ],
+      },
+      {
+        type: "features",
+        title: "Wat we aan uw radiatoren doen",
+        items: [
+          {
+            icon: "tools",
+            title: "Vervangen",
+            text: "Een oude radiator die lekt of slecht verwarmt? We vervangen hem door een passend model en gebruiken de aansluitingen opnieuw als het kan.",
+          },
+          {
+            icon: "layers",
+            title: "Bijplaatsen",
+            text: "Een nieuwe kamer, veranda of ingerichte zolder: we breiden de installatie uit en plaatsen radiatoren die passen bij de ruimte.",
+          },
+          { icon: "sync", title: "Verplaatsen", text: "Renovatie, nieuwe keuken: we verplaatsen een radiator en passen de leidingen netjes aan." },
+          {
+            icon: "thermometer",
+            title: "Thermostatische kranen",
+            text: "Thermostatische kranen plaatsen of vervangen om elke kamer apart te regelen en niet nodeloos te verwarmen.",
+          },
+        ],
+      },
+      {
+        type: "steps",
+        title: "Van offerte tot de eerste warmte",
+        steps: [
+          { title: "Bezoek en advies", description: "We bekijken de kamers die verwarmd moeten worden, uw ketel en de bestaande aansluitingen." },
+          { title: "Offerte binnen 24 uur", description: "Een gedetailleerde offerte: radiatoren, toebehoren en werkuren, lijn per lijn." },
+          { title: "Plaatsen en aansluiten", description: "Aftappen van de installatie indien nodig, plaatsen, aansluiten en controleren of alles dicht is." },
+          {
+            title: "Opnieuw in gebruik",
+            description: "Vullen, ontluchten, op druk brengen en inregelen, zodat elke radiator verwarmt zoals het hoort.",
+          },
+        ],
+      },
+      {
+        type: "alert",
+        tone: "info",
+        title: "Een radiator die slecht verwarmt, hoeft niet altijd vervangen te worden",
+        paragraphs: [
+          "**Boven koud, onderaan warm?** Er zit lucht in: ontluchten volstaat vaak.",
+          "**Onderaan koud, boven warm?** Er heeft zich slib afgezet: [ontslibben](/nl/verwarming/ontslibben) brengt de warmte terug in de hele installatie.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "Radiatoren en warmtepomp: denk vooruit",
+        paragraphs: [
+          "Overweegt u de komende jaren een [warmtepomp](/nl/verwarming/warmtepomp)? Een warmtepomp verwarmt met lauwer water dan een klassieke ketel: uw radiatoren moeten dus een groot genoeg verwarmend oppervlak hebben.",
+          "Kiest u nu al radiatoren voor lage temperatuur, dan hoeft u ze later geen tweede keer te vervangen. We adviseren u over het juiste evenwicht tussen comfort, budget en de toekomst.",
+        ],
+      },
+    ],
+    faqTitle: "Veelgestelde vragen over het plaatsen van radiatoren",
+    faqs: [
+      {
+        id: 1,
+        question: "Hoeveel kost het plaatsen van een radiator in Brussel?",
+        answer:
+          "De prijs hangt af van het type en de grootte van de radiator, en van het aansluitwerk (vervanging door hetzelfde model, bijplaatsen, verplaatsen). U krijgt binnen 24 uur een gratis en gedetailleerde offerte.",
+      },
+      {
+        id: 2,
+        question: "Kan een radiator vervangen worden zonder de hele installatie af te tappen?",
+        answer:
+          "Vaak wel, door de radiator af te sluiten of maar een deel van de installatie af te tappen. Dat hangt af van de opbouw van uw installatie, die we ter plaatse bekijken.",
+      },
+      {
+        id: 3,
+        question: "Hoe kies je het vermogen van een radiator?",
+        answer:
+          "Dat hangt af van het volume van de kamer, de isolatie, de oriëntatie en de temperatuur van het water uit uw ketel. Wij maken die berekening voor u, kamer per kamer.",
+      },
+      {
+        id: 4,
+        question: "Werken mijn radiatoren met een warmtepomp?",
+        answer:
+          "Niet altijd: een warmtepomp maakt minder warm water, waarvoor grotere radiatoren of lagetemperatuurradiatoren nodig zijn. We controleren uw installatie voor elk [warmtepompproject](/nl/verwarming/warmtepomp).",
+      },
+      {
+        id: 5,
+        question: "Kunt u een handdoekdroger in mijn badkamer plaatsen?",
+        answer: "Ja, aangesloten op de centrale verwarming, elektrisch of gemengd, afhankelijk van uw installatie en het gewenste gebruik.",
+      },
+      {
+        id: 6,
+        question: "Moeten de radiatoren ontlucht worden na de plaatsing?",
+        answer:
+          "Ja: na de plaatsing vullen we de installatie, ontluchten ze, brengen ze op druk en controleren we of elke radiator goed verwarmt.",
+      },
+      { id: 7, question: "Welke garantie krijg ik op de plaatsing?", answer: "Op ons werk krijgt u 2 jaar garantie." },
+    ],
+    related: ["chauffage/desembouage", "chauffage/pompe-a-chaleur", "chauffage/remplacement-chaudiere", "chauffage/entretien-chaudiere"],
+    cta: {
+      body: "Beschrijf ons uw project: we raden u het juiste model aan en u krijgt binnen 24 uur een offerte, plaatsing en aansluiting inbegrepen.",
+    },
+    draft: false,
+  },
+
+  // --- Warmtepomp ---
+  {
+    category: "chauffage",
+    slug: "pompe-a-chaleur",
+    path: "/nl/verwarming/warmtepomp",
+    title: "Warmtepomp",
+    name: "Een warmtepomp plaatsen",
+    pageTitle: "Een warmtepomp plaatsen in Brussel en omgeving",
+    metaTitle: "Warmtepomp plaatsen in Brussel",
+    metaDescription:
+      "Plaatsing van een lucht-waterwarmtepomp in Brussel: studie, dimensionering, plaatsing en onderhoud. Gratis offerte binnen 24 uur.",
+    summary: "Uw ketel vervangen door een lucht-waterwarmtepomp: studie van de woning, berekening van het vermogen, plaatsing en opvolging.",
+    icon: "leaf",
+    intent: "installation",
+    hero: {
+      eyebrow: "Koolstofarm verwarmen",
+      intro:
+        "Uw ketel is aan het einde van zijn leven, of u wilt van stookolie af? We bestuderen uw woning, berekenen het nodige vermogen en plaatsen de warmtepomp, afstelling inbegrepen.",
+      image: { asset: "P12", alt: "Buitenunit van een lucht-waterwarmtepomp in een tuin" },
+    },
+    facts: [
+      { icon: "award", stat: "Dimensionering", label: "Vermogen berekend voor uw woning" },
+      { icon: "euro", stat: "Gratis offerte", label: "Binnen 24 uur" },
+      { icon: "handshake", stat: "Afstelling inbegrepen", label: "Stooklijn en uitleg" },
+      { icon: "shield", stat: "2 jaar garantie", label: "Op ons werk" },
+    ],
+    blocks: [
+      {
+        type: "features",
+        title: "Waarom een warmtepomp?",
+        items: [
+          {
+            icon: "leaf",
+            title: "Minder energieverbruik",
+            text: "Een warmtepomp haalt het grootste deel van haar energie uit de buitenlucht: meestal geeft ze 3 à 4 keer meer warmte af dan ze aan elektriciteit verbruikt.",
+          },
+          {
+            icon: "fire",
+            title: "Het einde van stookolie",
+            text: "Het Brussels Gewest verbiedt voortaan de plaatsing van nieuwe stookolieketels: de warmtepomp is een van de alternatieven.",
+          },
+          {
+            icon: "snowflake",
+            title: "Warm in de winter, fris in de zomer",
+            text: "Sommige modellen zijn omkeerbaar en kunnen uw woning ook koelen tijdens hittegolven.",
+          },
+        ],
+        note: "De RENOLUTION-premies zijn momenteel opgeschort. De regels veranderen regelmatig: kijk voor de actuele informatie op [leefmilieu.brussels](https://leefmilieu.brussels). Tijdens de studie helpen we u om het overzicht te bewaren.",
+      },
+      {
+        type: "options",
+        title: "Lucht-water, lucht-lucht of hybride: welke warmtepomp?",
+        intro: "Niet elke warmtepomp beantwoordt aan dezelfde behoefte. De juiste keuze hangt af van uw woning, uw radiatoren of vloerverwarming en uw budget.",
+        items: [
+          {
+            title: "Lucht-waterwarmtepomp",
+            badge: "Vervangt de ketel",
+            text: "Ze verwarmt het water van uw centrale verwarming (radiatoren of vloerverwarming) en, afhankelijk van het model, ook uw sanitair warm water.",
+            points: ["Wordt aangesloten op de bestaande installatie", "Ideaal met vloerverwarming of lagetemperatuurradiatoren", "Kan sanitair warm water maken"],
+          },
+          {
+            title: "Lucht-luchtwarmtepomp",
+            text: "Een omkeerbare airco die warme of koude lucht blaast via binnenunits. Als aanvulling, of voor een woning zonder centrale verwarming.",
+            points: ["Verwarmt en koelt", "Geen radiatoren nodig", "[Bekijk het plaatsen van een airco](/nl/airco/airco-plaatsen)"],
+          },
+          {
+            title: "Hybride warmtepomp",
+            text: "Een warmtepomp samen met een gasketel die het overneemt bij strenge vorst. Een zachte overgang voor weinig geïsoleerde huizen.",
+            points: ["Behoudt een ketel als aanvulling", "Werkt makkelijker met bestaande radiatoren", "Schakelt automatisch naar de best geschikte bron"],
+          },
+        ],
+      },
+      {
+        type: "steps",
+        title: "Uw warmtepompproject, stap voor stap",
+        steps: [
+          {
+            title: "Bezoek en studie",
+            description: "We bekijken uw woning: oppervlakte, isolatie, radiatoren of vloerverwarming, plaats voor de buitenunit.",
+          },
+          {
+            title: "Dimensionering en offerte",
+            description:
+              "We berekenen het nodige vermogen en bezorgen u binnen 24 uur een gedetailleerde offerte. Een slecht gedimensioneerde warmtepomp kost u comfort en geld.",
+          },
+          {
+            title: "Plaatsing",
+            description: "Plaatsing van de buitenunit en de binnenmodule, hydraulische en elektrische aansluitingen, inbedrijfstelling.",
+          },
+          {
+            title: "Afstelling en opvolging",
+            description: "Afstelling van de stooklijn, samen met u de bediening overlopen, daarna regelmatig onderhoud om de prestaties te behouden.",
+          },
+        ],
+      },
+      {
+        type: "checklist",
+        title: "Wat we controleren voor we plaatsen",
+        items: [
+          "De warmtebehoefte van uw woning (isolatie, oppervlakte, oriëntatie)",
+          "Of uw radiatoren met water op lage temperatuur kunnen werken",
+          "De plaats van de buitenunit: geluid, afstand, buren",
+          "Eventuele toelatingen (mede-eigendom, stedenbouw afhankelijk van de plaats)",
+          "Het beschikbare elektrische vermogen en de aansluiting op de zekeringkast",
+          "De productie van sanitair warm water (ingebouwd of apart voorraadvat)",
+          "De staat van de verwarmingsinstallatie ([ontslibben](/nl/verwarming/ontslibben) indien nodig)",
+        ],
+        note: "Afhankelijk van de plaats van de buitenunit (gevel aan de straat, mede-eigendom) kan een toelating nodig zijn: we helpen u dat na te gaan voor de werken.",
+        image: { asset: "P13", alt: "Technicus van Radialec stelt de binnenmodule van een warmtepomp af, naast het warmwatervat" },
+      },
+      {
+        type: "pricing",
+        title: "Tarieven warmtepomp in Brussel",
+        items: [
+          { label: "Plaatsing van een warmtepomp", note: "Op gratis offerte, na studie van uw woning" },
+          { key: "entretienPac" },
+        ],
+        note: "Prijzen btw inbegrepen. De plaatsing gebeurt op basis van een gratis en gedetailleerde offerte, en het bedrag van de offerte is het bedrag van de factuur.",
+      },
+    ],
+    faqTitle: "Veelgestelde vragen over de warmtepomp",
+    faqs: [
+      {
+        id: 1,
+        question: "Hoeveel kost een warmtepomp in Brussel?",
+        answer:
+          "De prijs hangt af van het nodige vermogen, het type warmtepomp en eventuele aanpassingen (radiatoren, elektriciteit, warm water). Na een bezoek krijgt u binnen 24 uur een gratis en gedetailleerde offerte.",
+      },
+      {
+        id: 2,
+        question: "Zijn er premies voor een warmtepomp in Brussel?",
+        answer: "De RENOLUTION-premies zijn momenteel opgeschort. Bekijk de actuele informatie op [leefmilieu.brussels](https://leefmilieu.brussels).",
+      },
+      {
+        id: 3,
+        question: "Werkt een warmtepomp met mijn radiatoren?",
+        answer:
+          "Vaak wel, op voorwaarde dat ze groot genoeg zijn om met minder warm water te verwarmen. We controleren het kamer per kamer; indien nodig kunnen enkele [radiatoren](/nl/verwarming/radiatoren-plaatsen) vervangen worden.",
+      },
+      {
+        id: 4,
+        question: "Werkt een warmtepomp ook midden in de winter?",
+        answer:
+          "Ja, de huidige lucht-waterwarmtepompen werken ook bij temperaturen onder nul. Hun rendement daalt bij strenge vorst, daarom zijn een goede dimensionering of een hybride oplossing in een weinig geïsoleerd huis belangrijk.",
+      },
+      {
+        id: 5,
+        question: "Maakt een warmtepomp lawaai?",
+        answer:
+          "Recente modellen worden steeds stiller, maar de buitenunit blijft hoorbaar. We kiezen haar plaats zo dat u en uw buren er zo weinig mogelijk last van hebben.",
+      },
+      {
+        id: 6,
+        question: "Moet een warmtepomp onderhouden worden?",
+        answer: `Ja: regelmatig onderhoud behoudt de prestaties en de levensduur, en de meeste fabrikanten raden het jaarlijks aan. Het [onderhoud van een warmtepomp](/nl/airco/onderhoud-airco) kost **${prices.entretienPac.amount}€ btw inbegrepen**.`,
+      },
+      {
+        id: 7,
+        question: "Kan ik mijn stookolieketel vervangen door een warmtepomp?",
+        answer:
+          "Ja, dat komt vaak voor: nieuwe stookolieketels plaatsen mag niet meer in het Brussels Gewest. Samen bekijken we welke warmtepomp, of welke hybride oplossing, bij uw huis past.",
+      },
+      {
+        id: 8,
+        question: "Hoelang duurt de plaatsing?",
+        answer: "Meestal enkele dagen, afhankelijk van de nodige aanpassingen (radiatoren, elektriciteit, warm water). De precieze planning staat in uw offerte.",
+      },
+    ],
+    related: ["chauffage/remplacement-chaudiere", "chauffage/installation-radiateurs", "climatisation/installation-climatisation", "climatisation/entretien-climatisation"],
+    cta: {
+      body: "Een warmtepomp bereid je voor: we komen uw woning, radiatoren en isolatie bekijken, en u krijgt binnen 24 uur een gedetailleerde offerte. Is een warmtepomp bij u niet de juiste keuze, dan zeggen we het u.",
+    },
+    draft: false,
+  },
+
+  // --- Schoorsteenvegen ---
+  {
+    category: "chauffage",
+    slug: "ramonage-cheminee",
+    path: "/nl/verwarming/schoorsteenvegen",
+    title: "Schoorsteenvegen",
+    name: "Schoorsteen en rookkanalen vegen",
+    pageTitle: "Schoorsteen en rookkanalen laten vegen in Brussel",
+    metaTitle: `Schoorsteenvegen in Brussel – ${prices.ramonage.amount}€ btw incl.`,
+    metaDescription: `Schoorsteenvegen voor open haard, kachel, inzethaard en rookkanaal van een stookolieketel in Brussel en omgeving. ${prices.ramonage.amount}€ btw incl., prijs op voorhand gekend. Maak een afspraak.`,
+    summary: "Schouw, kachel, inzethaard of rookkanaal van een stookolieketel: regelmatig vegen beperkt het risico op brand en vergiftiging.",
+    icon: "broom",
+    intent: "entretien",
+    price: { key: "ramonage" },
+    hero: {
+      eyebrow: "Veiligheid · Jaarlijks onderhoud",
+      intro:
+        "Open haard, inzethaard, houtkachel of stookolieketel: het roet in uw rookkanalen is een belangrijke oorzaak van schoorsteenbranden en vergiftigingen. Onze technici vegen en controleren uw rookkanalen, aan de prijs die op de site staat.",
+      image: { asset: "P18", alt: "Technicus veegt een rookkanaal" },
+    },
+    facts: [
+      { icon: "euro", stat: `${prices.ramonage.amount}€ btw incl.`, label: "Schoorsteenvegen" },
+      { icon: "calendar", stat: "1 keer per jaar", label: "Meestal aangeraden frequentie" },
+      { icon: "shield", stat: "Minder risico", label: "Schoorsteenbrand en koolmonoxide" },
+      { icon: "calendarCheck", stat: "Snel een afspraak", label: "Meestal binnen 24 uur" },
+    ],
+    blocks: [
+      {
+        type: "features",
+        title: "Waarom uw rookkanalen laten vegen?",
+        intro: "Elk vuur en elke verbranding van stookolie laat roet achter in het rookkanaal. Zonder vegen hoopt het zich op tot het gevaarlijk wordt.",
+        items: [
+          {
+            icon: "fire",
+            title: "Schoorsteenbrand vermijden",
+            text: "Roet en teer zijn brandbaar: ze kunnen vuur vatten en het rookkanaal, of zelfs het dak, beschadigen.",
+          },
+          {
+            icon: "smog",
+            title: "Rook goed afvoeren",
+            text: "Een vuil of verstopt rookkanaal (nest, puin) voert de rook slecht af, met kans op terugslag van koolmonoxide.",
+          },
+          {
+            icon: "file",
+            title: "Verzekerd blijven",
+            text: "Bij schade kan uw verzekeraar een bewijs van recent schoorsteenvegen vragen. Bewaar het document dat u na de interventie krijgt.",
+          },
+          { icon: "wind", title: "Een betere trek", text: "Een schoon rookkanaal trekt beter: het vuur gaat makkelijker aan en uw toestel brandt properder." },
+        ],
+      },
+      {
+        type: "options",
+        title: "Welke rookkanalen vegen we?",
+        items: [
+          {
+            title: "Open haard en inzethaard",
+            text: "Bij houtvuren die regelmatig branden, hoopt de afzetting zich snel op in het gemetselde of gebuisde rookkanaal.",
+            points: ["Mechanisch vegen van het rookkanaal", "Visuele controle van de trek", "Tips voor het gebruik (droog hout, aansteken)"],
+          },
+          {
+            title: "Hout- of pelletkachel",
+            text: "Kachels maken fijn roet dat het rookkanaal en de aansluitbuis snel vervuilt.",
+            points: ["Vegen van het rookkanaal en de aansluiting", "Controle van de dichtheid van de aansluiting"],
+          },
+          {
+            title: "Rookkanaal van een stookolieketel",
+            text: "De verbranding van stookolie vervuilt het rookkanaal: regelmatig vegen is nodig om de ketel goed te laten werken.",
+            points: ["Aanvulling op het [ketelonderhoud](/nl/verwarming/ketelonderhoud)", "Rookafvoer gecontroleerd"],
+          },
+        ],
+      },
+      {
+        type: "alert",
+        tone: "info",
+        title: "Gasketel met ventouse?",
+        paragraphs: [
+          "Gascondensatieketels voeren hun rook af via een ventouse of een specifiek rookkanaal. Die rookafvoer wordt gecontroleerd tijdens het [ketelonderhoud](/nl/verwarming/ketelonderhoud), dat in het Brussels Gewest verplicht is: meestal is apart vegen niet nodig.",
+        ],
+      },
+      {
+        type: "steps",
+        title: "Zo verloopt het schoorsteenvegen",
+        steps: [
+          {
+            title: "Afspraak",
+            description: "We kiezen een moment, liefst voor het stookseizoen. Maak de uren ervoor geen vuur: het rookkanaal moet koud zijn.",
+          },
+          { title: "Afschermen", description: "De zone rond het toestel wordt afgeschermd voor we beginnen." },
+          { title: "Vegen", description: "De borstel gaat door het hele rookkanaal om roet en afzetting los te maken, daarna voeren we de resten af." },
+          {
+            title: "Controle en advies",
+            description: "Controle van de trek en de zichtbare staat van het rookkanaal, tips voor het gebruik en een interventiedocument om te bewaren.",
+          },
+        ],
+      },
+      {
+        type: "pricing",
+        title: "Tarief schoorsteenvegen in Brussel",
+        items: [{ key: "ramonage", popular: true }, { key: "entretienChaudiereMazout" }],
+      },
+    ],
+    faqTitle: "Veelgestelde vragen over schoorsteenvegen",
+    faqs: [
+      {
+        id: 1,
+        question: "Is schoorsteenvegen verplicht?",
+        answer:
+          "De verplichtingen hangen af van uw toestel en uw brandstof, en ook uw verzekeraar of uw huurcontract kan het opleggen. In elk geval is minstens één keer per jaar vegen sterk aangeraden voor elk rookkanaal dat regelmatig gebruikt wordt.",
+      },
+      {
+        id: 2,
+        question: "Hoeveel kost schoorsteenvegen in Brussel?",
+        answer: `Het vegen van een schoorsteen kost **${prices.ramonage.amount}€ btw inbegrepen**. Het veegattest is inbegrepen en u kent de prijs voor de interventie.`,
+      },
+      {
+        id: 3,
+        question: "Hoe vaak moet ik laten vegen?",
+        answer:
+          "Minstens één keer per jaar voor een schouw, kachel of rookkanaal van een stookolieketel dat regelmatig gebruikt wordt, liefst voor de winter. Bij intensief gebruik kan een tweede keer nodig zijn.",
+      },
+      {
+        id: 4,
+        question: "Moet het rookkanaal van een gasketel geveegd worden?",
+        answer:
+          "Bij een gasketel met ventouse wordt de rookafvoer gecontroleerd tijdens het [ketelonderhoud](/nl/verwarming/ketelonderhoud). Voor een oud gemetseld rookkanaal vraagt u ons best om advies.",
+      },
+      {
+        id: 5,
+        question: "Hoelang duurt schoorsteenvegen?",
+        answer: "Meestal minder dan een uur voor een standaard rookkanaal, langer als het erg vuil of moeilijk bereikbaar is.",
+      },
+      {
+        id: 6,
+        question: "Wat doe ik bij een schoorsteenbrand?",
+        answer: "Sluit indien mogelijk de luchttoevoer van het toestel, gooi nooit water in de haard, verlaat de woning en bel 112.",
+      },
+      {
+        id: 7,
+        question: "Moet ik iets voorbereiden voor u komt?",
+        answer: "Maak de uren ervoor geen vuur, zodat het rookkanaal koud is, en maak de toegang tot het toestel vrij.",
+      },
+    ],
+    related: ["chauffage/entretien-chaudiere", "chauffage/depannage-chaudiere", "chauffage/pompe-a-chaleur", "chauffage/desembouage"],
+    cta: {
+      title: "Moet uw schoorsteen (bijna) geveegd worden? Maak een afspraak.",
+      highlight: "(bijna)",
+      body: "Schouw, inzethaard, kachel of stookolieketel? Maak een afspraak voor het stookseizoen: vegen aan de prijs op de site, veegattest inbegrepen.",
+    },
+    draft: false,
+  },
 ];

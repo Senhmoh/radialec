@@ -46,7 +46,7 @@ export const categoryPaths: Record<ServiceCategory, Record<Locale, string>> = {
  */
 export const translatedPages: Record<Locale, PageKey[]> = {
   fr: Object.keys(pagePaths) as PageKey[],
-  nl: ["home", "contact", "devis", "rendezVous", "confidentialite", "cookies", "mentionsLegales"],
+  nl: Object.keys(pagePaths) as PageKey[],
 };
 
 export function hasPage(key: PageKey, locale: Locale): boolean {

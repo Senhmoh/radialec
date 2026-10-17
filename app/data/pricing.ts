@@ -135,7 +135,10 @@ export const pricingPolicy = {
 
 /** Conditions de `pricingPolicy` en néerlandais (même contenu). */
 export const pricingPolicyNl = {
+  extraHour: `${prices.heureSupplementaire.amount} € btw incl. per uur` as string | null,
+  travel: "Inbegrepen tot 50 km, toeslag daarbuiten" as string | null,
   payment: "Cash of via een bankapp (Wero, Payconiq)" as string | null,
+  promoValidity: null as string | null,
 };
 
 /**
