@@ -107,6 +107,8 @@ export function getAlternates(): Alternates {
     const nl = findServiceByRef(`${service.category}/${service.slug}`, "nl");
     if (nl) pairs.push({ fr: serviceHref(service), nl: serviceHref(nl) });
   }
+  // Offre flyer : même page dans les deux langues (QR /f et /fn).
+  pairs.push({ fr: "/offre", nl: "/nl/aanbod" });
   const map: Alternates = {};
   for (const pair of pairs) {
     for (const locale of locales) {

@@ -11,7 +11,7 @@ Mis à jour le 13 octobre 2026. Remplace l'audit du 5 octobre.
   - fonctionnent par e-mail (Resend) ;
   - alerte Telegram instantanée et confirmation au client codées, mais **pas encore activées** (identifiants à fournir) ;
   - suivi Google Ads et Microsoft Clarity codés, mais **pas encore activés**.
-- **Version néerlandaise (`/nl`) complète** (36 pages, 17/10), **invisible en production** jusqu'à la relecture par un néerlandophone, le gestionnaire (consignes gaz, promesses) et un juriste (pages légales). Seule `/nl/aanbod` (offre flyer) est déjà en ligne. Publication : `nlPublished = true` (`app/data/visibility.ts`). Détails : `prompts/refonte/09-nl.md`.
+- **Version néerlandaise (`/nl`) en ligne depuis le 17/10** : 36 pages, chacune reliée à sa page française (lien FR / NL dans l'en-tête, hreflang, plan du site). Détails : `prompts/refonte/09-nl.md`.
 - **Il reste surtout des réglages de comptes** (Resend, Telegram, Google Ads, Clarity) et quelques décisions du propriétaire (section 13).
 
 ## 1. Technique et hébergement
@@ -335,4 +335,4 @@ Elle ne part qu'avec un expéditeur sur un domaine vérifié dans Resend (`QUOTE
 | 13/10 | Textes réécrits pour ne plus sonner « IA » ; urgences 24h/24 ; carte « Joignable maintenant » sur les pages métier ; début de la version néerlandaise (phase 1, invisible en production) |
 | 14/10 | Liens courts des QR imprimés (`/f` flyer avec code zone, `/s` autocollant, `/c` carte) et pages d'arrivée `/offre` et `/ma-chaudiere` |
 | 15/10 | Offre flyer : entretien gaz 129 € jusqu'au 31/12/2026 (fin automatique), page `/offre` refaite en page d'offre avec formulaire « Je réserve », code zone du flyer, demandes du flyer signalées « 🟠 FLYER » (e-mail, Telegram) et prix rappelé au client ; version néerlandaise de l'offre `/nl/aanbod` (QR `/fn`), seule page néerlandaise en ligne |
-| 17/10 | Version néerlandaise complète : les 4 métiers et leurs 22 pages, Syndici, Tarieven, Over ons (invisible en production en attendant la relecture) |
+| 17/10 | Version néerlandaise complète : les 4 métiers et leurs 22 pages, Syndici, Tarieven, Over ons ; publiée le jour même après relecture |
